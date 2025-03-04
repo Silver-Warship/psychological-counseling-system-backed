@@ -3,10 +3,7 @@ package org.example.psychologicalcounseling.controller;
 import org.example.psychologicalcounseling.param.Request;
 import org.example.psychologicalcounseling.param.Response;
 import org.json.JSONObject;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +65,8 @@ public class MessageHandler implements WebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        session.sendMessage(message);
+        String response = handle(message.getPayload().toString());
+        session.sendMessage(new TextMessage(response));
     }
 
     @Override
