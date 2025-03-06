@@ -36,13 +36,13 @@ public class MessageHandler implements WebSocketHandler {
         }
 
         // check if request type is valid
-        String request_type = json.getString("type");
-        if (!requestMap.containsKey(request_type)) {
+        String requestType = json.getString("type");
+        if (!requestMap.containsKey(requestType)) {
             return new Response<>(-1, "Invalid request type", "null").toJsonString();
         }
 
         // check if the required params are present
-        Request request = requestMap.get(request_type);
+        Request request = requestMap.get(requestType);
         String[] requiredParams = request.getRequireParams();
         for (String param : requiredParams) {
             if (!json.has(param)) {
@@ -54,13 +54,13 @@ public class MessageHandler implements WebSocketHandler {
         return request.handle(json.toMap());
     }
 
-    public String heartBeat(Map<String, ?> request_json) {
+    public String heartBeat(Map<String, ?> requestJson) {
         return new Response<>(200, "success", "活着").toJsonString();
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
+        session.sendMessage(new TextMessage(new Response<>(200, "success", "连接成功").toJsonString()));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class MessageHandler implements WebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-
+        session.sendMessage(new TextMessage(new Response<>(200, "success", "连接关闭").toJsonString()));
     }
 
     @Override
