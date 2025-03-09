@@ -1,6 +1,10 @@
 package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.param.Response;
+import org.example.psychologicalcounseling.param.chat.PullUnReceivedMessageRequest;
+import org.example.psychologicalcounseling.param.chat.PullUnReceivedMessageResponse;
+import org.example.psychologicalcounseling.param.chat.TransmitMessageRequest;
+import org.example.psychologicalcounseling.param.chat.TransmitMessageResponse;
 import org.example.psychologicalcounseling.utils.HttpProxy;
 import org.json.JSONObject;
 
@@ -16,31 +20,31 @@ public class TencentIM implements ChatProxy {
     final String CONTENT_TYPE = "json";
 
     // sample url : https://xxxxxx/v4/openim/sendmsg?sdkappid=88888888&identifier=admin&usersig=xxx&random=99999999&contenttype=json
-    public String transmitMessage(Map<String, ?> requestJson) {
+    public String transmitMessage(Map<String, ?> request_json) {
         final String baseUrl = String.format("https://%s/v4/openim/sendmsg", DOMAIN);
         final String url = String.format("%s?sdkappid=%s&identifier=%s&usersig=%s&random=%s&contenttype=%s",
                 baseUrl, SDK_APPID, ADMIN_IDENTIFIER, ADMIN_USERSIG, RANDOM, CONTENT_TYPE);
 
         // make posted data
         JSONObject json = new JSONObject();
-        json.put("From_Account", requestJson.get("From_Account"));
-        json.put("To_Account", requestJson.get("To_Account"));
+        json.put("From_Account", request_json.get("From_Account"));
+        json.put("To_Account", request_json.get("To_Account"));
         // generate unsigned int as message random
         json.put("MsgRandom", Integer.toUnsignedLong(new Random().nextInt()));
-        Map<String, ?>[] msgBody = new Map[]{Map.of("MsgType", "TIMTextElem",
-                "MsgContent", Map.of("Text", requestJson.get("Text")))};
+        Map<String, ?>[] msg_body = new Map[]{Map.of("MsgType", "TIMTextElem",
+                "MsgContent", Map.of("Text", request_json.get("Text")))};
 
-        json.put("MsgBody", msgBody);
+        json.put("MsgBody", msg_body);
 
         String str_response = HttpProxy.sendPost(url, json.toMap());
         // check response and store message into database
-        JSONObject jsonResponse = new JSONObject(str_response);
-        int errorCode = jsonResponse.getInt("ErrorCode");
-        if (errorCode == 0) {
+        JSONObject json_response = new JSONObject(str_response);
+        int error_code = json_response.getInt("ErrorCode");
+        if (error_code == 0) {
             // store message into database
             System.out.print("store into database");
         } else {
-            return new Response<String>(errorCode, "error", "transmit message failed").toJsonString();
+            return new Response<String>(error_code, "error", "transmit message failed").toJsonString();
         }
 
         return new Response<String>(200, "success", "transmit message").toJsonString();
@@ -52,7 +56,17 @@ public class TencentIM implements ChatProxy {
 
     public static void main(String[] args) {
         TencentIM tencentIM = new TencentIM();
-        Map<String, ?> requestJson = Map.of("From_Account", "test1", "To_Account", "test2", "Text", "hello");
-        tencentIM.transmitMessage(requestJson);
+        Map<String, ?> request_json = Map.of("From_Account", "test1", "To_Account", "test2", "Text", "hello");
+        tencentIM.transmitMessage(request_json);
+    }
+
+    @Override
+    public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
+        return null;
+    }
+
+    @Override
+    public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
+        return null;
     }
 }

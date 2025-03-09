@@ -31,18 +31,18 @@ public class HttpProxy {
     }
 
     public static String sendGet(String url) {
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet http_get = new HttpGet(url);
 
-        return getResponse(httpGet);
+        return getResponse(http_get);
     }
 
     public static String sendGet(String url, Map<String, String> header) {
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet http_get = new HttpGet(url);
         for (Map.Entry<?, ?> entry : header.entrySet()) {
-            httpGet.setHeader(entry.getKey().toString(), entry.getValue().toString());
+            http_get.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
 
-        return getResponse(httpGet);
+        return getResponse(http_get);
     }
     
     public static String sendPost(String url, Map<String, ?> params) {
@@ -65,21 +65,21 @@ public class HttpProxy {
 
     public static String sendPost(String url, Map<String, String> header, JSONObject body) {
         StringEntity entity = new StringEntity(body.toString(), Consts.UTF_8);
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setEntity(entity);
+        HttpPost http_post = new HttpPost(url);
+        http_post.setEntity(entity);
         for (Map.Entry<?, ?> entry : header.entrySet()) {
-            httpPost.setHeader(entry.getKey().toString(), entry.getValue().toString());
+            http_post.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
 
-        return getResponse(httpPost);
+        return getResponse(http_post);
     }
 
     public static String sendPost(String url, JSONObject body) {
         StringEntity entity = new StringEntity(body.toString(), Consts.UTF_8);
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setEntity(entity);
+        HttpPost http_post = new HttpPost(url);
+        http_post.setEntity(entity);
 
-        return getResponse(httpPost);
+        return getResponse(http_post);
     }
 }
 
