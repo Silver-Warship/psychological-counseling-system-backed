@@ -8,4 +8,6 @@ public interface ChatProxy {
 
     // 获取某个用户所有未接收的消息
     String pullUnReceivedMessage(Map<String, ?> request_json);
+
+    // 
 }

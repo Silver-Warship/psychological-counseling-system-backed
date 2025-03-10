@@ -16,31 +16,31 @@ public class TencentIM implements ChatProxy {
     final String CONTENT_TYPE = "json";
 
     // sample url : https://xxxxxx/v4/openim/sendmsg?sdkappid=88888888&identifier=admin&usersig=xxx&random=99999999&contenttype=json
-    public String transmitMessage(Map<String, ?> request_json) {
+    public String transmitMessage(Map<String, ?> requestJson) {
         final String baseUrl = String.format("https://%s/v4/openim/sendmsg", DOMAIN);
         final String url = String.format("%s?sdkappid=%s&identifier=%s&usersig=%s&random=%s&contenttype=%s",
                 baseUrl, SDK_APPID, ADMIN_IDENTIFIER, ADMIN_USERSIG, RANDOM, CONTENT_TYPE);
 
         // make posted data
         JSONObject json = new JSONObject();
-        json.put("From_Account", request_json.get("From_Account"));
-        json.put("To_Account", request_json.get("To_Account"));
+        json.put("From_Account", requestJson.get("From_Account"));
+        json.put("To_Account", requestJson.get("To_Account"));
         // generate unsigned int as message random
         json.put("MsgRandom", Integer.toUnsignedLong(new Random().nextInt()));
-        Map<String, ?>[] msg_body = new Map[]{Map.of("MsgType", "TIMTextElem",
-                "MsgContent", Map.of("Text", request_json.get("Text")))};
+        Map<String, ?>[] msgBody = new Map[]{Map.of("MsgType", "TIMTextElem",
+                "MsgContent", Map.of("Text", requestJson.get("Text")))};
 
-        json.put("MsgBody", msg_body);
+        json.put("MsgBody", msgBody);
 
         String str_response = HttpProxy.sendPost(url, json.toMap());
         // check response and store message into database
-        JSONObject json_response = new JSONObject(str_response);
-        int error_code = json_response.getInt("ErrorCode");
-        if (error_code == 0) {
+        JSONObject jsonResponse = new JSONObject(str_response);
+        int errorCode = jsonResponse.getInt("ErrorCode");
+        if (errorCode == 0) {
             // store message into database
             System.out.print("store into database");
         } else {
-            return new Response<String>(error_code, "error", "transmit message failed").toJsonString();
+            return new Response<String>(errorCode, "error", "transmit message failed").toJsonString();
         }
 
         return new Response<String>(200, "success", "transmit message").toJsonString();
@@ -52,7 +52,7 @@ public class TencentIM implements ChatProxy {
 
     public static void main(String[] args) {
         TencentIM tencentIM = new TencentIM();
-        Map<String, ?> request_json = Map.of("From_Account", "test1", "To_Account", "test2", "Text", "hello");
-        tencentIM.transmitMessage(request_json);
+        Map<String, ?> requestJson = Map.of("From_Account", "test1", "To_Account", "test2", "Text", "hello");
+        tencentIM.transmitMessage(requestJson);
     }
 }
