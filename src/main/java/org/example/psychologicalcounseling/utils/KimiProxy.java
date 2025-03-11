@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class KimiUtil {
+public class KimiProxy {
     private static final String API_KEY = "sk-kpZmG3a0pWQIkwc69L5sdgpCXgU2rtjcivkTVu3EO7uasOsI";
     private static final String CALL_WORD = "你是一名心理咨询师，你将引导用户并解答用户的问题，默认用户使用中文。";
     private static final String ERROR_WORD = "服务器繁忙，请稍后再试。";
@@ -22,7 +22,7 @@ public class KimiUtil {
         Map<String, ?> body = Map.of("model", "moonshot-v1-8k",
                 "messages", messages, "temperature", 0.3);
 
-        return HttpUtil.sendPost("https://api.moonshot.cn/v1/chat/completions", header, body);
+        return HttpProxy.sendPost("https://api.moonshot.cn/v1/chat/completions", header, body);
     }
 
     public static String register_session() {

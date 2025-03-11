@@ -1,25 +1,28 @@
-package org.example.psychologicalcounseling.controller;
+package org.example.psychologicalcounseling.utils;
 
 import com.alibaba.fastjson.JSON;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-public class MessageController implements WebSocketHandler {
-    protected HashMap<String, Class<?>> requestMap;
+public class MessageHandler implements WebSocketHandler {
+    protected HashMap<String, RequestHandler<?, ?>> requestMap;
 
-    public MessageController(MessageController... children) {
+    public MessageHandler(MessageHandler... children) {
         requestMap = new HashMap<>(10);
 
         // add children's requestMap to this requestMap
-        for (MessageController child : children) {
+        for (MessageHandler child : children) {
             requestMap.putAll(child.requestMap);
         }
+    }
+
+    public MessageHandler() {
+        requestMap = new HashMap<>(10);
     }
 
     public String handle(String message) {
@@ -38,7 +41,7 @@ public class MessageController implements WebSocketHandler {
         }
 
         // check if the required params are present
-        RequestHandler<?, ?> request = (RequestHandler<?, ?>)GetBeanUtil.getBean(requestMap.get(request_type));
+        RequestHandler<?, ?> request = requestMap.get(request_type);
         String[] requiredParams = request.requestParams();
         for (String param : requiredParams) {
             if (!json.has(param)) {
@@ -51,10 +54,6 @@ public class MessageController implements WebSocketHandler {
 
         // handle request
         return request.handleRequest(JSON.parseObject(message, requestParamType)).toJsonString();
-    }
-
-    public <T> void registerRequest(String type, Class<T> handler) {
-        requestMap.put(type, handler);
     }
 
     @Override
