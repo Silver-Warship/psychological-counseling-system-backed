@@ -5,7 +5,7 @@ import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageRequest
 import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageResponse;
 import org.example.psychologicalcounseling.dto.chat.TransmitMessageRequest;
 import org.example.psychologicalcounseling.dto.chat.TransmitMessageResponse;
-import org.example.psychologicalcounseling.utils.HttpProxy;
+import org.example.psychologicalcounseling.utils.HttpUtil;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public class TencentIMService implements ChatService {
 
         json.put("MsgBody", msg_body);
 
-        String str_response = HttpProxy.sendPost(url, json.toMap());
+        String str_response = HttpUtil.sendPost(url, json.toMap());
         // check response and store message into database
         JSONObject json_response = new JSONObject(str_response);
         int error_code = json_response.getInt("ErrorCode");

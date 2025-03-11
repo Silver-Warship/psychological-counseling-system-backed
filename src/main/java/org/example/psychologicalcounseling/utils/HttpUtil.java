@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
-public class HttpProxy {
+public class HttpUtil {
     private static final CloseableHttpClient httpclient = HttpClients.createDefault();
 
     private synchronized static String getResponse(HttpRequestBase request) {
