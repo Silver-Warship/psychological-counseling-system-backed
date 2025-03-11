@@ -1,7 +1,7 @@
 package org.example.psychologicalcounseling.config;
 
 
-import org.example.psychologicalcounseling.controller.chat.ChatHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -10,6 +10,11 @@ import org.springframework.web.socket.config.annotation.*;
 public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new ChatHandler(), "/chat").setAllowedOrigins("*");
+        registry.addHandler(chatHandler(), "/chat").setAllowedOrigins("*");
+    }
+
+    @Bean
+    public ChatHandlerConfig chatHandler() {
+        return new ChatHandlerConfig();
     }
 }

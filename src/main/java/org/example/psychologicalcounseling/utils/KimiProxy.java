@@ -1,9 +1,9 @@
 package org.example.psychologicalcounseling.utils;
 
 import com.alibaba.fastjson.JSON;
-import org.example.psychologicalcounseling.param.kimi.KimiConversation;
-import org.example.psychologicalcounseling.param.kimi.KimiMessage;
-import org.example.psychologicalcounseling.param.kimi.KimiResponse;
+import org.example.psychologicalcounseling.dto.kimi.KimiConversation;
+import org.example.psychologicalcounseling.dto.kimi.KimiMessage;
+import org.example.psychologicalcounseling.dto.kimi.KimiResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public class KimiProxy {
         // get response from server and parse it to get returned messages
         String str_response = post_request(messages);
         KimiResponse map_response = JSON.parseObject(str_response, KimiResponse.class);
-        List<KimiConversation> choices = map_response.getChoices();
+        KimiConversation[] choices = map_response.getChoices();
         if (choices == null) {
             return ERROR_WORD;
         }
@@ -54,13 +54,13 @@ public class KimiProxy {
 
         String str_response = post_request(messages);
         KimiResponse map_response = JSON.parseObject(str_response, KimiResponse.class);
-        List<KimiConversation> choices = map_response.getChoices();
+        KimiConversation[] choices = map_response.getChoices();
         if (choices == null) {
             messages.remove(messages.size() - 1);
             return ERROR_WORD;
         }
 
-        KimiMessage last_message = choices.get(choices.size() - 1).getMessage();
+        KimiMessage last_message = choices[choices.length - 1].getMessage();
         messages.add(last_message);
         session_pool.put(session_id, messages);
 

@@ -1,7 +1,8 @@
-package org.example.psychologicalcounseling.param;
+package org.example.psychologicalcounseling.dto;
+
+import com.alibaba.fastjson.JSON;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class Response<T> {
     public int code;
@@ -18,7 +19,7 @@ public class Response<T> {
         return Map.of(
                 "code", code,
                 "message", message,
-                "data", (data == null) ? "null" : data
+                "data", (data == null) ? "null" : JSON.toJSONString(data)
         ).toString();
     }
 }

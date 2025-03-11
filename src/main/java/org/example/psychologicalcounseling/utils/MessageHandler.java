@@ -1,19 +1,19 @@
-package org.example.psychologicalcounseling.controller;
+package org.example.psychologicalcounseling.utils;
 
-import org.example.psychologicalcounseling.param.Request;
-import org.example.psychologicalcounseling.param.Response;
+import com.alibaba.fastjson.JSON;
+import org.example.psychologicalcounseling.dto.RequestHandler;
+import org.example.psychologicalcounseling.dto.Response;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MessageHandler implements WebSocketHandler {
-    protected HashMap<String, Request> requestMap;
+    protected HashMap<String, RequestHandler<?, ?>> requestMap;
 
     public MessageHandler(MessageHandler... children) {
         requestMap = new HashMap<>(10);
-        requestMap.put("heart_beat", new Request("heart_beat", new String[]{}, this::heartBeat));
 
         // add children's requestMap to this requestMap
         for (MessageHandler child : children) {
@@ -23,7 +23,6 @@ public class MessageHandler implements WebSocketHandler {
 
     public MessageHandler() {
         requestMap = new HashMap<>(10);
-        requestMap.put("heart_beat", new Request("heart_beat", new String[]{}, this::heartBeat));
     }
 
     public String handle(String message) {
@@ -42,20 +41,19 @@ public class MessageHandler implements WebSocketHandler {
         }
 
         // check if the required params are present
-        Request request = requestMap.get(request_type);
-        String[] requiredParams = request.getRequireParams();
+        RequestHandler<?, ?> request = requestMap.get(request_type);
+        String[] requiredParams = request.requestParams();
         for (String param : requiredParams) {
             if (!json.has(param)) {
                 return new Response<>(-1, "Missing required parameter: " + param, "null").toJsonString();
             }
         }
 
-        // handle request
-        return request.handle(json.toMap());
-    }
+        // initialize request object
+        Type requestParamType = request.getRequestParamClass();
 
-    public String heartBeat(Map<String, ?> request_json) {
-        return new Response<>(200, "success", "活着").toJsonString();
+        // handle request
+        return request.handleRequest(JSON.parseObject(message, requestParamType)).toJsonString();
     }
 
     @Override
