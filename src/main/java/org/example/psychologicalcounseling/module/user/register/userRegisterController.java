@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.user;
+package org.example.psychologicalcounseling.module.user.register;
 
 
 import org.example.psychologicalcounseling.dto.UserDto;
@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class userRegisterController {
 
     @Autowired//自动插入
-    private UserService userService;
+    private userRegisterService userRegisterService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser( @RequestBody UserDto userDto) {
-        userService.registerUser(userDto);
+        userRegisterService.registerUser(userDto);
         return ResponseEntity.ok("User registered successfully");
     }
 
     @GetMapping("/{uid}")
     public  ResponseEntity<UserDto> getUserByUid(@PathVariable Long uid) {
-        UserDto userDto = userService.findByUid(uid);
+        UserDto userDto = userRegisterService.findByUid(uid);
         return ResponseEntity.ok(userDto);
     }
 }
