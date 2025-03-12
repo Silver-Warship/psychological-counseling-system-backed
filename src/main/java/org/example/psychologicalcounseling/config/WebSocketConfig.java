@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.config;
 
 
+import org.example.psychologicalcounseling.controller.chat.ChatController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
@@ -14,7 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public ChatHandlerConfig chatHandler() {
-        return new ChatHandlerConfig();
+    public ChatController chatHandler() {
+        return new ChatController();
     }
 }

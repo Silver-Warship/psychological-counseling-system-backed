@@ -1,28 +1,25 @@
-package org.example.psychologicalcounseling.utils;
+package org.example.psychologicalcounseling.controller;
 
 import com.alibaba.fastjson.JSON;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
+import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-public class MessageHandler implements WebSocketHandler {
-    protected HashMap<String, RequestHandler<?, ?>> requestMap;
+public class MessageController implements WebSocketHandler {
+    protected HashMap<String, Class<?>> requestMap;
 
-    public MessageHandler(MessageHandler... children) {
+    public MessageController(MessageController... children) {
         requestMap = new HashMap<>(10);
 
         // add children's requestMap to this requestMap
-        for (MessageHandler child : children) {
+        for (MessageController child : children) {
             requestMap.putAll(child.requestMap);
         }
-    }
-
-    public MessageHandler() {
-        requestMap = new HashMap<>(10);
     }
 
     public String handle(String message) {
@@ -41,7 +38,7 @@ public class MessageHandler implements WebSocketHandler {
         }
 
         // check if the required params are present
-        RequestHandler<?, ?> request = requestMap.get(request_type);
+        RequestHandler<?, ?> request = (RequestHandler<?, ?>)GetBeanUtil.getBean(requestMap.get(request_type));
         String[] requiredParams = request.requestParams();
         for (String param : requiredParams) {
             if (!json.has(param)) {
@@ -54,6 +51,10 @@ public class MessageHandler implements WebSocketHandler {
 
         // handle request
         return request.handleRequest(JSON.parseObject(message, requestParamType)).toJsonString();
+    }
+
+    public <T> void registerRequest(String type, Class<T> handler) {
+        requestMap.put(type, handler);
     }
 
     @Override
