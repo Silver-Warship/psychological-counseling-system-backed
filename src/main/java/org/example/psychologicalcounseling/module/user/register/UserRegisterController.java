@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-public class userRegisterController {
+public class UserRegisterController {
 
     @Autowired//自动插入
-    private userRegisterService userRegisterService;
+    private UserRegisterService userRegisterService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser( @RequestBody UserDto userDto) {

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class userRegisterService {
+public class UserRegisterService {
 
     private final UserRepository userRepository;
 
-    public userRegisterService(UserRepository userRepository) {
+    public UserRegisterService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
