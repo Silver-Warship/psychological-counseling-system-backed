@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.user;
+package org.example.psychologicalcounseling.module.user.register;
 
 
 import org.example.psychologicalcounseling.dto.UserDto;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserService {
+public class userRegisterService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public userRegisterService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
