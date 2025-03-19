@@ -11,32 +11,21 @@ public class UserLoginService {
 
     @Autowired
     UserRepository userRepository;
-
-    //检查传入的email和password进行匹配
+    //检查传入的email和password是否存在且匹配
     public boolean authenticate(String email, String password) {
-        // 模拟从数据库中获取用户信息
+
+        //从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
-        //如果user非空
         if (user==null) {
-            System.out.println("User not exist");
+            //System.out.println("User not exist");
             return false;
         }
-        String storedPassword = user.getPassword(); // 假设从数据库获取的加密密码
-
-
-
         //检查密码是否匹配
+        String storedPassword = user.getPassword();
         if (!password.equals(storedPassword)){
-            System.out.println("Password does not match");
+            //System.out.println("Password does not match");
             return false;
         }
-
         return true;
     }
-
-    //检查数据库中是否有匹配的记录
-
-    //生成token
-
-
 }

@@ -4,6 +4,7 @@ package org.example.psychologicalcounseling.module.user.register;
 import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.repository.UserRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 
@@ -16,21 +17,21 @@ public class UserRegisterService {
         this.userRepository = userRepository;
     }
 
-    public void registerUser(UserDto userDto) {
-        //注册用户数据保存到数据库
-        // 将 UserDto 转换为 User
-
-        System.out.println("Registering user: " + userDto.getEmail());
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setNickname(userDto.getNickname());
-        //user需要自动生成不重复的id
-
-        // 保存到数据库
-        userRepository.save(user);
-
-        System.out.println("User registered: " + user.getUid());
+    public boolean registerUser(UserDto userDto) {
+        try {
+            // 将 UserDto 转换为 User
+            User user = new User();
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+            user.setNickname(userDto.getNickname());
+            // 保存到数据库
+            userRepository.save(user);
+            // 保存成功
+            return true;
+        } catch (Exception e) {
+            // 捕获数据库操作异常
+            return false;
+        }
     }
 
     public UserDto findByUid(Long uid) {

@@ -15,9 +15,13 @@ public class UserRegisterController {
     private UserRegisterService userRegisterService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser( @RequestBody UserDto userDto) {
-        userRegisterService.registerUser(userDto);
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<?> registerUser( @RequestBody UserDto userDto) {
+        RegisterResponse response= new RegisterResponse();
+        if (!userRegisterService.registerUser(userDto)){
+            response.setCode(400);
+            response.setCodeMsg("Repeated email.");
+        }
+        return response.buildResponse();
     }
 
     @GetMapping("/{uid}")

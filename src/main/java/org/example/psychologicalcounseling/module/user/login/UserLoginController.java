@@ -1,24 +1,44 @@
 package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.LoginRequestDto;
+import org.example.psychologicalcounseling.module.safety.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserLoginController {
     @Autowired//自动插入
     private UserLoginService userLoginService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDto loginRequest) {
-        if (userLoginService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())) {
-            return "login success";
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
+        //验证email和password是否正确
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+
+        LoginResponse response = new LoginResponse();
+        if (userLoginService.authenticate(email, password)) {
+            //给正确的用户生成token
+            String token = jwtUtil.generateToken(email);
+            response.setToken(token);
         } else {
-            throw new RuntimeException("Invalid username or password");
+            response.setCode(401);
+            response.setCodeMsg("Invalid username or password");
+        }
+        return response.buildResponse();
+    }
+
+    @GetMapping("/tokenValid")
+    public String getUserInfo(@RequestHeader("Authorization") String token) {
+        if (jwtUtil.validateToken(token)) {
+            String email = jwtUtil.getEmailFromToken(token);
+            return "Hello, " + email + "!";
+        } else {
+            return "Invalid token";
         }
     }
 
