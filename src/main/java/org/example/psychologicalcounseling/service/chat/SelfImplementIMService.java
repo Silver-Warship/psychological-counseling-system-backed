@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SelfImplementIMService implements ChatService {
@@ -36,8 +37,8 @@ public class SelfImplementIMService implements ChatService {
         // 按时间顺序获取所有未接收的消息
         // 消息状态为0的数据表示未接受说
         List<Message> messages = messageRepository.findAll().stream().filter(message ->
-                message.getStatus() == 0 && message.getReceiverID() == request.getUserID()
-                        && message.getSessionID() == request.getSessionID()).toList();
+                message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID())
+                        && Objects.equals(message.getSessionID(), request.getSessionID())).toList();
 
         // 依次更新消息状态并存回数据库
         PullUnReceivedMessageResponse.Message[] messageArray = new PullUnReceivedMessageResponse.Message[messages.size()];
