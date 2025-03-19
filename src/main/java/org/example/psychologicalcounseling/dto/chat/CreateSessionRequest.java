@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransmitMessageResponse {
-    private Long messageID;
+public class CreateSessionRequest {
+    private Long firstUserID;
+    private Long secondUserID;
+    private Long sessionStartTime;
 }

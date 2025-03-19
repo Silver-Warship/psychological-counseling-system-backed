@@ -9,5 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PullUnReceivedMessageResponse {
-    private String[] messageID;
+    @Data
+    public static class Message {
+        private Long messageID;
+        private org.example.psychologicalcounseling.model.Message.FileType contentType;
+        private String content;
+        private long timestamp;
+    }
+
+    private Message[] messages;
 }
