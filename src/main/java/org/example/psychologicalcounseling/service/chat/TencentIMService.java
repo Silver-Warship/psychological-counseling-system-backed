@@ -1,10 +1,7 @@
 package org.example.psychologicalcounseling.service.chat;
 
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageRequest;
-import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageResponse;
-import org.example.psychologicalcounseling.dto.chat.TransmitMessageRequest;
-import org.example.psychologicalcounseling.dto.chat.TransmitMessageResponse;
+import org.example.psychologicalcounseling.dto.chat.*;
 import org.example.psychologicalcounseling.utils.HttpUtil;
 import org.json.JSONObject;
 
@@ -53,12 +50,16 @@ public class TencentIMService implements ChatService {
 
     @Override
     public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
-        return new Response<>(200, "success", new PullUnReceivedMessageResponse(new String[]{"1", "2"}));
+        return null;
+    }
+
+    @Override
+    public Response<AcknowledgeMessageResponse> acknowledgeMessage(AcknowledgeMessageRequest request) {
+        return null;
     }
 
     public static void main(String[] args) {
         TencentIMService tencentIM = new TencentIMService();
-        TransmitMessageRequest request_json = new TransmitMessageRequest("s1", "1", "2", "TIMTextElem", "Text", 1234566789);
-        tencentIM.transmitMessage(request_json);
+
     }
 }

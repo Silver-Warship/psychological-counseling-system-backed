@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransmitMessageResponse {
-    private Long messageID;
+public class AcknowledgeMessageRequest {
+    private Long[] messageIDs;
+    private Long ackTimestamp;
 }
