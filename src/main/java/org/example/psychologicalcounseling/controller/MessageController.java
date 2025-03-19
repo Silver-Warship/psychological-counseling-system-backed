@@ -7,6 +7,7 @@ import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
@@ -24,24 +25,25 @@ public class MessageController implements WebSocketHandler {
 
     public String handle(String message) {
         // convert message to json
-        JSONObject json;
+        JSONObject json, content;
         try {
             json = new JSONObject(message);
+            content = json.getJSONObject("data");
         } catch (Exception e) {
             return new Response<>(-1, "Invalid JSON", "null").toJsonString();
         }
 
         // check if request type is valid
-        String request_type = json.getString("type");
-        if (!requestMap.containsKey(request_type)) {
+        String requestType = json.getString("type");
+        if (!requestMap.containsKey(requestType)) {
             return new Response<>(-1, "Invalid request type", "null").toJsonString();
         }
 
         // check if the required params are present
-        RequestHandler<?, ?> request = (RequestHandler<?, ?>)GetBeanUtil.getBean(requestMap.get(request_type));
+        RequestHandler<?, ?> request = (RequestHandler<?, ?>)GetBeanUtil.getBean(requestMap.get(requestType));
         String[] requiredParams = request.requestParams();
         for (String param : requiredParams) {
-            if (!json.has(param)) {
+            if (!content.has(param)) {
                 return new Response<>(-1, "Missing required parameter: " + param, "null").toJsonString();
             }
         }
@@ -50,7 +52,9 @@ public class MessageController implements WebSocketHandler {
         Type requestParamType = request.getRequestParamClass();
 
         // handle request
-        return request.handleRequest(JSON.parseObject(message, requestParamType)).toJsonString();
+        Response<?> response = request.handleRequest(JSON.parseObject(content.toString(), requestParamType));
+        response.setSeq(json.getString("seq"));
+        return response.toJsonString();
     }
 
     public <T> void registerRequest(String type, Class<T> handler) {
@@ -65,7 +69,11 @@ public class MessageController implements WebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String response = handle(message.getPayload().toString());
-        session.sendMessage(new TextMessage(response));
+        try {
+            session.sendMessage(new TextMessage(response));
+        } catch (IOException ignored) {
+
+        }
     }
 
     @Override

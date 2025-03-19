@@ -9,5 +9,6 @@ public class ChatController extends MessageController {
         super();
         registerRequest("transmitMessage", TransmitMessageController.class);
         registerRequest("pullUnReceivedMessage", PullUnReceiveMessageController.class);
+        registerRequest("acknowledgeMessage", AcknowledgeMessageController.class);
     }
 }

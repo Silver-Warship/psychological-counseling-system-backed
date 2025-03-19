@@ -1,5 +1,7 @@
 package org.example.psychologicalcounseling.dto;
 import lombok.Getter;
+import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageRequest;
+import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageResponse;
 
 import java.lang.reflect.Field;
 

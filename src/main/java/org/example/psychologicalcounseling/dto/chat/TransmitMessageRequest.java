@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransmitMessageRequest {
-    private String sessionID;
-    private String senderID;
-    private String receiverID;
+    private Long sessionID;
+    private Long senderID;
+    private Long receiverID;
     private String content;
-    private String messageType;
-    private long timestamp;
+    private org.example.psychologicalcounseling.model.Message.FileType contentType;
+    private Long timestamp;
 }
