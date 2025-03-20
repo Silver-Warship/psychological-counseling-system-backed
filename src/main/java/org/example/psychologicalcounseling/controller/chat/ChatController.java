@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 public class ChatController extends MessageController {
     public ChatController() {
         super();
-        registerRequest("transmitMessage", TransmitMessageController.class);
-        registerRequest("pullUnReceivedMessage", PullUnReceiveMessageController.class);
-        registerRequest("acknowledgeMessage", AcknowledgeMessageController.class);
+        registerRequest("sendMsg", TransmitMessageController.class);
+        registerRequest("requestMsg", PullUnReceiveMessageController.class);
+        registerRequest("ackMsg", AcknowledgeMessageController.class);
         registerRequest("createSession", CreateSessionController.class);
     }
 }
