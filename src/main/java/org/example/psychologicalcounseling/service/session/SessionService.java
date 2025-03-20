@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SessionService {
-    private final SessionRepository sessionRepository;
+    static final long SESSION_TIMEOUT = 600000;
 
-    public SessionService(SessionRepository sessionRepository) {
+    private final SessionRepository sessionRepository;
+    private final SessionTimeoutDetect sessionTimeoutDetect;
+
+    public SessionService(SessionRepository sessionRepository, SessionTimeoutDetect sessionManager) {
         this.sessionRepository = sessionRepository;
+        this.sessionTimeoutDetect = sessionManager;
     }
 
     public Response<CreateSessionResponse> createSession(CreateSessionRequest request) {
@@ -21,8 +25,13 @@ public class SessionService {
         session.setStartTimestamp(request.getSessionStartTime());
         session.setFirstUserID(request.getFirstUserID());
         session.setSecondUserID(request.getSecondUserID());
+        session.setLastMessageTimestamp(System.currentTimeMillis());
         session.setIsClosed(false);
         sessionRepository.save(session);
+
+        // register the session in session manager
+        // the session will be removed after 10 minutes if no activity is detected
+        sessionTimeoutDetect.registerSession(session.getSID(), SESSION_TIMEOUT);
 
         return new Response<>(200, "Session created successfully", new CreateSessionResponse(session.getSID()));
     }
