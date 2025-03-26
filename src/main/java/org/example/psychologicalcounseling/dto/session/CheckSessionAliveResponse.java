@@ -1,4 +1,5 @@
-package org.example.psychologicalcounseling.dto.chat;
+package org.example.psychologicalcounseling.dto.session;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateSessionResponse {
-    private Long sessionID;
+public class CheckSessionAliveResponse {
+    Boolean isAlive;
 }

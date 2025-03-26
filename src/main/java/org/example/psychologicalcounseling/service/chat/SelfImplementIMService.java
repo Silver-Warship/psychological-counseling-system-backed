@@ -27,7 +27,7 @@ public class SelfImplementIMService implements ChatService {
         message.setContentType(request.getContentType());
         message.setSendTimestamp(request.getTimestamp());
         message.setStatus(0);
-        messageRepository.saveAndFlush(message);
+        messageRepository.save(message);
 
         return new Response<>(200, "success", new TransmitMessageResponse(message.getMID()));
     }
@@ -63,7 +63,7 @@ public class SelfImplementIMService implements ChatService {
             message.setStatus(1);
             message.setReceiveTimestamp(request.getAckTimestamp());
         }
-        messageRepository.saveAllAndFlush(messages);
+        messageRepository.saveAll(messages);
 
         return new Response<>(200, "ack success", null);
     }

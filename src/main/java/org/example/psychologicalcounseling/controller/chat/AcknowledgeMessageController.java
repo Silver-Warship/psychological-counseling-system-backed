@@ -18,6 +18,10 @@ public class AcknowledgeMessageController  extends RequestHandler<AcknowledgeMes
 
     @Override
     public Response<AcknowledgeMessageResponse> handleRequest(AcknowledgeMessageRequest request) {
+        if (request.getAckTimestamp() <= 0) {
+            return new Response<>(400, "error timestamp", null);
+        }
+
         return chatService.acknowledgeMessage(request);
     }
 }

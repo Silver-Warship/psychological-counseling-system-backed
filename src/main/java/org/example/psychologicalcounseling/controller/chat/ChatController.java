@@ -1,15 +1,18 @@
 package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.controller.MessageController;
+import org.example.psychologicalcounseling.dto.session.CheckSessionAliveResponse;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ChatController extends MessageController {
     public ChatController() {
         super();
-        registerRequest("transmitMessage", TransmitMessageController.class);
-        registerRequest("pullUnReceivedMessage", PullUnReceiveMessageController.class);
-        registerRequest("acknowledgeMessage", AcknowledgeMessageController.class);
+        registerRequest("sendMsg", TransmitMessageController.class);
+        registerRequest("requestMsg", PullUnReceiveMessageController.class);
+        registerRequest("ackMsg", AcknowledgeMessageController.class);
         registerRequest("createSession", CreateSessionController.class);
+        registerRequest("checkSessionAlive", CheckSessionAliveResponse.class);
+        registerRequest("registerConnection", RegisterConnectionController.class);
     }
 }
