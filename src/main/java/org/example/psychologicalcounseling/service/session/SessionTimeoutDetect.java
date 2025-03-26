@@ -56,7 +56,7 @@ public class SessionTimeoutDetect {
         timer.schedule(task, new Date(timeoutPeriod));
     }
 
-    public void registerSession(long sessionID, long timeout) {
+     public void registerSession(long sessionID, long timeout) {
         // add timer task to remove the session after the timeout
         addTimerTask(sessionID, timeout);
     }

@@ -1,8 +1,7 @@
 package org.example.psychologicalcounseling.service.session;
 
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.CreateSessionRequest;
-import org.example.psychologicalcounseling.dto.chat.CreateSessionResponse;
+import org.example.psychologicalcounseling.dto.chat.*;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +33,23 @@ public class SessionService {
         sessionTimeoutDetect.registerSession(session.getSID(), SESSION_TIMEOUT);
 
         return new Response<>(200, "Session created successfully", new CreateSessionResponse(session.getSID()));
+    }
+
+    public Response<CheckSessionAliveResponse> checkSessionAlive(CheckSessionAliveRequest request) {
+        // check if the session is still active
+        Session session = sessionRepository.findById(request.getSessionID()).orElse(null);
+        if (session == null) {
+            return new Response<>(404, "Session not found", null);
+        }
+
+        if (session.getIsClosed()) {
+            return new Response<>(200, "Session is not alive", new CheckSessionAliveResponse(false));
+        }
+
+        // update the last activity time of the session
+        session.setLastMessageTimestamp(System.currentTimeMillis());
+        sessionRepository.save(session);
+
+        return new Response<>(200, "Session is alive", new CheckSessionAliveResponse(true));
     }
 }
