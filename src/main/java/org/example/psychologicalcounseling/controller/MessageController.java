@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
@@ -23,7 +24,7 @@ public class MessageController implements WebSocketHandler {
         }
     }
 
-    public String handle(String message) {
+    public String handle(String message, WebSocketSession session) {
         // convert message to json
         JSONObject json, content;
         try {
@@ -34,6 +35,18 @@ public class MessageController implements WebSocketHandler {
         }
 
         // check if request type is valid
+        if (!json.has("type")) {
+            return new Response<>(-1, "Missing request type", "null").toJsonString();
+        }
+
+        if (!json.has("seq")) {
+            return new Response<>(-1, "Missing request seq", "null").toJsonString();
+        }
+
+        if (!json.has("data")) {
+            return new Response<>(-1, "Missing request data", "null").toJsonString();
+        }
+
         String requestType = json.getString("type");
         if (!requestMap.containsKey(requestType)) {
             return new Response<>(-1, "Invalid request type", "null").toJsonString();
@@ -52,7 +65,15 @@ public class MessageController implements WebSocketHandler {
         Type requestParamType = request.getRequestParamClass();
 
         // handle request
-        Response<?> response = request.handleRequest(JSON.parseObject(content.toString(), requestParamType));
+        Response<?> response = null;
+        try {
+            response = request.handleRequest(JSON.parseObject(content.toString(), requestParamType), session);
+        } catch (JSONException e) {
+            return new Response<>(401, "data content error", null).toJsonString();
+        } catch (Exception e) {
+            return new Response<>(501, "server internal error", null).toJsonString();
+        }
+
         response.setSeq(json.getString("seq"));
         return response.toJsonString();
     }
@@ -68,7 +89,7 @@ public class MessageController implements WebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        String response = handle(message.getPayload().toString());
+        String response = handle(message.getPayload().toString(), session);
         try {
             session.sendMessage(new TextMessage(response));
         } catch (IOException ignored) {

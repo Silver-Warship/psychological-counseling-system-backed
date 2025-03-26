@@ -1,7 +1,10 @@
 package org.example.psychologicalcounseling.service.session;
 
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.*;
+import org.example.psychologicalcounseling.dto.session.CheckSessionAliveRequest;
+import org.example.psychologicalcounseling.dto.session.CheckSessionAliveResponse;
+import org.example.psychologicalcounseling.dto.session.CreateSessionRequest;
+import org.example.psychologicalcounseling.dto.session.CreateSessionResponse;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.springframework.stereotype.Service;
