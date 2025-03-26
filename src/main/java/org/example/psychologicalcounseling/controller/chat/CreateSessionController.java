@@ -2,8 +2,8 @@ package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.CreateSessionRequest;
-import org.example.psychologicalcounseling.dto.chat.CreateSessionResponse;
+import org.example.psychologicalcounseling.dto.session.CreateSessionRequest;
+import org.example.psychologicalcounseling.dto.session.CreateSessionResponse;
 import org.example.psychologicalcounseling.service.session.SessionService;
 import org.springframework.stereotype.Controller;
 
@@ -18,6 +18,10 @@ public class CreateSessionController extends RequestHandler<CreateSessionRequest
 
     @Override
     public Response<CreateSessionResponse> handleRequest(CreateSessionRequest request) {
+        if (request.getSessionStartTime() <= 0) {
+            return new Response<>(400, "session start time should greater than 1", null);
+        }
+
         return sessionService.createSession(request);
     }
 }

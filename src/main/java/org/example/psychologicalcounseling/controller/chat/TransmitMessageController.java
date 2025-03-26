@@ -18,6 +18,13 @@ public class TransmitMessageController extends RequestHandler<TransmitMessageReq
 
     @Override
     public Response<TransmitMessageResponse> handleRequest(TransmitMessageRequest request) {
+        if (request.getContentType() == null) {
+            return new Response<>(400, "error content type", null);
+        }
+        if (request.getTimestamp() <= 0) {
+            return new Response<>(400, "error timestamp", null);
+        }
+
         return chatService.transmitMessage(request);
     }
 }

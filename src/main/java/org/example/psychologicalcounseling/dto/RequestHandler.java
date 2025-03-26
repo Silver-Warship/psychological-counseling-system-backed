@@ -1,10 +1,11 @@
 package org.example.psychologicalcounseling.dto;
 import lombok.Getter;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.lang.reflect.Field;
 
 @Getter
-public abstract class RequestHandler<T, V> {
+public class RequestHandler<T, V> {
     // requestParamClass: the class of the request parameter
     // responseDataClass: the class of the response data
     private final Class<T> requestParamClass;
@@ -29,5 +30,16 @@ public abstract class RequestHandler<T, V> {
         return attributes;
     }
 
-    public abstract Response<V> handleRequest(T request);
+
+    // declare the method handleRequest
+    // only one of the two handleRequest methods will be used
+    // depending on the subclass
+    //  must override this method
+    public Response<V> handleRequest(T request) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Response<V> handleRequest(T request, WebSocketSession session) {
+        return handleRequest(request);
+    }
 }
