@@ -17,9 +17,6 @@ public class UserRegisterService {
         this.userRepository = userRepository;
     }
 
-
-
-
     public boolean registerUser(UserDto userDto) {
         try {
             // 将 UserDto 转换为 User
@@ -27,6 +24,7 @@ public class UserRegisterService {
             user.setEmail(userDto.getEmail());
             user.setPassword(userDto.getPassword());
             user.setNickname(userDto.getNickname());
+            user.setRole(User.Role.USER);
             // 保存到数据库
             userRepository.save(user);
             // 保存成功
