@@ -33,7 +33,7 @@ public class SelfImplementIMService implements ChatService {
 
         // package the message which will be sent to the receiver
         PullUnReceivedMessageResponse.Message msgToClient = new PullUnReceivedMessageResponse.Message();
-        msgToClient.setMessageID(message.getMID());
+        msgToClient.setMessageID(message.getMessageID());
         msgToClient.setContent(message.getContent());
         msgToClient.setContentType(message.getContentType());
         msgToClient.setTimestamp(message.getSendTimestamp());
@@ -53,6 +53,7 @@ public class SelfImplementIMService implements ChatService {
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
         // save the message to the database
         Message message = new Message();
+        message.setSessionID(request.getSessionID());
         message.setSenderID(request.getSenderID());
         message.setReceiverID(request.getReceiverID());
         message.setContent(request.getContent());
@@ -61,11 +62,10 @@ public class SelfImplementIMService implements ChatService {
         message.setStatus(0);
         messageRepository.save(message);
 
-
         // send to the receiver if the receiver is online
         sendMessage(message);
 
-        return new Response<>(200, "success", new TransmitMessageResponse(message.getMID()));
+        return new Response<>(200, "success", new TransmitMessageResponse(message.getMessageID()));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SelfImplementIMService implements ChatService {
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
             PullUnReceivedMessageResponse.Message m = new PullUnReceivedMessageResponse.Message();
-            m.setMessageID(message.getMID());
+            m.setMessageID(message.getMessageID());
             m.setContent(message.getContent());
             m.setContentType(message.getContentType());
             m.setTimestamp(message.getSendTimestamp());
