@@ -65,7 +65,7 @@ public class MessageController implements WebSocketHandler {
         Type requestParamType = request.getRequestParamClass();
 
         // handle request
-        Response<?> response = null;
+        Response<?> response;
         try {
             response = request.handleRequest(JSON.parseObject(content.toString(), requestParamType), session);
         } catch (JSONException e) {

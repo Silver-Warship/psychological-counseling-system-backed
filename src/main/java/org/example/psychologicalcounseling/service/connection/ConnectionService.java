@@ -1,6 +1,5 @@
 package org.example.psychologicalcounseling.service.connection;
 
-import lombok.Getter;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.RegisterConnectionRequest;
 import org.example.psychologicalcounseling.dto.chat.RegisterConnectionResponse;

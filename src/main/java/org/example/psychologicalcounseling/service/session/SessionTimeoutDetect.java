@@ -8,7 +8,6 @@ import org.example.psychologicalcounseling.service.connection.ConnectionService;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
