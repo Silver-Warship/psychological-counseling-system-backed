@@ -4,7 +4,11 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.*;
 import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.model.Message;
+import org.example.psychologicalcounseling.service.connection.ConnectionService;
+import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +22,36 @@ public class SelfImplementIMService implements ChatService {
         this.messageRepository = messageRepository;
     }
 
+    private void sendMessage(Message message) {
+        // send to the receiver if the receiver is online
+        Long receiverID = message.getReceiverID();
+        ConnectionService connectionService = GetBeanUtil.getBean(ConnectionService.class);
+        WebSocketSession session = connectionService.getConnection(receiverID);
+        if (session == null || !session.isOpen()) {
+            return;
+        }
+
+        // package the message which will be sent to the receiver
+        PullUnReceivedMessageResponse.Message msgToClient = new PullUnReceivedMessageResponse.Message();
+        msgToClient.setMessageID(message.getMID());
+        msgToClient.setContent(message.getContent());
+        msgToClient.setContentType(message.getContentType());
+        msgToClient.setTimestamp(message.getSendTimestamp());
+        Response<PullUnReceivedMessageResponse.Message> serverResponse = new Response<>(
+                200, "there are new message from other user", msgToClient
+        );
+
+        // convert the message to json string and send it to the receiver
+        try{
+            session.sendMessage(new TextMessage(serverResponse.toString()));
+        } catch (Exception ignored) {
+
+        }
+    }
+
     @Override
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
+        // save the message to the database
         Message message = new Message();
         message.setSenderID(request.getSenderID());
         message.setReceiverID(request.getReceiverID());
@@ -29,18 +61,21 @@ public class SelfImplementIMService implements ChatService {
         message.setStatus(0);
         messageRepository.save(message);
 
+
+        // send to the receiver if the receiver is online
+        sendMessage(message);
+
         return new Response<>(200, "success", new TransmitMessageResponse(message.getMID()));
     }
 
     @Override
     public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
-        // 按时间顺序获取所有未接收的消息
-        // 消息状态为0的数据表示未接受说
+        // get the un-received message from the database in chronological order
         List<Message> messages = messageRepository.findAll().stream().filter(message ->
                 message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID())
                         && Objects.equals(message.getSessionID(), request.getSessionID())).toList();
 
-        // 依次更新消息状态并存回数据库
+        // package the message to response
         PullUnReceivedMessageResponse.Message[] messageArray = new PullUnReceivedMessageResponse.Message[messages.size()];
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
@@ -57,7 +92,7 @@ public class SelfImplementIMService implements ChatService {
 
     @Override
     public Response<AcknowledgeMessageResponse> acknowledgeMessage(AcknowledgeMessageRequest request) {
-        // 更新消息状态为1表示已接收
+        // update the message status to 1 and set receive timestamp
         List<Message> messages = messageRepository.findAllById(Arrays.asList(request.getMessageIDs()));
         for (Message message : messages) {
             message.setStatus(1);
