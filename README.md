@@ -1,6 +1,10 @@
-SpringBoot_BackEnd
+# SpringBoot_BackEnd
+
+
+
 demo为SpringBoot框架，利用Maven进行依赖管理，架构设计如下：
 
+```
 src/
 ├── main/
 │   ├── java/
@@ -22,3 +26,5 @@ src/
 ├── test/
 |
 pom.xml/                                    //Maven的依赖配置文件
+```
+
