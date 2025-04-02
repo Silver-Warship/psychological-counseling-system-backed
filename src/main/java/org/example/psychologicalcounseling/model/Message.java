@@ -2,10 +2,11 @@ package org.example.psychologicalcounseling.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.psychologicalcounseling.dto.chat.TransmitMessageRequest;
 
 @Data
 @Entity
-@Table(schema = "message")
+@Table(schema = "Message")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +46,15 @@ public class Message {
     public enum FileType {
         TEXT, IMAGE, FILE, LARGE_FILE, RECORD
     }
+
+    public Message(TransmitMessageRequest request) {
+        this.setSenderID(request.getSenderID());
+        this.setReceiverID(request.getReceiverID());
+        this.setContent(request.getContent());
+        this.setContentType(request.getContentType());
+        this.setSendTimestamp(request.getTimestamp());
+        this.setStatus(0);
+    }
+
+    public Message() {}
 }

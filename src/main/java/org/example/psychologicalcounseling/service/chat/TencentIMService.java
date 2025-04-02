@@ -1,7 +1,10 @@
 package org.example.psychologicalcounseling.service.chat;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.*;
+import org.example.psychologicalcounseling.model.Message;
+import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.utils.HttpUtil;
 import org.json.JSONObject;
 
@@ -15,6 +18,11 @@ public class TencentIMService implements ChatService {
     final String ADMIN_USERSIG = "eJwtjMsOwiAURP*FLabSFkSbuPERianGpBo3blDQXO0rgI9o-Hex7XLOzJwP2qZZ8NAGJSgKCOo1GZQuHZyhwVIVUIJ1RrrKdAOrbrKuQaEkHBBCeExZ1Db6VYPRnjPGIl*11EHxZ5ySOBxxyjsLXLx-M5-mb2xX*CSI0uvZ-ljcM3**pk*ai0MfT3ZiuLCx1MtqjL4-efM0Yw__";
     final String RANDOM = "99999999";
     final String CONTENT_TYPE = "json";
+    private MessageRepository messageRepository;
+
+    public TencentIMService(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
     @Override
     // sample url : https://xxxxxx/v4/openim/sendmsg?sdkappid=88888888&identifier=admin&usersig=xxx&random=99999999&contenttype=json
@@ -40,12 +48,13 @@ public class TencentIMService implements ChatService {
         int error_code = json_response.getInt("ErrorCode");
         if (error_code == 0) {
             // store message into database
-            System.out.print("store into database");
+            Message message = new Message(request);
+            messageRepository.save(message);
         } else {
             return new Response<>(error_code, "error", new TransmitMessageResponse());
         }
 
-        return new Response<>(200, "success", new TransmitMessageResponse());
+        return new Response<>(ErrorConstant.successSendMessage.code, ErrorConstant.successSendMessage.codeMsg, new TransmitMessageResponse());
     }
 
     @Override
@@ -56,10 +65,5 @@ public class TencentIMService implements ChatService {
     @Override
     public Response<AcknowledgeMessageResponse> acknowledgeMessage(AcknowledgeMessageRequest request) {
         return null;
-    }
-
-    public static void main(String[] args) {
-        TencentIMService tencentIM = new TencentIMService();
-
     }
 }

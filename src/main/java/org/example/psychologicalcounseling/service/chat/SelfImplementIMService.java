@@ -1,9 +1,12 @@
 package org.example.psychologicalcounseling.service.chat;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.*;
+import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.model.Message;
+import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.service.connection.ConnectionService;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,11 @@ import java.util.Objects;
 @Service
 public class SelfImplementIMService implements ChatService {
     private final MessageRepository messageRepository;
+    private final SessionRepository sessionRepository;
 
-    public SelfImplementIMService(MessageRepository messageRepository) {
+    public SelfImplementIMService(MessageRepository messageRepository, SessionRepository sessionRepository) {
         this.messageRepository = messageRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     private void sendMessage(Message message) {
@@ -38,7 +43,7 @@ public class SelfImplementIMService implements ChatService {
         msgToClient.setContentType(message.getContentType());
         msgToClient.setTimestamp(message.getSendTimestamp());
         Response<PullUnReceivedMessageResponse.Message> serverResponse = new Response<>(
-                200, "there are new message from other user", msgToClient
+                ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
         );
 
         // convert the message to json string and send it to the receiver
@@ -51,21 +56,20 @@ public class SelfImplementIMService implements ChatService {
 
     @Override
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
+        // check session
+        Session session = sessionRepository.getSessionBySessionID(request.getSessionID());
+        if (session == null) {
+            return new Response<>(ErrorConstant.sessionNotExist.code, ErrorConstant.sessionNotExist.codeMsg, null);
+        }
+
         // save the message to the database
-        Message message = new Message();
-        message.setSessionID(request.getSessionID());
-        message.setSenderID(request.getSenderID());
-        message.setReceiverID(request.getReceiverID());
-        message.setContent(request.getContent());
-        message.setContentType(request.getContentType());
-        message.setSendTimestamp(request.getTimestamp());
-        message.setStatus(0);
+        Message message = new Message(request);
         messageRepository.save(message);
 
         // send to the receiver if the receiver is online
         sendMessage(message);
 
-        return new Response<>(200, "success", new TransmitMessageResponse(message.getMessageID()));
+        return new Response<>(ErrorConstant.successSendMessage.code, ErrorConstant.successSendMessage.codeMsg, new TransmitMessageResponse(message.getMessageID()));
     }
 
     @Override
@@ -87,7 +91,7 @@ public class SelfImplementIMService implements ChatService {
             messageArray[i] = m;
         }
 
-        return new Response<>(200, "pull message success", new PullUnReceivedMessageResponse(messageArray));
+        return new Response<>(ErrorConstant.successPullMessage.code, ErrorConstant.successPullMessage.codeMsg, new PullUnReceivedMessageResponse(messageArray));
     }
 
     @Override
@@ -100,6 +104,6 @@ public class SelfImplementIMService implements ChatService {
         }
         messageRepository.saveAll(messages);
 
-        return new Response<>(200, "ack success", null);
+        return new Response<>(ErrorConstant.successAckMessage.code, ErrorConstant.successSendMessage.codeMsg, null);
     }
 }

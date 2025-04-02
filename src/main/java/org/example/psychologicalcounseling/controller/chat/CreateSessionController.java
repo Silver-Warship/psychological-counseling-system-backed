@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.controller.chat;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.session.CreateSessionRequest;
@@ -19,7 +20,7 @@ public class CreateSessionController extends RequestHandler<CreateSessionRequest
     @Override
     public Response<CreateSessionResponse> handleRequest(CreateSessionRequest request) {
         if (request.getSessionStartTime() <= 0) {
-            return new Response<>(400, "session start time should greater than 1", null);
+            return new Response<>(ErrorConstant.illegalTimestamp.code, ErrorConstant.illegalTimestamp.codeMsg, null);
         }
 
         return sessionService.createSession(request);
