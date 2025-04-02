@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.service.connection;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.RegisterConnectionRequest;
 import org.example.psychologicalcounseling.dto.chat.RegisterConnectionResponse;
@@ -21,7 +22,8 @@ public class ConnectionService {
     }
 
     public Response<RegisterConnectionResponse> registerConnection(RegisterConnectionRequest request, WebSocketSession session) {
+        // judge whether the user has already login in
         connectionMap.put(request.getUserID(), session);
-        return new Response<>(200, "Connection registered", null);
+        return new Response<>(ErrorConstant.successRegisterConnection.code, ErrorConstant.successRegisterConnection.codeMsg, null);
     }
 }

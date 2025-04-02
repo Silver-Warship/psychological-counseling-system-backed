@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.controller.chat;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.dto.chat.AcknowledgeMessageRequest;
@@ -19,7 +20,7 @@ public class AcknowledgeMessageController  extends RequestHandler<AcknowledgeMes
     @Override
     public Response<AcknowledgeMessageResponse> handleRequest(AcknowledgeMessageRequest request) {
         if (request.getAckTimestamp() <= 0) {
-            return new Response<>(400, "timestamp should more than 0", null);
+            return new Response<>(ErrorConstant.illegalTimestamp.code, ErrorConstant.illegalTimestamp.codeMsg, null);
         }
 
         return chatService.acknowledgeMessage(request);

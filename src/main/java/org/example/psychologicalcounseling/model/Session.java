@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(schema = "session")
+@Table(schema = "Session")
 public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sid", nullable = false, length = 20)
-    private Long sID;
+    @Column(name = "sessionID", nullable = false, length = 20)
+    private Long sessionID;
 
     // start timestamp and end timestamp of the session
     private Long startTimestamp;

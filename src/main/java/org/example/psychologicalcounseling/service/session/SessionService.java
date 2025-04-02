@@ -33,16 +33,16 @@ public class SessionService {
 
         // register the session in session manager
         // the session will be removed after 10 minutes if no activity is detected
-        sessionTimeoutDetect.registerSession(session.getSID(), SESSION_TIMEOUT);
+        sessionTimeoutDetect.registerSession(session.getSessionID(), SESSION_TIMEOUT);
 
-        return new Response<>(200, "Session created successfully", new CreateSessionResponse(session.getSID()));
+        return new Response<>(200, "Session created successfully", new CreateSessionResponse(session.getSessionID()));
     }
 
     public Response<CheckSessionAliveResponse> checkSessionAlive(CheckSessionAliveRequest request) {
         // check if the session is still active
         Session session = sessionRepository.findById(request.getSessionID()).orElse(null);
         if (session == null) {
-            return new Response<>(404, "Session not found", null);
+            return new Response<>(604, "Session not found", null);
         }
 
         if (session.getIsClosed()) {
