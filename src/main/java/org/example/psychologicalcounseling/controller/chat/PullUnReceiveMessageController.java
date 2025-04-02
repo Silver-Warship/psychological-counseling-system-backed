@@ -2,22 +2,22 @@ package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageRequest;
-import org.example.psychologicalcounseling.dto.chat.PullUnReceivedMessageResponse;
-import org.example.psychologicalcounseling.service.chat.ChatService;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.MessageService;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PullUnReceiveMessageController extends RequestHandler<PullUnReceivedMessageRequest, PullUnReceivedMessageResponse> {
-    private final ChatService chatService;
+    private final MessageService messageService;
 
-    public PullUnReceiveMessageController(ChatService chatService) {
+    public PullUnReceiveMessageController(MessageService messageService) {
         super(PullUnReceivedMessageRequest.class, PullUnReceivedMessageResponse.class);
-        this.chatService = chatService;
+        this.messageService = messageService;
     }
 
     @Override
     public Response<PullUnReceivedMessageResponse> handleRequest(PullUnReceivedMessageRequest request) {
-        return chatService.pullUnReceivedMessage(request);
+        return messageService.pullUnReceivedMessage(request);
     }
 }

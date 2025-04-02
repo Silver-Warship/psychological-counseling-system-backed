@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.dto.chat;
+package org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

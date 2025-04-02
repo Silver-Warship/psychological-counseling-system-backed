@@ -2,9 +2,9 @@ package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.RegisterConnectionRequest;
-import org.example.psychologicalcounseling.dto.chat.RegisterConnectionResponse;
-import org.example.psychologicalcounseling.service.connection.ConnectionService;
+import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionRequest;
+import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionResponse;
+import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
 

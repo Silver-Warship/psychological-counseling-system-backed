@@ -3,18 +3,18 @@ package org.example.psychologicalcounseling.controller.chat;
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.TransmitMessageRequest;
-import org.example.psychologicalcounseling.dto.chat.TransmitMessageResponse;
-import org.example.psychologicalcounseling.service.chat.ChatService;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.MessageService;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class TransmitMessageController extends RequestHandler<TransmitMessageRequest, TransmitMessageResponse> {
-    private final ChatService chatService;
+    private final MessageService messageService;
 
-    public TransmitMessageController(ChatService chatService) {
+    public TransmitMessageController(MessageService messageService) {
         super(TransmitMessageRequest.class, TransmitMessageResponse.class);
-        this.chatService = chatService;
+        this.messageService = messageService;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class TransmitMessageController extends RequestHandler<TransmitMessageReq
             return new Response<>(ErrorConstant.illegalTimestamp.code, ErrorConstant.illegalTimestamp.codeMsg, null);
         }
 
-        return chatService.transmitMessage(request);
+        return messageService.transmitMessage(request);
     }
 }

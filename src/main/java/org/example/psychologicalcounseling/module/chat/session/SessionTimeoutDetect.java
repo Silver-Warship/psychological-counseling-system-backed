@@ -1,10 +1,10 @@
-package org.example.psychologicalcounseling.service.session;
+package org.example.psychologicalcounseling.module.chat.session;
 
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.session.SessionCloseNotification;
+import org.example.psychologicalcounseling.module.chat.session.sessionCloseNotification.SessionCloseNotification;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.service.connection.ConnectionService;
+import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;

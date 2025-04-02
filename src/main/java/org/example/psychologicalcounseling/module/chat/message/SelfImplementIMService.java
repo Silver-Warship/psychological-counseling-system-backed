@@ -1,13 +1,18 @@
-package org.example.psychologicalcounseling.service.chat;
+package org.example.psychologicalcounseling.module.chat.message;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.*;
 import org.example.psychologicalcounseling.model.Session;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageResponse;
 import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.model.Message;
 import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.service.connection.ConnectionService;
+import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -18,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class SelfImplementIMService implements ChatService {
+public class SelfImplementIMService implements MessageService {
     private final MessageRepository messageRepository;
     private final SessionRepository sessionRepository;
 

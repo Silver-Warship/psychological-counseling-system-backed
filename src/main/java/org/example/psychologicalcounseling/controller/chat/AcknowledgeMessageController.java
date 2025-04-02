@@ -3,18 +3,18 @@ package org.example.psychologicalcounseling.controller.chat;
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.AcknowledgeMessageRequest;
-import org.example.psychologicalcounseling.dto.chat.AcknowledgeMessageResponse;
-import org.example.psychologicalcounseling.service.chat.ChatService;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.MessageService;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class AcknowledgeMessageController  extends RequestHandler<AcknowledgeMessageRequest, AcknowledgeMessageResponse> {
-    private final ChatService chatService;
+    private final MessageService messageService;
 
-    public AcknowledgeMessageController(ChatService chatService) {
+    public AcknowledgeMessageController(MessageService messageService) {
         super(AcknowledgeMessageRequest.class, AcknowledgeMessageResponse.class);
-        this.chatService = chatService;
+        this.messageService = messageService;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class AcknowledgeMessageController  extends RequestHandler<AcknowledgeMes
             return new Response<>(ErrorConstant.illegalTimestamp.code, ErrorConstant.illegalTimestamp.codeMsg, null);
         }
 
-        return chatService.acknowledgeMessage(request);
+        return messageService.acknowledgeMessage(request);
     }
 }

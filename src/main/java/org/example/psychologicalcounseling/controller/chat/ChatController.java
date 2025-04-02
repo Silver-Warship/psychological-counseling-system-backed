@@ -2,7 +2,7 @@ package org.example.psychologicalcounseling.controller.chat;
 
 import org.example.psychologicalcounseling.constant.RequestConstant;
 import org.example.psychologicalcounseling.controller.MessageController;
-import org.example.psychologicalcounseling.dto.session.CheckSessionAliveResponse;
+import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveResponse;
 import org.springframework.stereotype.Controller;
 
 @Controller

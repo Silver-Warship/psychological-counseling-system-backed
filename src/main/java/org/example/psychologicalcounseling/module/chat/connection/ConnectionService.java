@@ -1,9 +1,9 @@
-package org.example.psychologicalcounseling.service.connection;
+package org.example.psychologicalcounseling.module.chat.connection;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.RegisterConnectionRequest;
-import org.example.psychologicalcounseling.dto.chat.RegisterConnectionResponse;
+import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionRequest;
+import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 

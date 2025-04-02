@@ -1,9 +1,14 @@
-package org.example.psychologicalcounseling.service.chat;
+package org.example.psychologicalcounseling.module.chat.message;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.chat.*;
 import org.example.psychologicalcounseling.model.Message;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageResponse;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageResponse;
 import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.utils.HttpUtil;
 import org.json.JSONObject;
@@ -11,7 +16,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Random;
 
-public class TencentIMService implements ChatService {
+public class TencentIMService implements MessageService {
     final String DOMAIN = "console.tim.qq.com";
     final String SDK_APPID = "1600073452";
     final String ADMIN_IDENTIFIER = "administrator";

@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.dto.session;
+package org.example.psychologicalcounseling.module.chat.session.createSession;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

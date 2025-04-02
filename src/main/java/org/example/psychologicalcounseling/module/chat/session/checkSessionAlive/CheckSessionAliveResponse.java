@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.dto.session;
+package org.example.psychologicalcounseling.module.chat.session.checkSessionAlive;
 
 
 import lombok.AllArgsConstructor;
