@@ -11,12 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TokenInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
-        if (token != null && jwtUtil.validateToken(token)) {
+        if (token != null && jwtUtilTokenBuilder.validateToken(token)) {
             return true; // Token有效，继续执行请求
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

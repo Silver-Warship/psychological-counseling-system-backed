@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SendMailController {
 
-    private final SendMail sendMail = new SendMail();
+    private final SendMail sendMail =SendMail.getInstance();
 
     @GetMapping("/sendVerificationEmail")
     public String sendVerificationEmail(@RequestParam String toEmail, @RequestParam String verificationCode) {

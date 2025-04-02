@@ -21,19 +21,26 @@ public class SendMail {
     private static final String PASSWORD = "10225101Ecnu";
     *
     */
-    private   String SMTP_HOST ;
-    private   int SMTP_PORT ; // SMTP端口号
-    private   String USERNAME ;
-    private   String PASSWORD ;
-    private   boolean AUTH;
-    private   boolean SSL;
+    private  static String SMTP_HOST ;
+    private  static int SMTP_PORT ; // SMTP端口号
+    private  static String USERNAME ;
+    private  static String PASSWORD ;
+    private  static boolean AUTH;
+    private  static boolean SSL;
 
+    private static SendMail sendmail = null;
 
-    public SendMail() {
+    public static SendMail getInstance() {
+        if (sendmail == null) {
+            sendmail = new SendMail();
+        }
+        return sendmail;
+    }
+
+    private SendMail() {
         Properties configProps = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             configProps.load(input);
-
             // 读取配置
             SMTP_HOST = configProps.getProperty("mail.smtp.host");
             SMTP_PORT = Integer.parseInt(configProps.getProperty("mail.smtp.port"));
@@ -41,8 +48,6 @@ public class SendMail {
             PASSWORD = configProps.getProperty("mail.smtp.password");
             AUTH=Boolean.parseBoolean(configProps.getProperty("mail.smtp.auth"));
             SSL=Boolean.parseBoolean(configProps.getProperty("mail.smtp.ssl.enable"));
-
-
         } catch (Exception e) {
             System.err.println("加载配置文件失败: " + e.getMessage());
         }
