@@ -22,6 +22,11 @@ public class AcknowledgeMessageController  extends RequestHandler<AcknowledgeMes
         if (request.getAckTimestamp() <= 0) {
             return new Response<>(ErrorConstant.illegalTimestamp.code, ErrorConstant.illegalTimestamp.codeMsg, null);
         }
+        for (Long messageID : request.getMessageIDs()) {
+            if (messageID < 0) {
+                return new Response<>(ErrorConstant.negativeMessageID.code, ErrorConstant.negativeMessageID.codeMsg, null);
+            }
+        }
 
         return messageService.acknowledgeMessage(request);
     }

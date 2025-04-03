@@ -13,7 +13,8 @@ public class ChatController extends MessageController {
         registerRequest(RequestConstant.pullUnReceivedMessage, PullUnReceiveMessageController.class);
         registerRequest(RequestConstant.acknowledgeMessage, AcknowledgeMessageController.class);
         registerRequest(RequestConstant.createSession, CreateSessionController.class);
-        registerRequest(RequestConstant.checkSessionAlive, CheckSessionAliveResponse.class);
+        registerRequest(RequestConstant.checkSessionAlive, CheckSessionAliveController.class);
         registerRequest(RequestConstant.registerConnection, RegisterConnectionController.class);
+        registerRequest(RequestConstant.chatWithGPT, ChatWithGPTController.class);
     }
 }

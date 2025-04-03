@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.module.chat.session;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveRequest;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveResponse;
@@ -35,24 +36,24 @@ public class SessionService {
         // the session will be removed after 10 minutes if no activity is detected
         sessionTimeoutDetect.registerSession(session.getSessionID(), SESSION_TIMEOUT);
 
-        return new Response<>(200, "Session created successfully", new CreateSessionResponse(session.getSessionID()));
+        return new Response<>(ErrorConstant.successCreateSession.code, ErrorConstant.successCreateSession.codeMsg, new CreateSessionResponse(session.getSessionID()));
     }
 
     public Response<CheckSessionAliveResponse> checkSessionAlive(CheckSessionAliveRequest request) {
         // check if the session is still active
         Session session = sessionRepository.findById(request.getSessionID()).orElse(null);
         if (session == null) {
-            return new Response<>(604, "Session not found", null);
+            return new Response<>(ErrorConstant.sessionNotExist.code, ErrorConstant.sessionNotExist.codeMsg, null);
         }
 
         if (session.getIsClosed()) {
-            return new Response<>(200, "Session is not alive", new CheckSessionAliveResponse(false));
+            return new Response<>(ErrorConstant.sessionExpired.code, ErrorConstant.sessionExpired.codeMsg, new CheckSessionAliveResponse(false));
         }
 
         // update the last activity time of the session
         session.setLastMessageTimestamp(System.currentTimeMillis());
         sessionRepository.save(session);
 
-        return new Response<>(200, "Session is alive", new CheckSessionAliveResponse(true));
+        return new Response<>(ErrorConstant.sessionAlive.code, ErrorConstant.sessionAlive.codeMsg, new CheckSessionAliveResponse(true));
     }
 }

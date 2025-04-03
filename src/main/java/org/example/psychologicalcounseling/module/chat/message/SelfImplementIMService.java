@@ -109,6 +109,6 @@ public class SelfImplementIMService implements MessageService {
         }
         messageRepository.saveAll(messages);
 
-        return new Response<>(ErrorConstant.successAckMessage.code, ErrorConstant.successSendMessage.codeMsg, null);
+        return new Response<>(ErrorConstant.successAckMessage.code, ErrorConstant.successAckMessage.codeMsg, null);
     }
 }

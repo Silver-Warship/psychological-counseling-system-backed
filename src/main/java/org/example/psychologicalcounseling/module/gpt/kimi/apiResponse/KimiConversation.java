@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.dto.kimi;
+package org.example.psychologicalcounseling.module.gpt.kimi.apiResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
