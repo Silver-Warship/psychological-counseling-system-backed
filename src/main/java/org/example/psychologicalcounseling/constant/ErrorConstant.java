@@ -49,6 +49,10 @@ public class ErrorConstant {
             200, "success ack message"
     );
 
+    public static final Description sessionClosed = new Description(
+            200, "session have been closed"
+    );
+
     public static final Description illegalTimestamp = new Description(
             601, "illegal timestamp, please check your timestamp"
     );
