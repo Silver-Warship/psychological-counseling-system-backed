@@ -2,7 +2,7 @@ package org.example.psychologicalcounseling.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.example.psychologicalcounseling.dto.chat.TransmitMessageRequest;
+import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageRequest;
 
 @Data
 @Entity

@@ -2,6 +2,7 @@ package org.example.psychologicalcounseling.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
@@ -31,25 +32,25 @@ public class MessageController implements WebSocketHandler {
             json = new JSONObject(message);
             content = json.getJSONObject("data");
         } catch (Exception e) {
-            return new Response<>(-1, "Invalid JSON", "null").toJsonString();
+            return new Response<>(ErrorConstant.invalidJson.code, ErrorConstant.invalidJson.codeMsg, null).toJsonString();
         }
 
         // check if request type is valid
         if (!json.has("type")) {
-            return new Response<>(-1, "Missing request type", "null").toJsonString();
+            return new Response<>(ErrorConstant.missRequestType.code, ErrorConstant.missRequestType.codeMsg, null).toJsonString();
         }
 
         if (!json.has("seq")) {
-            return new Response<>(-1, "Missing request seq", "null").toJsonString();
+            return new Response<>(ErrorConstant.missRequestSeq.code, ErrorConstant.missRequestType.codeMsg, null).toJsonString();
         }
 
         if (!json.has("data")) {
-            return new Response<>(-1, "Missing request data", "null").toJsonString();
+            return new Response<>(ErrorConstant.missRequestData.code, ErrorConstant.missRequestData.codeMsg, null).toJsonString();
         }
 
         String requestType = json.getString("type");
         if (!requestMap.containsKey(requestType)) {
-            return new Response<>(-1, "Invalid request type", "null").toJsonString();
+            return new Response<>(ErrorConstant.invalidRequestType.code, ErrorConstant.invalidRequestType.codeMsg, null).toJsonString();
         }
 
         // check if the required params are present
@@ -57,7 +58,7 @@ public class MessageController implements WebSocketHandler {
         String[] requiredParams = request.requestParams();
         for (String param : requiredParams) {
             if (!content.has(param)) {
-                return new Response<>(-1, "Missing required parameter: " + param, "null").toJsonString();
+                return new Response<>(ErrorConstant.missParameters.code, ErrorConstant.missParameters.codeMsg + param, null).toJsonString();
             }
         }
 
@@ -69,9 +70,9 @@ public class MessageController implements WebSocketHandler {
         try {
             response = request.handleRequest(JSON.parseObject(content.toString(), requestParamType), session);
         } catch (JSONException e) {
-            return new Response<>(401, "data content error", null).toJsonString();
+            return new Response<>(ErrorConstant.dataContentError.code, ErrorConstant.dataContentError.codeMsg, null).toJsonString();
         } catch (Exception e) {
-            return new Response<>(501, "server internal error", null).toJsonString();
+            return new Response<>(ErrorConstant.serverInternalError.code, ErrorConstant.serverInternalError.codeMsg, null).toJsonString();
         }
 
         response.setSeq(json.getString("seq"));

@@ -10,4 +10,5 @@ public class RequestConstant {
     public static final String registerConnection = "registerConnection";
     public static final String createSession = "createSession";
     public static final String checkSessionAlive = "checkSessionAlive";
+    public static final String chatWithGPT = "sendMsgToGPT";
 }

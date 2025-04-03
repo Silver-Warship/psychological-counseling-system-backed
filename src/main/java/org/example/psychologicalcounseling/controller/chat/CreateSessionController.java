@@ -3,9 +3,9 @@ package org.example.psychologicalcounseling.controller.chat;
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.RequestHandler;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.dto.session.CreateSessionRequest;
-import org.example.psychologicalcounseling.dto.session.CreateSessionResponse;
-import org.example.psychologicalcounseling.service.session.SessionService;
+import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionRequest;
+import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionResponse;
+import org.example.psychologicalcounseling.module.chat.session.SessionService;
 import org.springframework.stereotype.Controller;
 
 @Controller
