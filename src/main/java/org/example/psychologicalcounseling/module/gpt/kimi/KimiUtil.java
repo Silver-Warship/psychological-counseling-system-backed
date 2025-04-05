@@ -59,7 +59,7 @@ public class KimiUtil {
         List<KimiMessage> messages = messagePool.get(sessionID);
         messages.add(new KimiMessage("user", message));
 
-        String response = chat(sessionID, messages);
+        String response = chat(messages);
         if (response == null) {
             messages.remove(messages.size() - 1);
         }
@@ -68,7 +68,7 @@ public class KimiUtil {
         return response;
     }
 
-    public static String chat(String sessionID, List<KimiMessage> messages) {
+    public static String chat(List<KimiMessage> messages) {
         String strResponse = post_request(messages);
         KimiResponse mapResponse = JSON.parseObject(strResponse, KimiResponse.class);
         KimiConversation[] choices = mapResponse.getChoices();

@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.module.chat.session;
 
+import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.sessionCloseNotification.SessionCloseNotification;
 import org.example.psychologicalcounseling.model.Session;
@@ -18,7 +19,6 @@ import java.util.TimerTask;
 
 // this class is responsible for managing the sessions
 // for example, if a session times out, it will be removed and set as inactive in the database
-
 @Component
 public class SessionTimeoutDetect {
     private final SessionRepository sessionRepository;
@@ -38,8 +38,8 @@ public class SessionTimeoutDetect {
         }
 
         // send a message to the user
-        Response<SessionCloseNotification> response = new Response<>(200, "Session closed",
-                new SessionCloseNotification(sessionID));
+        Response<SessionCloseNotification> response = new Response<>(ErrorConstant.sessionClosed.code,
+                ErrorConstant.sessionClosed.codeMsg, new SessionCloseNotification(sessionID));
         try {
             connection.sendMessage(new TextMessage(response.toJsonString()));
         } catch (IOException ignored) {
