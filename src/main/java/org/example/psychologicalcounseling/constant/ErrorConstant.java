@@ -108,4 +108,20 @@ public class ErrorConstant {
     public static final Description negativeMessageID = new Description(
             614, "messageID should be positive, please check your messageID"
     );
+
+    public static final Description noThisUser = new Description(
+            615, "no this user, please check your userID"
+    );
+
+    public static final Description noThisMessage = new Description(
+            616, "no this message, please check your messageID"
+    );
+
+    public static final Description noThisSession = new Description(
+            617, "no this session, please check your sessionID"
+    );
+
+    public static final Description userNotInSession = new Description(
+            618, "user not in this session, please check your sessionID and userID"
+    );
 }
