@@ -7,18 +7,19 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.gpt.ChatWithGPTRequest;
 import org.example.psychologicalcounseling.module.gpt.ChatWithGPTResponse;
 import org.example.psychologicalcounseling.module.gpt.GPTServer;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ChatWithGPTController extends RequestHandler<ChatWithGPTRequest, ChatWithGPTResponse> {
     private final GPTServer gptServer;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    public ChatWithGPTController(GPTServer gptServer, UserRepository userRepository) {
+    public ChatWithGPTController(GPTServer gptServer, AccountRepository accountRepository) {
         super(ChatWithGPTRequest.class, ChatWithGPTResponse.class);
         this.gptServer = gptServer;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ChatWithGPTController extends RequestHandler<ChatWithGPTRequest, Ch
         }
 
         // check if the user exists
-        if (!userRepository.existsById(request.getSenderID())) {
+        if (!accountRepository.existsById(request.getSenderID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg, null);
         }
 

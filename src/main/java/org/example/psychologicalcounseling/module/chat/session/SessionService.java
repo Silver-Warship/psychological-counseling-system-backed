@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.chat.session;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
+import org.example.psychologicalcounseling.constant.OtherConstant;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveRequest;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveResponse;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SessionService {
-    static final long SESSION_TIMEOUT = 600000;
-
     private final SessionRepository sessionRepository;
     private final SessionTimeoutDetect sessionTimeoutDetect;
 
@@ -34,7 +33,7 @@ public class SessionService {
 
         // register the session in session manager
         // the session will be removed after 10 minutes if no activity is detected
-        sessionTimeoutDetect.registerSession(session.getSessionID(), SESSION_TIMEOUT);
+        sessionTimeoutDetect.registerSession(session.getSessionID(), OtherConstant.SessionTimeout);
 
         return new Response<>(ErrorConstant.successCreateSession.code, ErrorConstant.successCreateSession.codeMsg, new CreateSessionResponse(session.getSessionID()));
     }

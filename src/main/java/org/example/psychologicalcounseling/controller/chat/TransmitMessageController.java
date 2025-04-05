@@ -8,6 +8,7 @@ import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageRequest;
 import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.TransmitMessageResponse;
 import org.example.psychologicalcounseling.module.chat.message.MessageService;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -15,14 +16,14 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class TransmitMessageController extends RequestHandler<TransmitMessageRequest, TransmitMessageResponse> {
     private final MessageService messageService;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final SessionRepository sessionRepository;
 
 
-    public TransmitMessageController(MessageService messageService, UserRepository userRepository, SessionRepository sessionRepository) {
+    public TransmitMessageController(MessageService messageService, AccountRepository accountRepository, SessionRepository sessionRepository) {
         super(TransmitMessageRequest.class, TransmitMessageResponse.class);
         this.messageService = messageService;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
         this.sessionRepository = sessionRepository;
     }
 
@@ -34,12 +35,12 @@ public class TransmitMessageController extends RequestHandler<TransmitMessageReq
         }
 
         // check if the senderID is valid
-        if (!userRepository.existsById(request.getSenderID())) {
+        if (!accountRepository.existsById(request.getSenderID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg + request.getSenderID(), null);
         }
 
         // check if the receiverID is valid
-        if (!userRepository.existsById(request.getReceiverID())) {
+        if (!accountRepository.existsById(request.getReceiverID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg + request.getReceiverID(), null);
         }
 

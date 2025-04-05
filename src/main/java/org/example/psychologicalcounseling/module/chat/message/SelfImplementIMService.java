@@ -81,8 +81,9 @@ public class SelfImplementIMService implements MessageService {
     public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
         // get the un-received message from the database in chronological order
         List<Message> messages = messageRepository.findAll().stream().filter(message ->
-                message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID())
-                        && Objects.equals(message.getSessionID(), request.getSessionID())).toList();
+                message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID()) // && Objects.equals(message.getSessionID(), request.getSessionID())
+        ).toList();
+
 
         // package the message to response
         PullUnReceivedMessageResponse.Message[] messageArray = new PullUnReceivedMessageResponse.Message[messages.size()];

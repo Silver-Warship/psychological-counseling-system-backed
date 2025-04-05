@@ -6,6 +6,7 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionRequest;
 import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionResponse;
 import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,18 +14,18 @@ import org.springframework.web.socket.WebSocketSession;
 @Controller
 public class RegisterConnectionController extends RequestHandler<RegisterConnectionRequest, RegisterConnectionResponse> {
     private final ConnectionService connectionService;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    public RegisterConnectionController(ConnectionService connectionService, UserRepository userRepository) {
+    public RegisterConnectionController(ConnectionService connectionService, AccountRepository accountRepository) {
         super(RegisterConnectionRequest.class, RegisterConnectionResponse.class);
         this.connectionService = connectionService;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public Response<RegisterConnectionResponse> handleRequest(RegisterConnectionRequest request, WebSocketSession session) {
         // check whether the userID is existed
-        if (userRepository.findById(request.getUserID()).isEmpty()) {
+        if (accountRepository.existsById(request.getUserID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg, null);
         }
 

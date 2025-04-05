@@ -6,6 +6,7 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
 import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageResponse;
 import org.example.psychologicalcounseling.module.chat.message.MessageService;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -13,20 +14,20 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class PullUnReceiveMessageController extends RequestHandler<PullUnReceivedMessageRequest, PullUnReceivedMessageResponse> {
     private final MessageService messageService;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final SessionRepository sessionRepository;
 
-    public PullUnReceiveMessageController(MessageService messageService, UserRepository userRepository, SessionRepository sessionRepository) {
+    public PullUnReceiveMessageController(MessageService messageService, AccountRepository accountRepository, SessionRepository sessionRepository) {
         super(PullUnReceivedMessageRequest.class, PullUnReceivedMessageResponse.class);
         this.messageService = messageService;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
         this.sessionRepository = sessionRepository;
     }
 
     @Override
     public Response<PullUnReceivedMessageResponse> handleRequest(PullUnReceivedMessageRequest request) {
         // check whether the userID is existed
-        if (!userRepository.existsById(request.getUserID())) {
+        if (!accountRepository.existsById(request.getUserID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg, null);
         }
 

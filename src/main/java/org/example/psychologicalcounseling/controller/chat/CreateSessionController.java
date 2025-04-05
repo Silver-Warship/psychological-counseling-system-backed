@@ -7,28 +7,29 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionRequest;
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionResponse;
 import org.example.psychologicalcounseling.module.chat.session.SessionService;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class CreateSessionController extends RequestHandler<CreateSessionRequest, CreateSessionResponse> {
     private final SessionService sessionService;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
 
-    public CreateSessionController(SessionService sessionService, UserRepository userRepository) {
+    public CreateSessionController(SessionService sessionService, AccountRepository accountRepository) {
         super(CreateSessionRequest.class, CreateSessionResponse.class);
         this.sessionService = sessionService;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public Response<CreateSessionResponse> handleRequest(CreateSessionRequest request) {
         // check if the firstUserID and secondUserID are valid
-        if (!userRepository.existsById(request.getFirstUserID())) {
+        if (!accountRepository.existsById(request.getFirstUserID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg + request.getFirstUserID(), null);
         }
-        if (!userRepository.existsById(request.getSecondUserID())) {
+        if (!accountRepository.existsById(request.getSecondUserID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg + request.getSecondUserID(), null);
         }
 
