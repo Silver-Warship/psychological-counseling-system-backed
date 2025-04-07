@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "User")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "uid", nullable = false, length = 20)
-    private Long uid;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userID", nullable = false, length = 11)
+    private int uid;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -23,10 +23,13 @@ public class User {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Gender gender;
 
-    public enum Role {
-        ADMIN, USER
+    public enum Gender {
+        Male, Female
     }
+
+    @Column(nullable = true)
+    private String role;
 }
 

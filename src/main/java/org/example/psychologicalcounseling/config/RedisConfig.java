@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.repository;
+package org.example.psychologicalcounseling.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

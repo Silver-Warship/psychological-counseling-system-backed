@@ -24,7 +24,6 @@ public class UserRegisterService {
             user.setEmail(userDto.getEmail());
             user.setPassword(userDto.getPassword());
             user.setNickname(userDto.getNickname());
-            user.setRole(User.Role.USER);
             // 保存到数据库
             userRepository.save(user);
             // 保存成功
@@ -35,7 +34,7 @@ public class UserRegisterService {
         }
     }
 
-    public UserDto findByUid(Long uid) {
+    public UserDto findByUid(int uid) {
         User user = userRepository.findById(uid).orElse(null);
         if (user != null) {
             UserDto userDto = new UserDto();

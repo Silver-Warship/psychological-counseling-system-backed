@@ -10,7 +10,7 @@ public class SendMailController {
 
     private final SendMail sendMail =SendMail.getInstance();
 
-    @GetMapping("/sendVerificationEmail")
+    @GetMapping("/test/sendVerificationEmail")
     public String sendVerificationEmail(@RequestParam String toEmail, @RequestParam String verificationCode) {
         boolean isSuccess = sendMail.sendVerificationEmail(toEmail, verificationCode);
         if (isSuccess) {
