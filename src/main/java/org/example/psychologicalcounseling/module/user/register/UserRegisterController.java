@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/test")
 public class UserRegisterController {
 
     @Autowired//自动插入
@@ -24,8 +24,8 @@ public class UserRegisterController {
         return response.buildResponse();
     }
 
-    @GetMapping("/{uid}")
-    public  ResponseEntity<UserDto> getUserByUid(@PathVariable Long uid) {
+    @GetMapping("/getUserBy/{uid}")
+    public  ResponseEntity<UserDto> getUserByUid(@PathVariable int uid) {
         UserDto userDto = userRegisterService.findByUid(uid);
         return ResponseEntity.ok(userDto);
     }
