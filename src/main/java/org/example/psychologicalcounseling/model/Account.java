@@ -13,7 +13,7 @@ public class Account {
     @Column(name = "account", nullable = false, length = 11)
     private int aid;
 
-    @Column(nullable = false)
+    @Column(name = "password",nullable = false)
     private String password;
 
 }
