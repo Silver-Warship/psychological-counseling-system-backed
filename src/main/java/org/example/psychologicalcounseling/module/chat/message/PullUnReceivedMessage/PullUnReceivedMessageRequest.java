@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PullUnReceivedMessageRequest {
-    @Getter
     private Long userID;
     private Long sessionID;
     // The maximum number of messages this user can receive
