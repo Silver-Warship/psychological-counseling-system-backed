@@ -117,7 +117,7 @@ public class UserLoginController {
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
         if (jwtUtilTokenBuilder.validateToken(token)) {
             String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-            int uid = userLoginService.getUidByEmail(email);
+            Long uid = userLoginService.getUidByEmail(email);
             String nickname = userLoginService.getNicknameByEmail(email);
             //return "Hello, " + email + "!";
 

@@ -78,7 +78,7 @@ public class UserLoginService {
 
         //从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
-        int aid = user.getUid();
+        Long aid = user.getUid();
         String storedPassword = accountRepository.findPasswordByAid(aid);
         //检查密码是否匹配
         //String storedPassword = user.getPassword();
@@ -100,7 +100,7 @@ public class UserLoginService {
 
             // 保存到 account 表，获取自增的 aid
             accountRepository.save(account);
-            int aid = account.getAid(); // 假设 aid 是 int 类型
+            Long aid = account.getAid(); // 假设 aid 是 int 类型
 
             // 将 UserDto 转换为 User
             User user = new User();
@@ -124,12 +124,12 @@ public class UserLoginService {
         return users;
     }
 
-    public int getUidByEmail(String email) {
+    public Long getUidByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
         if (user == null) {
             // 用户不存在，返回-1或其他错误处理
-            return -1;
+            return -1L;
         }
         return user.getUid();
     }
