@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.chat.message;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
+import org.example.psychologicalcounseling.constant.ServerMessageType;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
@@ -48,12 +49,12 @@ public class SelfImplementIMService implements MessageService {
         msgToClient.setContentType(message.getContentType());
         msgToClient.setTimestamp(message.getSendTimestamp());
         Response<PullUnReceivedMessageResponse.Message> serverResponse = new Response<>(
-                ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
+                ServerMessageType.NEW_MESSAGE, ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
         );
 
         // convert the message to json string and send it to the receiver
         try{
-            session.sendMessage(new TextMessage(serverResponse.toString()));
+            session.sendMessage(new TextMessage(serverResponse.toJsonString()));
         } catch (Exception ignored) {
 
         }
@@ -81,8 +82,9 @@ public class SelfImplementIMService implements MessageService {
     public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
         // get the un-received message from the database in chronological order
         List<Message> messages = messageRepository.findAll().stream().filter(message ->
-                message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID())
-                        && Objects.equals(message.getSessionID(), request.getSessionID())).toList();
+                message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID()) // && Objects.equals(message.getSessionID(), request.getSessionID())
+        ).toList();
+
 
         // package the message to response
         PullUnReceivedMessageResponse.Message[] messageArray = new PullUnReceivedMessageResponse.Message[messages.size()];

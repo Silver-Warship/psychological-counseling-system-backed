@@ -22,7 +22,6 @@ public class ConnectionService {
     }
 
     public Response<RegisterConnectionResponse> registerConnection(RegisterConnectionRequest request, WebSocketSession session) {
-        // judge whether the user has already login in
         connectionMap.put(request.getUserID(), session);
         return new Response<>(ErrorConstant.successRegisterConnection.code, ErrorConstant.successRegisterConnection.codeMsg, null);
     }

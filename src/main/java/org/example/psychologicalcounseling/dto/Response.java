@@ -25,7 +25,6 @@ public class Response<T> {
         this.data = data;
     }
 
-
     public String toJsonString() {
         if (seq == null) {
             return JSON.toJSONString(Map.of(

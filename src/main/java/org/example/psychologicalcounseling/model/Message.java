@@ -50,6 +50,7 @@ public class Message {
     public Message(TransmitMessageRequest request) {
         this.setSenderID(request.getSenderID());
         this.setReceiverID(request.getReceiverID());
+        this.setSessionID(request.getSessionID());
         this.setContent(request.getContent());
         this.setContentType(request.getContentType());
         this.setSendTimestamp(request.getTimestamp());

@@ -11,7 +11,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account", nullable = false, length = 11)
-    private int aid;
+    private Long aid;
 
     @Column(name = "password",nullable = false)
     private String password;
