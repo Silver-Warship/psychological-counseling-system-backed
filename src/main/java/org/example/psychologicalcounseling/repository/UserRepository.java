@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     //继承了JpaRepository，自带对于Users表格的增删改查方法
 
     User findByEmail(String email);
+
 }

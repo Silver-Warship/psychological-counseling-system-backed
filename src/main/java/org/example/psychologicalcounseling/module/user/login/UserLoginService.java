@@ -105,7 +105,7 @@ public class UserLoginService {
             // 将 UserDto 转换为 User
             User user = new User();
             user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
+            //user.setPassword(userDto.getPassword());
             user.setNickname(userDto.getNickname());
             user.setUid(aid);
             // 保存到数据库
@@ -123,5 +123,27 @@ public class UserLoginService {
         List<User> users = userRepository.findAll();
         return users;
     }
+
+    public int getUidByEmail(String email) {
+        // 从数据库中获取用户信息，并检查用户是否存在
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            // 用户不存在，返回-1或其他错误处理
+            return -1;
+        }
+        return user.getUid();
+    }
+
+    public String getNicknameByEmail(String email) {
+        // 从数据库中获取用户信息，并检查用户是否存在
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            // 用户不存在，返回-1或其他错误处理
+            return null;
+        }
+        return user.getNickname();
+    }
+
+
 
 }

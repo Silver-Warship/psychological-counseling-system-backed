@@ -22,7 +22,7 @@ public class UserRegisterService {
             // 将 UserDto 转换为 User
             User user = new User();
             user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
+            //user.setPassword(userDto.getPassword());
             user.setNickname(userDto.getNickname());
             // 保存到数据库
             userRepository.save(user);
@@ -39,7 +39,7 @@ public class UserRegisterService {
         if (user != null) {
             UserDto userDto = new UserDto();
             userDto.setEmail(user.getEmail());
-            userDto.setPassword(user.getPassword());
+            //userDto.setPassword(user.getPassword());
             userDto.setNickname(user.getNickname());
             return userDto;
         }

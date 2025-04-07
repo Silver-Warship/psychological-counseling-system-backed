@@ -16,8 +16,8 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+//    @Column(nullable = false)
+//    private String password;
 
     @Column(nullable = false)
     private String nickname;
@@ -29,7 +29,5 @@ public class User {
         Male, Female
     }
 
-    @Column(nullable = true)
-    private String role;
 }
 

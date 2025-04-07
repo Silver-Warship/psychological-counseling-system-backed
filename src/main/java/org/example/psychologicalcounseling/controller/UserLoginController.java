@@ -113,13 +113,24 @@ public class UserLoginController {
     }
 
 
-    @GetMapping("/test/tokenVerify")
-    public String getUserInfo(@RequestHeader("Authorization") String token) {
+    @GetMapping("/api/tokenVerify")
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
         if (jwtUtilTokenBuilder.validateToken(token)) {
             String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-            return "Hello, " + email + "!";
+            int uid = userLoginService.getUidByEmail(email);
+            String nickname = userLoginService.getNicknameByEmail(email);
+            //return "Hello, " + email + "!";
+
+            Map<String, String> userInfo = new HashMap<>();
+            userInfo.put("uid", String.valueOf(uid));
+            userInfo.put("email", email);
+            userInfo.put("nickname", nickname);
+
+            return ResponseEntity.ok(userInfo);
         } else {
-            return "Invalid token";
+            Map<String, String> userInfo = new HashMap<>();
+            userInfo.put("uid", "invalid token");
+            return ResponseEntity.ok(userInfo);
         }
     }
 
