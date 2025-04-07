@@ -53,7 +53,7 @@ public class SelfImplementIMService implements MessageService {
 
         // convert the message to json string and send it to the receiver
         try{
-            session.sendMessage(new TextMessage(serverResponse.toString()));
+            session.sendMessage(new TextMessage(serverResponse.toJsonString()));
         } catch (Exception ignored) {
 
         }

@@ -8,7 +8,6 @@ import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMes
 import org.example.psychologicalcounseling.module.chat.message.MessageService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -32,7 +31,7 @@ public class PullUnReceiveMessageController extends RequestHandler<PullUnReceive
         }
 
         // check whether the sessionID is existed
-        if (sessionRepository.existsById(request.getSessionID())) {
+        if (!sessionRepository.existsById(request.getSessionID())) {
             return new Response<>(ErrorConstant.noThisSession.code, ErrorConstant.noThisSession.codeMsg, null);
         }
 

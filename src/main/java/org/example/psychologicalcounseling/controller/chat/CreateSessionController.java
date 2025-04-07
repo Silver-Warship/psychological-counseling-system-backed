@@ -8,7 +8,6 @@ import org.example.psychologicalcounseling.module.chat.session.createSession.Cre
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionResponse;
 import org.example.psychologicalcounseling.module.chat.session.SessionService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller

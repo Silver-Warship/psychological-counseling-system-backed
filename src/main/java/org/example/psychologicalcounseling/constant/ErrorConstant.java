@@ -38,7 +38,7 @@ public class ErrorConstant {
     );
 
     public static final Description newMessage = new Description(
-            200, "there are new message from other user"
+            200, "there are new messages from other user"
     );
 
     public static final Description newMessageFromGPT = new Description(

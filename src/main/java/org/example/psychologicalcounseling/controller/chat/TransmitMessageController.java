@@ -10,7 +10,6 @@ import org.example.psychologicalcounseling.module.chat.message.TransmitMessage.T
 import org.example.psychologicalcounseling.module.chat.message.MessageService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller

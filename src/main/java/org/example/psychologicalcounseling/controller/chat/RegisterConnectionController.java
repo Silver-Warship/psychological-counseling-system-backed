@@ -7,7 +7,6 @@ import org.example.psychologicalcounseling.module.chat.connection.RegisterConnec
 import org.example.psychologicalcounseling.module.chat.connection.RegisterConnection.RegisterConnectionResponse;
 import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -25,7 +24,7 @@ public class RegisterConnectionController extends RequestHandler<RegisterConnect
     @Override
     public Response<RegisterConnectionResponse> handleRequest(RegisterConnectionRequest request, WebSocketSession session) {
         // check whether the userID is existed
-        if (accountRepository.existsById(request.getUserID())) {
+        if (!accountRepository.existsById(request.getUserID())) {
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg, null);
         }
 

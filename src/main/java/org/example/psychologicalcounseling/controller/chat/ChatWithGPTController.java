@@ -8,7 +8,6 @@ import org.example.psychologicalcounseling.module.gpt.ChatWithGPTRequest;
 import org.example.psychologicalcounseling.module.gpt.ChatWithGPTResponse;
 import org.example.psychologicalcounseling.module.gpt.GPTServer;
 import org.example.psychologicalcounseling.repository.AccountRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller
