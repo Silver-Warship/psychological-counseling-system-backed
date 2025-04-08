@@ -17,7 +17,6 @@ public class KimiServer implements GPTServer {
     // record the history of messages in each session
     private final Map<Long, List<KimiMessage>> messagePool = new HashMap<>();
 
-
     public Response<ChatWithGPTResponse> sendMessage(ChatWithGPTRequest request) {
         List<KimiMessage> historyMessages = this.messagePool.get(request.getSenderID());
         if (historyMessages == null) {
