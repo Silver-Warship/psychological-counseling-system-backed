@@ -18,7 +18,7 @@ public class UserSessionController {
         this.accountRepository = accountRepository;
     }
 
-    @PostMapping("getRunningSession")
+    @PostMapping("/api/getRunningSession")
     public ResponseEntity<?> getRunningSession(@RequestParam Long userID) {
         // check if userID is valid
         if (!accountRepository.existsById(userID)) {
