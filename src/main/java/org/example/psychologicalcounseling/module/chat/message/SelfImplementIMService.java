@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.chat.message;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
+import org.example.psychologicalcounseling.constant.ServerMessageType;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.module.chat.message.PullUnReceivedMessage.PullUnReceivedMessageRequest;
@@ -48,7 +49,7 @@ public class SelfImplementIMService implements MessageService {
         msgToClient.setContentType(message.getContentType());
         msgToClient.setTimestamp(message.getSendTimestamp());
         Response<PullUnReceivedMessageResponse.Message> serverResponse = new Response<>(
-                ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
+                ServerMessageType.NEW_MESSAGE, ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
         );
 
         // convert the message to json string and send it to the receiver

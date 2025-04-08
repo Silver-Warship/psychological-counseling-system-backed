@@ -33,11 +33,10 @@ public class ChatWithGPTController extends RequestHandler<ChatWithGPTRequest, Ch
             return new Response<>(ErrorConstant.noThisUser.code, ErrorConstant.noThisUser.codeMsg, null);
         }
 
-        if(request.getContent() == null || request.getContent().isEmpty()) {
-
-            return new Response<>(ErrorConstant.contentEmpty.code, ErrorConstant.contentEmpty.codeMsg, null);
+        // check if the content is empty
+        if (request.getContent() == null || request.getContent().isEmpty()) {
+            return new Response<>(ErrorConstant.contentIsEmpty.code, ErrorConstant.contentIsEmpty.codeMsg, null);
         }
-
 
         return gptServer.sendMessage(request);
     }

@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.chat.session;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
+import org.example.psychologicalcounseling.constant.ServerMessageType;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.sessionCloseNotification.SessionCloseNotification;
 import org.example.psychologicalcounseling.model.Session;
@@ -38,8 +39,8 @@ public class SessionTimeoutDetect {
         }
 
         // send a message to the user
-        Response<SessionCloseNotification> response = new Response<>(ErrorConstant.sessionClosed.code,
-                ErrorConstant.sessionClosed.codeMsg, new SessionCloseNotification(sessionID));
+        Response<SessionCloseNotification> response = new Response<>(ServerMessageType.SESSION_CLOSE,
+                ErrorConstant.sessionClosed.code, ErrorConstant.sessionClosed.codeMsg, new SessionCloseNotification(sessionID));
         try {
             connection.sendMessage(new TextMessage(response.toJsonString()));
         } catch (IOException ignored) {

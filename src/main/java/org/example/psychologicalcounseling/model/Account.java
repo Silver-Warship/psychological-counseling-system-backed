@@ -1,19 +1,19 @@
 package org.example.psychologicalcounseling.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
 
 @Data
 @Entity
 @Table(name = "Account")
 public class Account {
     @Id
-    @Column(name = "account")
-    private Long account;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account", nullable = false, length = 11)
+    private Long aid;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
+
 }

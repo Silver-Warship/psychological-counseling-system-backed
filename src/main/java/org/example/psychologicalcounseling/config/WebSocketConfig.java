@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketConfigurer, WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**") // 拦截所有请求
-                .excludePathPatterns("/api/users/**"); // 排除user的子路径，比如登录、注册接口 // ? 这个好像不起作用
+                .excludePathPatterns("/api/users/login","/test/**"); // 排除user的子路径，比如登录、注册接口 // ? 这个好像不起作用
     }
 
     @Override

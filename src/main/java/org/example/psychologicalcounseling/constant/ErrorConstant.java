@@ -125,7 +125,7 @@ public class ErrorConstant {
             618, "user not in this session, please check your sessionID and userID"
     );
 
-    public static final Description contentEmpty = new Description(
+    public static final Description contentIsEmpty = new Description(
             619, "content is empty, please check your content"
     );
 }

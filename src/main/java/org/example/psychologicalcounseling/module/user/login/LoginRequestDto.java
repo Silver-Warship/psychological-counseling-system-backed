@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.dto;
+package org.example.psychologicalcounseling.module.user.login;
 
 import lombok.Data;
 
