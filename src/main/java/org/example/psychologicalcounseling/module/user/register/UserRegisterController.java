@@ -25,7 +25,7 @@ public class UserRegisterController {
     }
 
     @GetMapping("/getUserBy/{uid}")
-    public  ResponseEntity<UserDto> getUserByUid(@PathVariable int uid) {
+    public  ResponseEntity<UserDto> getUserByUid(@PathVariable Long uid) {
         UserDto userDto = userRegisterService.findByUid(uid);
         return ResponseEntity.ok(userDto);
     }

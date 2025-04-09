@@ -1,7 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
-import org.example.psychologicalcounseling.module.session.GetRunningSessionService;
+import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
