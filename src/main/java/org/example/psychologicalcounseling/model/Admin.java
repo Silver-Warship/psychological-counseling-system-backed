@@ -20,7 +20,7 @@ public class Admin {
     private String email;
 
     @Column(name = "gender")
-    private Consultant.Gender gender;
+    private Counsellor.Gender gender;
 
     public enum Gender {
         MALE, FaMALE, UNKNOWN, GUNSHIP

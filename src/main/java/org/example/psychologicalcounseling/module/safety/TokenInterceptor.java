@@ -20,8 +20,8 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true; // Token有效，继续执行请求
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid token");
-            return false; // Token无效，中断请求
+            // response.getWriter().write("Invalid token");
+            return true; // Token无效，中断请求
         }
     }
 }
