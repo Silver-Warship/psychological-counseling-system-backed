@@ -1,15 +1,19 @@
 package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.UserDto;
+import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.Account;
+import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
+import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +25,8 @@ public class UserLoginService {
     UserRepository userRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    SessionRepository sessionRepository;
     // Redis client initialization
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -118,10 +124,20 @@ public class UserLoginService {
     }
 
 
-    public List<User> getAllUsers() {
+    public List<UserWithSessionsDto> getAllUsers() {
         // 从数据库中获取所有用户信息
+//        List<User> users = userRepository.findAll();
+//        return users;
         List<User> users = userRepository.findAll();
-        return users;
+        List<UserWithSessionsDto> userWithSessionsList = new ArrayList<>();
+
+        for (User user : users) {
+            Long uid = user.getUid();
+            List<Session> sessions = sessionRepository.findByFirstUserIDOrSecondUserID(uid, uid);
+            userWithSessionsList.add(new UserWithSessionsDto(user, sessions));
+        }
+
+        return userWithSessionsList;
     }
 
     public Long getUidByEmail(String email) {

@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.controller;
 
+import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.OriginalPasswordBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginRequestDto;
@@ -121,16 +122,16 @@ public class UserLoginController {
             String nickname = userLoginService.getNicknameByEmail(email);
             //return "Hello, " + email + "!";
 
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", String.valueOf(uid));
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("uid", uid);
             userInfo.put("email", email);
             userInfo.put("nickname", nickname);
 
             return ResponseEntity.ok(userInfo);
         } else {
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", "invalid token");
-            return ResponseEntity.ok(userInfo);
+//            Map<String, String> userInfo = new HashMap<>();
+//            userInfo.put("uid", "invalid token");
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
         }
     }
 
@@ -138,14 +139,17 @@ public class UserLoginController {
     @GetMapping("/api/test/getAll")
     public ResponseEntity<?> getUserList() {
         // 查询所有用户
-        List<User> userList = userLoginService.getAllUsers();
+        List<UserWithSessionsDto> userList = userLoginService.getAllUsers();
 
-        // 创建一个Map来存储用户的ID和昵称
-        List<Map<String, String>> userInfoList = new ArrayList<>();
-        for (User user : userList) {
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", String.valueOf(user.getUid()));
-            userInfo.put("nickname", user.getNickname());
+        // 创建一个List来存储用户信息，包括sessions
+        List<Map<String, Object>> userInfoList = new ArrayList<>();
+        for (UserWithSessionsDto user : userList) {
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("uid", user.getUser().getUid()); // 获取用户ID
+            userInfo.put("email", user.getUser().getEmail());//获取用户email
+            userInfo.put("gender", user.getUser().getGender());//获取用户性别
+            userInfo.put("nickname", user.getUser().getNickname()); // 获取用户昵称
+            userInfo.put("sessions", user.getSessions()); // 获取sessions列表
             userInfoList.add(userInfo);
         }
 
