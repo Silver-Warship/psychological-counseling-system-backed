@@ -34,7 +34,7 @@ public class UserRegisterService {
         }
     }
 
-    public UserDto findByUid(int uid) {
+    public UserDto findByUid(Long uid) {
         User user = userRepository.findById(uid).orElse(null);
         if (user != null) {
             UserDto userDto = new UserDto();

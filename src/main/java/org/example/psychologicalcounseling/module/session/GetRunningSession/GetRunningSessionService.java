@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.session;
+package org.example.psychologicalcounseling.module.session.GetRunningSession;
 
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;

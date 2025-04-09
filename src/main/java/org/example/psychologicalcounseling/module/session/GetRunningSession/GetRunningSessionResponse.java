@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.session;
+package org.example.psychologicalcounseling.module.session.GetRunningSession;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
