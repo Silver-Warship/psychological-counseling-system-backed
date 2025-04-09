@@ -26,10 +26,8 @@ public class UserLoginService {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    SessionRepository sessionRepository;
-    // Redis client initialization
-    @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
 
     private  final SendMail sendMail = SendMail.getInstance();
 
@@ -38,7 +36,7 @@ public class UserLoginService {
         //System.out.println("查询哈希表");
         try {
 
-            if (redisTemplate.hasKey(email)) {
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
                 System.out.println("查询哈希表发现重复");
                 return false;
             }else{
@@ -78,8 +76,7 @@ public class UserLoginService {
         return true;
     }
 
-
-    //在email存在的前提下检查传入的email和password是否匹配
+    //默认email存在的前提下检查传入的email和password是否匹配
     public boolean checkPassword(String email, String password) {
 
         //从数据库中获取用户信息，并检查用户是否存在
@@ -94,7 +91,6 @@ public class UserLoginService {
         }
         return true;
     }
-
 
     //添加用户，用email来作为nickname，这是可以修改的
     public void addUser(UserDto userDto) {
@@ -122,44 +118,5 @@ public class UserLoginService {
             System.out.println("保存用户失败");
         }
     }
-
-
-    public List<UserWithSessionsDto> getAllUsers() {
-        // 从数据库中获取所有用户信息
-//        List<User> users = userRepository.findAll();
-//        return users;
-        List<User> users = userRepository.findAll();
-        List<UserWithSessionsDto> userWithSessionsList = new ArrayList<>();
-
-        for (User user : users) {
-            Long uid = user.getUid();
-            List<Session> sessions = sessionRepository.findByFirstUserIDOrSecondUserID(uid, uid);
-            userWithSessionsList.add(new UserWithSessionsDto(user, sessions));
-        }
-
-        return userWithSessionsList;
-    }
-
-    public Long getUidByEmail(String email) {
-        // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return -1L;
-        }
-        return user.getUid();
-    }
-
-    public String getNicknameByEmail(String email) {
-        // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return null;
-        }
-        return user.getNickname();
-    }
-
-
 
 }

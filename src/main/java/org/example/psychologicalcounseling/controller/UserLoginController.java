@@ -34,30 +34,10 @@ public class UserLoginController {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         String verificationCode = loginRequest.getVerificationCode();
-        //业务情况：
+        //业务情况
         //登录：有email和password，email在数据库内，没有verification
         //注册：有email和password，email不在数据库内，有verification
         //验证注册：有email和password，email不在数据库内，没有verification
-
-        //if(password！=null or ""){
-        //  if(账户存在){验证密码}
-        //  else{提示账户未注册}
-        //}
-        //}else{
-        //   if(验证码为空){
-        //     if(5分钟内){
-        //       发送验证码
-        //     }else{提示系统繁忙}
-        //   }if{
-        //     if(验证码正确){
-        //       if(!userLoginService.checkEmail(email)){数据库添加初始账号和17位密码}
-        //       发送token
-        //     }else{
-        //       发送验证码未成功匹配
-        //     }
-        //   }
-        //}
-
         if(password!=null && !password.isEmpty()){
             if(userLoginService.checkEmail(email)){
                 //登录验证
@@ -111,50 +91,6 @@ public class UserLoginController {
             }
         }
         return response.buildResponse();
-    }
-
-
-    @GetMapping("/api/tokenVerify")
-    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
-        if (jwtUtilTokenBuilder.validateToken(token)) {
-            String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-            Long uid = userLoginService.getUidByEmail(email);
-            String nickname = userLoginService.getNicknameByEmail(email);
-            //return "Hello, " + email + "!";
-
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("uid", uid);
-            userInfo.put("email", email);
-            userInfo.put("nickname", nickname);
-
-            return ResponseEntity.ok(userInfo);
-        } else {
-//            Map<String, String> userInfo = new HashMap<>();
-//            userInfo.put("uid", "invalid token");
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
-        }
-    }
-
-
-    @GetMapping("/api/test/getAll")
-    public ResponseEntity<?> getUserList() {
-        // 查询所有用户
-        List<UserWithSessionsDto> userList = userLoginService.getAllUsers();
-
-        // 创建一个List来存储用户信息，包括sessions
-        List<Map<String, Object>> userInfoList = new ArrayList<>();
-        for (UserWithSessionsDto user : userList) {
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("uid", user.getUser().getUid()); // 获取用户ID
-            userInfo.put("email", user.getUser().getEmail());//获取用户email
-            userInfo.put("gender", user.getUser().getGender());//获取用户性别
-            userInfo.put("nickname", user.getUser().getNickname()); // 获取用户昵称
-            userInfo.put("sessions", user.getSessions()); // 获取sessions列表
-            userInfoList.add(userInfo);
-        }
-
-        // 返回JSON格式的用户信息
-        return ResponseEntity.ok(userInfoList);
     }
 
 }
