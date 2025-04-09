@@ -18,6 +18,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     @Query(nativeQuery = true, value = "SELECT startTimestamp FROM Session WHERE sessionID in ?1")
     List<Long> getSessionStartTimestampBySessionID(List<Long> sessionID);
 
-    @Query(nativeQuery = true, value = "SELECT endTimestamp - startTimestamp FROM Session WHERE sessionID in ?1")
+    @Query(nativeQuery = true, value = "SELECT max(startTimestamp + 1, endTimestamp) - startTimestamp FROM Session WHERE sessionID in ?1")
     List<Long> getSessionDurationBySessionID(List<Long> sessionID);
 }
