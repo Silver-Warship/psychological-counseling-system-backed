@@ -55,7 +55,6 @@ public class GetConsultantRecordService {
             records[i] = response;
         }
 
-
         return records;
     }
 
