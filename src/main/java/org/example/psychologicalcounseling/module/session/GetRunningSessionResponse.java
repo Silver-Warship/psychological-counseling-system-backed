@@ -21,7 +21,7 @@ public class GetRunningSessionResponse extends ResponseBuilder {
         if (code == 404) {
             return ResponseEntity.badRequest().body(this);
         } else {
-            return ResponseEntity.ok(this.sessions);
+            return ResponseEntity.ok(this);
         }
     }
 }
