@@ -40,7 +40,7 @@ public class SessionTimeoutDetect {
      */
     private void checkSession() {
         // get all timeout sessions in the database
-        List<String> allTimeoutSessions = sessionRepository.getAllTimeoutSession(OtherConstant.SessionTimeout, System.currentTimeMillis());
+        List<String> allTimeoutSessions = sessionRepository.findAllTimeoutSession(OtherConstant.SessionTimeout, System.currentTimeMillis());
 
         // set the session as inactive
         for (String sessionID : allTimeoutSessions) {

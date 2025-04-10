@@ -25,7 +25,7 @@ public class UserSessionController {
     @PostMapping("/api/getRunningSession")
     public ResponseEntity<?> getRunningSession(@RequestParam Long userID) {
         // check if userID is valid
-        if (userID == null || !accountRepository.existsById(userID)) {
+        if (userID == null || userID < 0 || !accountRepository.existsById(userID)) {
             return ResponseEntity.badRequest().body(ErrorConstant.noThisUser.codeMsg);
         }
 
@@ -35,7 +35,7 @@ public class UserSessionController {
     @GetMapping("/api/getRunningSessionNumber")
     public ResponseEntity<?> getRunningSessionNumber(@RequestParam Long userID) {
         // check if userID is valid
-        if (userID == null || !accountRepository.existsById(userID)) {
+        if (userID == null || userID < 0 || !accountRepository.existsById(userID)) {
             return ResponseEntity.badRequest().body(ErrorConstant.noThisUser.codeMsg);
         }
 
@@ -45,7 +45,7 @@ public class UserSessionController {
     @GetMapping("/api/getSessionMessages")
     public ResponseEntity<?> getSessionMessages(@RequestParam Long sessionID) {
         // check if sessionID is valid
-        if (sessionID == null || !accountRepository.existsById(sessionID)) {
+        if (sessionID == null || sessionID < 0 || !accountRepository.existsById(sessionID)) {
             return ResponseEntity.badRequest().body(ErrorConstant.noThisSession.codeMsg);
         }
 

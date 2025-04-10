@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM Message WHERE sessionID = ?1 order by sendTimestamp")
-    List<Message> getMessagesBySessionID(Long sessionID);
+    List<Message> findMessagesBySessionID(Long sessionID);
 }

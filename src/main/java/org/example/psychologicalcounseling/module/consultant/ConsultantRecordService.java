@@ -38,8 +38,8 @@ public class ConsultantRecordService {
         // get username and counsellor name from userID and counsellorID
         List<String> allUserNames = consultantRecords.stream().map((record) -> userRepository.findUserNameByUid(record.getUserID())).toList();
         List<String> allCounsellorNames = consultantRecords.stream().map((record) -> counsellorRepository.findCounsellorNameByCounsellorID(record.getCounsellorID())).toList();
-        List<Long> allSessionStartTimestamp = sessionRepository.getSessionStartTimestampBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
-        List<Long> allSessionDuration = sessionRepository.getSessionDurationBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
+        List<Long> allSessionStartTimestamp = sessionRepository.findSessionStartTimestampBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
+        List<Long> allSessionDuration = sessionRepository.findSessionDurationBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
 
         for (int i = 0; i < consultantRecords.size(); i++) {
             ConsultantRecord record = consultantRecords.get(i);
@@ -93,7 +93,7 @@ public class ConsultantRecordService {
      * @return The number of completed sessions.
      */
     public Long getCompletedSessionNumberByUserID(Long userID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.getCompletedConsultantNumberByUserIDAndTimestampBetween(userID, startTimestamp, endTimestamp);
+        return consultantRecordRepository.findCompletedConsultantNumberByUserIDAndTimestampBetween(userID, startTimestamp, endTimestamp);
     }
 
     /**
@@ -105,7 +105,7 @@ public class ConsultantRecordService {
      * @return The number of completed sessions.
      */
     public Long getCompletedSessionNumberByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.getCompletedConsultantNumberByCounsellorIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
+        return consultantRecordRepository.findCompletedConsultantNumberByCounsellorIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
     }
 
     /**
@@ -117,7 +117,7 @@ public class ConsultantRecordService {
      * @return The total consultation duration in seconds.
      */
     public Long getHistoricalConsultationDurationByUserID(Long userID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.getHistoricalConsultationDurationByUserID(userID, startTimestamp, endTimestamp);
+        return consultantRecordRepository.findHistoricalConsultationDurationByUserID(userID, startTimestamp, endTimestamp);
     }
 
     /**
@@ -129,6 +129,6 @@ public class ConsultantRecordService {
      * @return The total consultation duration in seconds.
      */
     public Long getHistoricalConsultationDurationByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.getHistoricalConsultationDurationByCounsellorID(counsellorID, startTimestamp, endTimestamp);
+        return consultantRecordRepository.findHistoricalConsultationDurationByCounsellorID(counsellorID, startTimestamp, endTimestamp);
     }
 }

@@ -1,7 +1,6 @@
 package org.example.psychologicalcounseling.module.session.GetRunningSession;
 
 import org.example.psychologicalcounseling.model.Session;
-import org.example.psychologicalcounseling.module.chat.session.SessionService;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class GetRunningSessionService {
     }
 
     public GetRunningSessionResponse getRunningSession(Long userID) {
-        List<Session> sessions = sessionRepository.getRunningSessionByUserID(userID);
+        List<Session> sessions = sessionRepository.findRunningSessionByUserID(userID);
         List<String> allUsernames = sessions.stream().map((session)->{
             if (userID.equals(session.getFirstUserID())) {
                 return userRepository.findUserNameByUid(session.getSecondUserID());
@@ -45,6 +44,6 @@ public class GetRunningSessionService {
     }
 
     public GetRunningSessionNumberResponse getRunningSessionNumber(Long userID) {
-        return new GetRunningSessionNumberResponse(sessionRepository.getRunningSessionNumberByUserID(userID));
+        return new GetRunningSessionNumberResponse(sessionRepository.findRunningSessionNumberByUserID(userID));
     }
 }
