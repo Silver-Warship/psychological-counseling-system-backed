@@ -1,6 +1,7 @@
-package org.example.psychologicalcounseling.module.consultant.getConsultantRecord;
+package org.example.psychologicalcounseling.module.consultant;
 
 import org.example.psychologicalcounseling.model.ConsultantRecord;
+import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordResponse;
 import org.example.psychologicalcounseling.repository.ConsultantRecordRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
@@ -10,14 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GetConsultantRecordService {
+public class ConsultantRecordService {
     private final ConsultantRecordRepository consultantRecordRepository;
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     private final CounsellorRepository counsellorRepository;
 
 
-    public GetConsultantRecordService(ConsultantRecordRepository consultantRecordRepository, UserRepository userRepository, SessionRepository sessionRepository, CounsellorRepository counsellorRepository) {
+    public ConsultantRecordService(ConsultantRecordRepository consultantRecordRepository, UserRepository userRepository, SessionRepository sessionRepository, CounsellorRepository counsellorRepository) {
         this.consultantRecordRepository = consultantRecordRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
@@ -105,5 +106,29 @@ public class GetConsultantRecordService {
      */
     public Long getCompletedSessionNumberByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
         return consultantRecordRepository.getCompletedConsultantNumberByCounsellorIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
+    }
+
+    /**
+     * Retrieves the historical consultation duration for a specific user.
+     *
+     * @param userID          The ID of the user.
+     * @param startTimestamp  The start timestamp for the query.
+     * @param endTimestamp    The end timestamp for the query.
+     * @return The total consultation duration in seconds.
+     */
+    public Long getHistoricalConsultationDurationByUserID(Long userID, Long startTimestamp, Long endTimestamp) {
+        return consultantRecordRepository.getHistoricalConsultationDurationByUserID(userID, startTimestamp, endTimestamp);
+    }
+
+    /**
+     * Retrieves the historical consultation duration for a specific counsellor.
+     *
+     * @param counsellorID    The ID of the counsellor.
+     * @param startTimestamp  The start timestamp for the query.
+     * @param endTimestamp    The end timestamp for the query.
+     * @return The total consultation duration in seconds.
+     */
+    public Long getHistoricalConsultationDurationByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
+        return consultantRecordRepository.getHistoricalConsultationDurationByCounsellorID(counsellorID, startTimestamp, endTimestamp);
     }
 }
