@@ -36,8 +36,8 @@ public class ConsultantRecordService {
         // Create an array of ConsultantRecord responses
         GetConsultantRecordResponse.ConsultantRecord[] records = new GetConsultantRecordResponse.ConsultantRecord[consultantRecords.size()];
         // get username and counsellor name from userID and counsellorID
-        List<String> allUserNames = consultantRecords.stream().map((record) -> userRepository.findUserNameByUid(record.getRecordID())).toList();
-        List<String> allCounsellorNames = counsellorRepository.findAllCounsellorNameByCounsellorID(consultantRecords.stream().map(ConsultantRecord::getCounsellorID).toList());
+        List<String> allUserNames = consultantRecords.stream().map((record) -> userRepository.findUserNameByUid(record.getUserID())).toList();
+        List<String> allCounsellorNames = consultantRecords.stream().map((record) -> counsellorRepository.findCounsellorNameByCounsellorID(record.getCounsellorID())).toList();
         List<Long> allSessionStartTimestamp = sessionRepository.getSessionStartTimestampBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
         List<Long> allSessionDuration = sessionRepository.getSessionDurationBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
 
