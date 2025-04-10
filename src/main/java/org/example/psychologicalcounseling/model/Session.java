@@ -30,5 +30,5 @@ public class Session {
     @Column(name = "firstUserID", nullable = false, length = 20)
     private Long firstUserID;
     @Column(name = "secondUserID", nullable = false, length = 20)
-    private Long SecondUserID;
+    private Long secondUserID;
 }

@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.controller;
 
+import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.OriginalPasswordBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginRequestDto;
@@ -33,30 +34,10 @@ public class UserLoginController {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         String verificationCode = loginRequest.getVerificationCode();
-        //业务情况：
+        //业务情况
         //登录：有email和password，email在数据库内，没有verification
         //注册：有email和password，email不在数据库内，有verification
         //验证注册：有email和password，email不在数据库内，没有verification
-
-        //if(password！=null or ""){
-        //  if(账户存在){验证密码}
-        //  else{提示账户未注册}
-        //}
-        //}else{
-        //   if(验证码为空){
-        //     if(5分钟内){
-        //       发送验证码
-        //     }else{提示系统繁忙}
-        //   }if{
-        //     if(验证码正确){
-        //       if(!userLoginService.checkEmail(email)){数据库添加初始账号和17位密码}
-        //       发送token
-        //     }else{
-        //       发送验证码未成功匹配
-        //     }
-        //   }
-        //}
-
         if(password!=null && !password.isEmpty()){
             if(userLoginService.checkEmail(email)){
                 //登录验证
@@ -110,47 +91,6 @@ public class UserLoginController {
             }
         }
         return response.buildResponse();
-    }
-
-
-    @GetMapping("/api/tokenVerify")
-    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
-        if (jwtUtilTokenBuilder.validateToken(token)) {
-            String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-            Long uid = userLoginService.getUidByEmail(email);
-            String nickname = userLoginService.getNicknameByEmail(email);
-            //return "Hello, " + email + "!";
-
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", String.valueOf(uid));
-            userInfo.put("email", email);
-            userInfo.put("nickname", nickname);
-
-            return ResponseEntity.ok(userInfo);
-        } else {
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", "invalid token");
-            return ResponseEntity.ok(userInfo);
-        }
-    }
-
-
-    @GetMapping("/api/test/getAll")
-    public ResponseEntity<?> getUserList() {
-        // 查询所有用户
-        List<User> userList = userLoginService.getAllUsers();
-
-        // 创建一个Map来存储用户的ID和昵称
-        List<Map<String, String>> userInfoList = new ArrayList<>();
-        for (User user : userList) {
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("uid", String.valueOf(user.getUid()));
-            userInfo.put("nickname", user.getNickname());
-            userInfoList.add(userInfo);
-        }
-
-        // 返回JSON格式的用户信息
-        return ResponseEntity.ok(userInfoList);
     }
 
 }
