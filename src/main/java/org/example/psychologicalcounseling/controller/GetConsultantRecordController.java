@@ -1,20 +1,21 @@
 package org.example.psychologicalcounseling.controller;
 
+import org.example.psychologicalcounseling.module.consultant.getCompletedConsultationNumber.GetCompletedConsultationNumberRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordResponse;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordService;
+import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionNumberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GetConsultantRecord {
+public class GetConsultantRecordController {
     private final GetConsultantRecordService getConsultantRecordService;
 
-    public GetConsultantRecord(GetConsultantRecordService getConsultantRecordService) {
+    public GetConsultantRecordController(GetConsultantRecordService getConsultantRecordService) {
         this.getConsultantRecordService = getConsultantRecordService;
     }
-
 
     @GetMapping("/api/getConsultantRecord")
     public ResponseEntity<?> getConsultantRecord(GetConsultantRecordRequest getConsultantRecordRequest) {
@@ -45,4 +46,32 @@ public class GetConsultantRecord {
         return response.buildResponse();
     }
 
+    @GetMapping("/api/getCompletedConsultationNumber")
+    public ResponseEntity<?> getCompletedConsultationNumber(GetCompletedConsultationNumberRequest request) {
+        GetRunningSessionNumberResponse response = new GetRunningSessionNumberResponse();
+        // check if startTimestamp and endTimestamp are present
+        if (request.getStartTimestamp() == null) {
+            request.setStartTimestamp(0L);
+        }
+        if (request.getEndTimestamp() == null) {
+            request.setEndTimestamp(System.currentTimeMillis());
+        }
+
+        // check if userID or counsellorID present
+        // if both are present, use userID
+        // if both are not present, return error
+        if (request.getUserID() != null) {
+            response.setNumber(getConsultantRecordService.getCompletedSessionNumberByUserID(request.getUserID(),
+                    request.getStartTimestamp(), request.getEndTimestamp()));
+        }  else if (request.getCounsellorID() != null) {
+            response.setNumber(getConsultantRecordService.getCompletedSessionNumberByCounsellorID(request.getCounsellorID(),
+                    request.getStartTimestamp(), request.getEndTimestamp()));
+        } else {
+                response.setCode(601);
+                response.setCodeMsg("The userID and counsellorID are empty.");
+                return response.buildResponse();
+        }
+
+        return response.buildResponse();
+    }
 }

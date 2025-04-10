@@ -5,7 +5,6 @@ import org.example.psychologicalcounseling.repository.ConsultantRecordRepository
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class GetConsultantRecordService {
         // Create an array of ConsultantRecord responses
         GetConsultantRecordResponse.ConsultantRecord[] records = new GetConsultantRecordResponse.ConsultantRecord[consultantRecords.size()];
         // get username and counsellor name from userID and counsellorID
-        List<String> allUserNames = userRepository.findAllUserNameByUid(consultantRecords.stream().map(ConsultantRecord::getUserID).toList());
+        List<String> allUserNames = consultantRecords.stream().map((record) -> userRepository.findUserNameByUid(record.getRecordID())).toList();
         List<String> allCounsellorNames = counsellorRepository.findAllCounsellorNameByCounsellorID(consultantRecords.stream().map(ConsultantRecord::getCounsellorID).toList());
         List<Long> allSessionStartTimestamp = sessionRepository.getSessionStartTimestampBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
         List<Long> allSessionDuration = sessionRepository.getSessionDurationBySessionID(consultantRecords.stream().map(ConsultantRecord::getSessionID).toList());
@@ -80,7 +79,31 @@ public class GetConsultantRecordService {
      * @return Array of ConsultantRecord responses.
      */
     public GetConsultantRecordResponse.ConsultantRecord[]  getConsultantRecordByCounsellor(Long counsellorID, Long startTimestamp, Long endTimestamp) {
-        List<ConsultantRecord> records = consultantRecordRepository.findByUserIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
+        List<ConsultantRecord> records = consultantRecordRepository.findByCounsellorIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
         return _recordAdopter(records);
+    }
+
+    /**
+     * Retrieves the number of completed sessions for a specific user within a given timestamp range.
+     *
+     * @param userID          The ID of the user.
+     * @param startTimestamp  The start timestamp for the query.
+     * @param endTimestamp    The end timestamp for the query.
+     * @return The number of completed sessions.
+     */
+    public Long getCompletedSessionNumberByUserID(Long userID, Long startTimestamp, Long endTimestamp) {
+        return consultantRecordRepository.getCompletedConsultantNumberByUserIDAndTimestampBetween(userID, startTimestamp, endTimestamp);
+    }
+
+    /**
+     * Retrieves the number of completed sessions for a specific counsellor.
+     *
+     * @param counsellorID    The ID of the counsellor.
+     * @param startTimestamp  The start timestamp for the query.
+     * @param endTimestamp    The end timestamp for the query.
+     * @return The number of completed sessions.
+     */
+    public Long getCompletedSessionNumberByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
+        return consultantRecordRepository.getCompletedConsultantNumberByCounsellorIDAndTimestampBetween(counsellorID, startTimestamp, endTimestamp);
     }
 }

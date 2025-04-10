@@ -20,13 +20,13 @@ public class GetRunningSessionService {
 
     public GetRunningSessionResponse getRunningSession(Long userID) {
         List<Session> sessions = sessionRepository.getRunningSessionByUserID(userID);
-        List<String> allUsernames = userRepository.findAllUserNameByUid(sessions.stream().map((session)->{
+        List<String> allUsernames = sessions.stream().map((session)->{
             if (userID.equals(session.getFirstUserID())) {
-                return session.getSecondUserID();
+                return userRepository.findUserNameByUid(session.getSecondUserID());
             } else {
-                return session.getFirstUserID();
+                return userRepository.findUserNameByUid(session.getFirstUserID());
             }
-        }).toList());
+        }).toList();
 
         // save the session information into the response
         GetRunningSessionResponse.Session[] sessionArray = new GetRunningSessionResponse.Session[sessions.size()];
@@ -42,5 +42,9 @@ public class GetRunningSessionService {
             sessionArray[i] = sessionInfo;
         }
         return new GetRunningSessionResponse(sessionArray);
+    }
+
+    public GetRunningSessionNumberResponse getRunningSessionNumber(Long userID) {
+        return new GetRunningSessionNumberResponse(sessionRepository.getRunningSessionNumberByUserID(userID));
     }
 }

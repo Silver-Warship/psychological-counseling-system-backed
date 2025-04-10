@@ -14,8 +14,11 @@ import java.util.List;
 public interface SessionRepository extends JpaRepository<Session, Long> {
     Session getSessionBySessionID(Long sid);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM Session WHERE firstUserID = :uid or secondUserID = :uid AND isClosed = 0")
+    @Query(nativeQuery = true, value = "SELECT * FROM Session WHERE (firstUserID = :uid or secondUserID = :uid) AND isClosed = 0")
     List<Session> getRunningSessionByUserID(@Param("uid") Long userID);
+
+    @Query(nativeQuery = true, value = "SELECT count(*) FROM Session WHERE (firstUserID = :uid or secondUserID = :uid) AND isClosed = 0")
+    Long getRunningSessionNumberByUserID(@Param("uid") Long userID);
 
     @Query(nativeQuery = true, value = "SELECT startTimestamp FROM Session WHERE sessionID in ?1")
     List<Long> getSessionStartTimestampBySessionID(List<Long> sessionID);
