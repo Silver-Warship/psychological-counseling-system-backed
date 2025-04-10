@@ -4,11 +4,10 @@ package org.example.psychologicalcounseling.controller;
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.user.info.UserInfoService;
+import org.example.psychologicalcounseling.module.user.info.EditRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-//@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserInfoController {
     @Autowired
     private JwtUtilTokenBuilder jwtUtilTokenBuilder;
@@ -24,7 +23,8 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
 
-    @GetMapping("/api/tokenVerify")
+    //通过token获取当前登录的用户信息
+    @GetMapping("/tokenVerify")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
         if (jwtUtilTokenBuilder.validateToken(token)) {
             String email = jwtUtilTokenBuilder.getEmailFromToken(token);
@@ -45,7 +45,8 @@ public class UserInfoController {
         }
     }
 
-    @GetMapping("/api/test/getAll")
+    //获取所有用户的信息
+    @GetMapping("/test/getAll")
     public ResponseEntity<?> getUserList() {
         // 查询所有用户
         List<UserWithSessionsDto> userList = userInfoService.getAllUsers();
@@ -64,6 +65,13 @@ public class UserInfoController {
 
         // 返回JSON格式的用户信息
         return ResponseEntity.ok(userInfoList);
+    }
+
+    @PostMapping("/user/editprofile")
+    public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest) {
+        userInfoService.editUserProfile(editRequest);
+
+        return ResponseEntity.ok().build();
     }
 
 }

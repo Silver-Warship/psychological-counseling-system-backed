@@ -26,7 +26,7 @@ public class User {
     private Gender gender;
 
     public enum Gender {
-        Male, Female
+        male, female, unknown, gunship;
     }
 
 }

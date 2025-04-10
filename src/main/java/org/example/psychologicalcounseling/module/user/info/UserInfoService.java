@@ -1,8 +1,10 @@
 package org.example.psychologicalcounseling.module.user.info;
 
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
+import org.example.psychologicalcounseling.model.Account;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.model.User;
+import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -18,6 +21,8 @@ public class UserInfoService {
     UserRepository userRepository;
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     public List<UserWithSessionsDto> getAllUsers() {
         // 从数据库中获取所有用户信息
@@ -54,4 +59,33 @@ public class UserInfoService {
         }
         return user.getNickname();
     }
+
+    public boolean editUserProfile (EditRequestDto editRequestDto){
+        try{
+            Long uid = editRequestDto.getUid();
+            // 根据uid获取用户实体
+            User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("User not found"));
+            Account account = accountRepository.findById(uid).orElseThrow(() -> new RuntimeException("Account not found"));
+
+            // 更新不为空的字段
+            if (editRequestDto.getGender() != null) {
+                user.setGender(editRequestDto.getGender());
+            }
+            if (editRequestDto.getNickname() != null) {
+                user.setNickname(editRequestDto.getNickname());
+            }
+            if (editRequestDto.getPassword() != null) {
+                account.setPassword(editRequestDto.getPassword());
+            }
+
+            // 保存更新后的用户信息
+            userRepository.save(user);
+            accountRepository.save(account);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
