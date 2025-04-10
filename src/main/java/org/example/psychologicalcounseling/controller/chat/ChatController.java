@@ -16,5 +16,6 @@ public class ChatController extends MessageController {
         registerRequest(RequestConstant.checkSessionAlive, CheckSessionAliveController.class);
         registerRequest(RequestConstant.registerConnection, RegisterConnectionController.class);
         registerRequest(RequestConstant.chatWithGPT, ChatWithGPTController.class);
+        registerRequest(RequestConstant.closeSession, CloseSessionController.class);
     }
 }
