@@ -4,6 +4,7 @@ import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionService;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,10 @@ public class UserSessionController {
         }
 
         return getRunningSessionService.getRunningSession(userID).buildResponse();
-     }
+    }
+
+    @GetMapping("/api/getCounsellorRunningSession")
+    public ResponseEntity<?> getCounsellorRunningSession(@RequestParam Long counsellorID, @RequestParam int maxCnt) {
+       return null;
+    }
 }
