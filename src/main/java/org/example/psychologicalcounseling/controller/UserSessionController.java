@@ -22,15 +22,20 @@ public class UserSessionController {
     @PostMapping("/api/getRunningSession")
     public ResponseEntity<?> getRunningSession(@RequestParam Long userID) {
         // check if userID is valid
-        if (!accountRepository.existsById(userID)) {
+        if (userID == null || !accountRepository.existsById(userID)) {
             return ResponseEntity.badRequest().body(ErrorConstant.noThisUser.codeMsg);
         }
 
         return getRunningSessionService.getRunningSession(userID).buildResponse();
     }
 
-    @GetMapping("/api/getCounsellorRunningSession")
-    public ResponseEntity<?> getCounsellorRunningSession(@RequestParam Long counsellorID, @RequestParam int maxCnt) {
-       return null;
+    @GetMapping("/api/getRunningSessionNumber")
+    public ResponseEntity<?> getRunningSessionNumber(@RequestParam Long userID) {
+        // check if userID is valid
+        if (userID == null || !accountRepository.existsById(userID)) {
+            return ResponseEntity.badRequest().body(ErrorConstant.noThisUser.codeMsg);
+        }
+
+        return getRunningSessionService.getRunningSessionNumber(userID).buildResponse();
     }
 }
