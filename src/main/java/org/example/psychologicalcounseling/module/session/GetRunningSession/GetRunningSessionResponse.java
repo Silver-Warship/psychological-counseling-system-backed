@@ -14,6 +14,19 @@ public class GetRunningSessionResponse extends ResponseBuilder {
         Long sessionID;
         Long firstUserID;
         Long secondUserID;
+
+        // the time of the session start
+        Long startTimestamp;
+
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class Other {
+            String avatar;
+            String nickname;
+        }
+
+        Other other;
     }
     public Session[] sessions;
 

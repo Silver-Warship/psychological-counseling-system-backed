@@ -19,7 +19,7 @@ public class GetConsultantRecordResponse extends ResponseBuilder {
         private String appraisal;
     }
 
-    ConsultantRecord[] consultantRecords;
+    public ConsultantRecord[] consultantRecords;
 
     public ResponseEntity<?> buildResponse() {
         if (code == 601) {

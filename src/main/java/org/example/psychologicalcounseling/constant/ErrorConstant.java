@@ -49,6 +49,10 @@ public class ErrorConstant {
             200, "success ack message"
     );
 
+    public static final Description successCloseSession = new Description(
+            200, "success close session"
+    );
+
     public static final Description sessionClosed = new Description(
             200, "session have been closed"
     );
@@ -127,5 +131,9 @@ public class ErrorConstant {
 
     public static final Description contentIsEmpty = new Description(
             619, "content is empty, please check your content"
+    );
+
+    public static final Description sessionAlreadyClosed = new Description(
+            620, "session already closed, please check your sessionID"
     );
 }

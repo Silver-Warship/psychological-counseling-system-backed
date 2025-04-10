@@ -30,7 +30,7 @@ public class SessionTimeoutDetect {
         this.timer = new Timer();
     }
 
-    private void notifyUser(Long userID, Long sessionID) {
+    public void notifyUser(Long userID, Long sessionID) {
         // notify the user that the session has timed out
         ConnectionService connectionService = GetBeanUtil.getBean(ConnectionService.class);
         WebSocketSession connection = connectionService.getConnection(userID);

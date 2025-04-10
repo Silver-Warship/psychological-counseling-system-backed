@@ -3,13 +3,20 @@ package org.example.psychologicalcounseling.module.chat.session;
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.constant.OtherConstant;
 import org.example.psychologicalcounseling.dto.Response;
+import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
+import org.example.psychologicalcounseling.module.chat.session.CloseSession.CloseSessionRequest;
+import org.example.psychologicalcounseling.module.chat.session.CloseSession.CloseSessionResponse;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveRequest;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveResponse;
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionRequest;
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionResponse;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;
+import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
+
+import java.util.function.Function;
 
 @Service
 public class SessionService {
@@ -54,5 +61,19 @@ public class SessionService {
         sessionRepository.save(session);
 
         return new Response<>(ErrorConstant.sessionAlive.code, ErrorConstant.sessionAlive.codeMsg, new CheckSessionAliveResponse(true));
+    }
+
+    public Response<CloseSessionResponse> closeSession(CloseSessionRequest request) {
+        // close the session in the database
+        sessionRepository.updateSessionBySessionID(request.getSessionID(), true);
+
+        // notify the session manager to remove the session
+        Session session = sessionRepository.findById(request.getSessionID()).orElse(null);
+        if (session != null) {
+            sessionTimeoutDetect.notifyUser(session.getFirstUserID(), request.getSessionID());
+            sessionTimeoutDetect.notifyUser(session.getSecondUserID(), request.getSessionID());
+        }
+
+        return new Response<>(ErrorConstant.successCloseSession.code, ErrorConstant.successCloseSession.codeMsg, new CloseSessionResponse(request.getSessionID()));
     }
 }
