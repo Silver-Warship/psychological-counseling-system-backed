@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface CounsellorRepository extends CrudRepository<Counsellor, Long> {
 
-    @Query(nativeQuery = true, value = "SELECT nickname FROM Counsellor WHERE counsellorID in ?1")
-    List<String> findAllCounsellorNameByCounsellorID(List<Long> consultantIDs);
+    @Query(nativeQuery = true, value = "SELECT nickname FROM Counsellor WHERE counsellorID=:consultantID")
+    String findCounsellorNameByCounsellorID(Long consultantID);
 }
