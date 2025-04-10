@@ -1,21 +1,16 @@
-package org.example.psychologicalcounseling.module.session;
+package org.example.psychologicalcounseling.module.session.GetRunningSession;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.psychologicalcounseling.dto.ResponseBuilder;
 import org.springframework.http.ResponseEntity;
 
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetRunningSessionResponse extends ResponseBuilder {
-    @Data
-    public static class Session {
-        Long sessionID;
-        Long firstUserID;
-        Long secondUserID;
-    }
-    public Session[] sessions;
+public class GetRunningSessionNumberResponse extends ResponseBuilder {
+    public Long number;
 
     public ResponseEntity<?> buildResponse() {
         if (code == 404) {
