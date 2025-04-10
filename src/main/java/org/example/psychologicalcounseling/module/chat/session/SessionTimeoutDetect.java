@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.chat.session;
 
 import org.example.psychologicalcounseling.constant.ErrorConstant;
+import org.example.psychologicalcounseling.constant.OtherConstant;
 import org.example.psychologicalcounseling.constant.ServerMessageType;
 import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.module.chat.session.sessionCloseNotification.SessionCloseNotification;
@@ -14,6 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +30,29 @@ public class SessionTimeoutDetect {
     public SessionTimeoutDetect(SessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
         this.timer = new Timer();
+
+        checkSession();
+    }
+
+    /*
+     * This method is called when the server starts
+     * It will check all the sessions in the database and if any session timeout when the server is closing will be set closed
+     */
+    private void checkSession() {
+        // get all timeout sessions in the database
+        List<String> allTimeoutSessions = sessionRepository.getAllTimeoutSession(OtherConstant.SessionTimeout, System.currentTimeMillis());
+
+        // set the session as inactive
+        for (String sessionID : allTimeoutSessions) {
+            Session session = sessionRepository.findById(Long.parseLong(sessionID)).orElseThrow();
+            session.setIsClosed(true);
+            if (session.getLastMessageTimestamp() != null) {
+                session.setEndTimestamp(session.getLastMessageTimestamp() + OtherConstant.SessionTimeout);
+            } else {
+                session.setEndTimestamp(session.getStartTimestamp() + OtherConstant.SessionTimeout);
+            }
+            sessionRepository.save(session);
+        }
     }
 
     public void notifyUser(Long userID, Long sessionID) {

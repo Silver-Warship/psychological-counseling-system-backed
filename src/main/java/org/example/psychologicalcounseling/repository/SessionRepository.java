@@ -30,4 +30,8 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE Session SET isClosed = :isClosed WHERE sessionID = :sessionID")
     void updateSessionBySessionID(Long sessionID, Boolean isClosed);
+
+
+    @Query(nativeQuery = true, value = "SELECT sessionID FROM Session WHERE lastMessageTimestamp + :timeout <= :currentTime AND isClosed = 0")
+    List<String> getAllTimeoutSession(Long timeout, Long currentTime);
 }
