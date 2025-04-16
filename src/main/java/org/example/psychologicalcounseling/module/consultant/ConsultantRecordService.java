@@ -117,7 +117,11 @@ public class ConsultantRecordService {
      * @return The total consultation duration in seconds.
      */
     public Long getHistoricalConsultationDurationByUserID(Long userID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.findHistoricalConsultationDurationByUserID(userID, startTimestamp, endTimestamp);
+        Long duration = consultantRecordRepository.findHistoricalConsultationDurationByUserID(userID, startTimestamp, endTimestamp);
+        if (duration == null) {
+            return 0L;
+        }
+        return duration;
     }
 
     /**
@@ -129,6 +133,10 @@ public class ConsultantRecordService {
      * @return The total consultation duration in seconds.
      */
     public Long getHistoricalConsultationDurationByCounsellorID(Long counsellorID, Long startTimestamp, Long endTimestamp) {
-        return consultantRecordRepository.findHistoricalConsultationDurationByCounsellorID(counsellorID, startTimestamp, endTimestamp);
+        Long duration = consultantRecordRepository.findHistoricalConsultationDurationByCounsellorID(counsellorID, startTimestamp, endTimestamp);
+        if (duration == null) {
+            return 0L;
+        }
+        return duration;
     }
 }

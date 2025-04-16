@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.AdminManage.GetBindingCounsellor;
+package org.example.psychologicalcounseling.module.OrderManage.getBindingCounsellor;
 
 import org.example.psychologicalcounseling.repository.SupervisorManageRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
