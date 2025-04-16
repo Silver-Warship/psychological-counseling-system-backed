@@ -31,14 +31,4 @@ public class AdminManageController {
 
         return getBindingCounsellorService.getBindingCounsellor(adminID).buildResponse();
     }
-
-    @GetMapping("/api/getCounsellorOrder")
-    public ResponseEntity<?> getCounsellorOrder(@RequestParam Long counsellorID) {
-        // check if counsellorID is valid
-        if (counsellorID == null || counsellorID < 0 || !adminRepository.existsById(counsellorID)) {
-            return ResponseEntity.badRequest().body("Invalid counsellor ID");
-        }
-
-        return orderManageService.getCounsellorOrder(counsellorID).buildResponse();
-    }
 }

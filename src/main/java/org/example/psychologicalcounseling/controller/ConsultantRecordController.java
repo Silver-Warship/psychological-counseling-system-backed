@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GetConsultantRecordController {
+public class ConsultantRecordController {
     private final ConsultantRecordService getConsultantRecordService;
 
-    public GetConsultantRecordController(ConsultantRecordService getConsultantRecordService) {
+    public ConsultantRecordController(ConsultantRecordService getConsultantRecordService) {
         this.getConsultantRecordService = getConsultantRecordService;
     }
 
