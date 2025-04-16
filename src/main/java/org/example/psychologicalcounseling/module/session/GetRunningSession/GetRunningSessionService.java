@@ -1,7 +1,6 @@
 package org.example.psychologicalcounseling.module.session.GetRunningSession;
 
 import org.example.psychologicalcounseling.model.Session;
-import org.example.psychologicalcounseling.module.chat.session.SessionService;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,14 +18,14 @@ public class GetRunningSessionService {
     }
 
     public GetRunningSessionResponse getRunningSession(Long userID) {
-        List<Session> sessions = sessionRepository.getRunningSessionByUserID(userID);
-        List<String> allUsernames = userRepository.findAllUserNameByUid(sessions.stream().map((session)->{
+        List<Session> sessions = sessionRepository.findRunningSessionByUserID(userID);
+        List<String> allUsernames = sessions.stream().map((session)->{
             if (userID.equals(session.getFirstUserID())) {
-                return session.getSecondUserID();
+                return userRepository.findUserNameByUid(session.getSecondUserID());
             } else {
-                return session.getFirstUserID();
+                return userRepository.findUserNameByUid(session.getFirstUserID());
             }
-        }).toList());
+        }).toList();
 
         // save the session information into the response
         GetRunningSessionResponse.Session[] sessionArray = new GetRunningSessionResponse.Session[sessions.size()];
@@ -42,5 +41,9 @@ public class GetRunningSessionService {
             sessionArray[i] = sessionInfo;
         }
         return new GetRunningSessionResponse(sessionArray);
+    }
+
+    public GetRunningSessionNumberResponse getRunningSessionNumber(Long userID) {
+        return new GetRunningSessionNumberResponse(sessionRepository.findRunningSessionNumberByUserID(userID));
     }
 }

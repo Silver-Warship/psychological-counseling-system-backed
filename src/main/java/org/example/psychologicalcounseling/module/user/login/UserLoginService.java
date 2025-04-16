@@ -1,15 +1,19 @@
 package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.UserDto;
+import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.Account;
+import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
+import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,9 +25,9 @@ public class UserLoginService {
     UserRepository userRepository;
     @Autowired
     AccountRepository accountRepository;
-    // Redis client initialization
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
 
     private  final SendMail sendMail = SendMail.getInstance();
 
@@ -32,7 +36,7 @@ public class UserLoginService {
         //System.out.println("查询哈希表");
         try {
 
-            if (redisTemplate.hasKey(email)) {
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
                 System.out.println("查询哈希表发现重复");
                 return false;
             }else{
@@ -72,8 +76,7 @@ public class UserLoginService {
         return true;
     }
 
-
-    //在email存在的前提下检查传入的email和password是否匹配
+    //默认email存在的前提下检查传入的email和password是否匹配
     public boolean checkPassword(String email, String password) {
 
         //从数据库中获取用户信息，并检查用户是否存在
@@ -88,7 +91,6 @@ public class UserLoginService {
         }
         return true;
     }
-
 
     //添加用户，用email来作为nickname，这是可以修改的
     public void addUser(UserDto userDto) {
@@ -116,34 +118,5 @@ public class UserLoginService {
             System.out.println("保存用户失败");
         }
     }
-
-
-    public List<User> getAllUsers() {
-        // 从数据库中获取所有用户信息
-        List<User> users = userRepository.findAll();
-        return users;
-    }
-
-    public Long getUidByEmail(String email) {
-        // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return -1L;
-        }
-        return user.getUid();
-    }
-
-    public String getNicknameByEmail(String email) {
-        // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return null;
-        }
-        return user.getNickname();
-    }
-
-
 
 }
