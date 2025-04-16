@@ -18,7 +18,7 @@ public abstract class ResponseBuilder {
     protected String codeMsg = "Success"; // 默认值
 
     public ResponseEntity<?> buildResponse(){
-        if (Objects.equals(code, "Success")) {
+        if (Objects.equals(codeMsg, "Success")) {
             return ResponseEntity.ok(this);
         } else {
             return ResponseEntity.badRequest().body(this);

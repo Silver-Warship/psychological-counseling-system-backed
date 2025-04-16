@@ -10,5 +10,4 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     // 根据 aid 查询 password
     @Query("SELECT a.password FROM Account a WHERE a.aid = :aid")
     String findPasswordByAid(@Param("aid") Long aid);
-
 }

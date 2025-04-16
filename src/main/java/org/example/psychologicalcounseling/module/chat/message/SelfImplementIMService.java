@@ -63,7 +63,7 @@ public class SelfImplementIMService implements MessageService {
     @Override
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
         // check session
-        Session session = sessionRepository.getSessionBySessionID(request.getSessionID());
+        Session session = sessionRepository.findSessionBySessionID(request.getSessionID());
         if (session == null) {
             return new Response<>(ErrorConstant.sessionNotExist.code, ErrorConstant.sessionNotExist.codeMsg, null);
         }

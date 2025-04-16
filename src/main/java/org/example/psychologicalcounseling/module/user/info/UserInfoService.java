@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -34,7 +33,7 @@ public class UserInfoService {
 
         for (User user : users) {
             Long uid = user.getUid();
-            List<Session> sessions = sessionRepository.getRunningSessionByUserID(uid);
+            List<Session> sessions = sessionRepository.findRunningSessionByUserID(uid);
             userWithSessionsList.add(new UserWithSessionsDto(user, sessions));
         }
 
