@@ -1,6 +1,6 @@
 package org.example.psychologicalcounseling.controller;
 
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.OrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.orderManage.OrderManageService;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

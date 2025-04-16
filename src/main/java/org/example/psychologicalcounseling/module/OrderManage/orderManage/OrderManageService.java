@@ -1,6 +1,6 @@
-package org.example.psychologicalcounseling.module.AdminManage.orderManage;
+package org.example.psychologicalcounseling.module.OrderManage.orderManage;
 
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.getCounsellorOrder.GetCounsellorOrderResponse;
+import org.example.psychologicalcounseling.module.OrderManage.orderManage.getCounsellorOrder.GetCounsellorOrderResponse;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
 
