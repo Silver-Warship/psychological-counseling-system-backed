@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@IdClass(AdminManagePrimaryKey.class)
-@Table(name = "AdminManage")
-public class AdminManage {
+@IdClass(supervisorManagePrimaryKey.class)
+@Table(name = "supervisorManage")
+public class supervisorManage {
     @Id
-    @Column(name = "adminID")
-    private String adminID;
+    @Column(name = "supervisorID")
+    private String supervisorID;
 
     @Id
     @Column(name = "counsellorID")
