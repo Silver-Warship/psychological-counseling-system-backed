@@ -19,19 +19,19 @@ public interface ConsultantRecordRepository extends JpaRepository<ConsultantReco
 
     @Query(nativeQuery = true, value = "SELECT count(*) FROM ConsultantRecord t1 inner join Session t2 on t1.sessionID = t2.sessionID" +
             " WHERE t1.userID=:userID AND t2.isClosed=1 AND t2.startTimestamp >= :startTimestamp AND t2.startTimestamp <= :endTimestamp")
-    Long getCompletedConsultantNumberByUserIDAndTimestampBetween(Long userID, Long startTimestamp, Long endTimestamp);
+    Long findCompletedConsultantNumberByUserIDAndTimestampBetween(Long userID, Long startTimestamp, Long endTimestamp);
 
     @Query(nativeQuery = true, value = "SELECT count(*) FROM ConsultantRecord t1 inner join Session t2 on t1.sessionID = t2.sessionID" +
             " WHERE t1.counsellorID=:counsellorID AND t2.isClosed=1 AND t2.startTimestamp >= :startTimestamp AND t2.startTimestamp <= :endTimestamp")
-    Long getCompletedConsultantNumberByCounsellorIDAndTimestampBetween(Long counsellorID, Long startTimestamp, Long endTimestamp);
+    Long findCompletedConsultantNumberByCounsellorIDAndTimestampBetween(Long counsellorID, Long startTimestamp, Long endTimestamp);
 
 
     @Query(nativeQuery = true, value = "SELECT SUM(t2.endTimeStamp - t2.startTimestamp) FROM ConsultantRecord t1 inner join Session t2 on t1.sessionID = t2.sessionID " +
             "WHERE t1.userID=:userID AND t2.isClosed=1 AND t2.startTimestamp >= :startTimestamp AND t2.startTimestamp <= :endTimestamp")
-    Long getHistoricalConsultationDurationByUserID(Long userID, Long startTimestamp, Long endTimestamp);
+    Long findHistoricalConsultationDurationByUserID(Long userID, Long startTimestamp, Long endTimestamp);
 
 
     @Query(nativeQuery = true, value = "SELECT SUM(t2.endTimeStamp - t2.startTimestamp) FROM ConsultantRecord t1 inner join Session t2 on t1.sessionID = t2.sessionID " +
             "WHERE t1.counsellorID=:counsellorID AND t2.isClosed=1 AND t2.startTimestamp >= :startTimestamp AND t2.startTimestamp <= :endTimestamp")
-    Long getHistoricalConsultationDurationByCounsellorID(Long userID, Long startTimestamp, Long endTimestamp);
+    Long findHistoricalConsultationDurationByCounsellorID(Long userID, Long startTimestamp, Long endTimestamp);
 }

@@ -19,7 +19,7 @@ public class GetSessionMessageServer {
      * @return all messages in the session
      */
     public GetSessionMessageResponse getSessionMessage(Long sessionID) {
-        List<Message> messages = messageRepository.getMessagesBySessionID(sessionID);
+        List<Message> messages = messageRepository.findMessagesBySessionID(sessionID);
         GetSessionMessageResponse response = new GetSessionMessageResponse();
         GetSessionMessageResponse.Message[] tmpMessages = new GetSessionMessageResponse.Message[messages.size()];
         for (int i = 0; i < messages.size(); i++) {

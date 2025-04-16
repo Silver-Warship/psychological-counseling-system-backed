@@ -12,27 +12,25 @@ import java.util.List;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Long> {
-    Session getSessionBySessionID(Long sid);
-    List<Session> findByFirstUserIDOrSecondUserID(Long firstUserID, Long secondUserID);
+    Session findSessionBySessionID(Long sid);
 
     @Query(nativeQuery = true, value = "SELECT * FROM Session WHERE (firstUserID = :uid or secondUserID = :uid) AND isClosed = 0")
-    List<Session> getRunningSessionByUserID(@Param("uid") Long userID);
+    List<Session> findRunningSessionByUserID(@Param("uid") Long userID);
 
     @Query(nativeQuery = true, value = "SELECT count(*) FROM Session WHERE (firstUserID = :uid or secondUserID = :uid) AND isClosed = 0")
-    Long getRunningSessionNumberByUserID(@Param("uid") Long userID);
+    Long findRunningSessionNumberByUserID(@Param("uid") Long userID);
 
     @Query(nativeQuery = true, value = "SELECT startTimestamp FROM Session WHERE sessionID in ?1")
-    List<Long> getSessionStartTimestampBySessionID(List<Long> sessionID);
+    List<Long> findSessionStartTimestampBySessionID(List<Long> sessionID);
 
     @Query(nativeQuery = true, value = "SELECT endTimestamp - startTimestamp FROM Session WHERE sessionID in ?1")
-    List<Long> getSessionDurationBySessionID(List<Long> sessionID);
+    List<Long> findSessionDurationBySessionID(List<Long> sessionID);
+
+    @Query(nativeQuery = true, value = "SELECT sessionID FROM Session WHERE lastMessageTimestamp + :timeout <= :currentTime AND isClosed = 0")
+    List<String> findAllTimeoutSession(Long timeout, Long currentTime);
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE Session SET isClosed = :isClosed WHERE sessionID = :sessionID")
     void updateSessionBySessionID(Long sessionID, Boolean isClosed);
-
-
-    @Query(nativeQuery = true, value = "SELECT sessionID FROM Session WHERE lastMessageTimestamp + :timeout <= :currentTime AND isClosed = 0")
-    List<String> getAllTimeoutSession(Long timeout, Long currentTime);
 }
