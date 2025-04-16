@@ -14,9 +14,9 @@ public class GetBindingCounsellorService {
         this.counsellorRepository = counsellorRepository;
     }
 
-    public GetBindingCounsellorResponse getBindingCounsellor(Long adminId) {
+    public GetBindingCounsellorResponse getBindingCounsellor(Long supervisorID) {
         // get counsellor IDs bound to the admin
-        var counsellorIds = supervisorManageRepository.findCounsellorIDBySupervisorID(adminId);
+        var counsellorIds = supervisorManageRepository.findCounsellorIDBySupervisorID(supervisorID);
         // get counsellor names
         var counsellorNames = counsellorIds.stream().map(counsellorRepository::findCounsellorNameByCounsellorID).toList();
         // create the response

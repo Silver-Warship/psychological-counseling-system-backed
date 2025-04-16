@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Entity
 @Data
-@IdClass(supervisorManagePrimaryKey.class)
+@IdClass(SupervisorManagePrimaryKey.class)
 @Table(name = "supervisorManage")
-public class supervisorManage {
+public class SupervisorManage {
     @Id
     @Column(name = "supervisorID")
     private String supervisorID;

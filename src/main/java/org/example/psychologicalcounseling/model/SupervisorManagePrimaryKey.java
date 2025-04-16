@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class supervisorManagePrimaryKey implements Serializable {
+public class SupervisorManagePrimaryKey implements Serializable {
     Long supervisorID;
     Long counsellorID;
 }
