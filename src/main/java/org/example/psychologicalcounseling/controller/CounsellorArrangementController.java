@@ -38,5 +38,4 @@ public class CounsellorArrangementController {
         this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getCounsellors());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
-
 }

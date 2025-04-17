@@ -2,6 +2,7 @@ package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.OrderManage.getAllOrder.GetAllOrderNumberResponse;
 import org.example.psychologicalcounseling.module.OrderManage.getAllOrder.GetOrderService;
+import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,16 +17,10 @@ public class AdminController {
 
     @GetMapping("/api/getAllOrderNumber")
     public ResponseEntity<?> getAllOrderNumber(Long startTimestamp, Long endTimestamp, Long timeStep) {
-        // check if startTimestamp and endTimestamp are present
-        if (startTimestamp == null || startTimestamp < 0) {
-            return ResponseEntity.badRequest().body("Invalid start timestamp");
-        }
-        if (endTimestamp == null || endTimestamp < 0) {
-            return ResponseEntity.badRequest().body("Invalid end timestamp");
-        }
-        // check whether startTimestamp is less than endTimestamp
-        if (startTimestamp >= endTimestamp) {
-            return ResponseEntity.badRequest().body("startTimestamp should be less than endTimestamp");
+        // check if startTimestamp and endTimestamp are valid
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(startTimestamp, endTimestamp);
+        if (timeStampError.isPresent()) {
+            return ResponseEntity.badRequest().body(timeStampError);
         }
 
         if (timeStep == null) {

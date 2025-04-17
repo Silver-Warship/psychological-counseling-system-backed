@@ -9,6 +9,7 @@ import org.example.psychologicalcounseling.module.consultant.getConsultationDura
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionNumberResponse;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
+import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +36,11 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
-        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(request.getStartTimestamp(), request.getEndTimestamp());
+        if (timeStampError.isPresent()) {
             response.setCode(601);
-            response.setCodeMsg("The start timestamp is invalid.");
+            response.setCodeMsg(timeStampError.get());
             return response.buildResponse();
         }
 
@@ -79,9 +82,10 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
-        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(request.getStartTimestamp(), request.getEndTimestamp());
+        if (timeStampError.isPresent()) {
             response.setCode(601);
-            response.setCodeMsg("startTimestamp should be less than endTimestamp");
+            response.setCodeMsg(timeStampError.get());
             return response.buildResponse();
         }
 
@@ -123,9 +127,10 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
-        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(request.getStartTimestamp(), request.getEndTimestamp());
+        if (timeStampError.isPresent()) {
             response.setCode(601);
-            response.setCodeMsg("startTimestamp should be less than endTimestamp");
+            response.setCodeMsg(timeStampError.get());
             return response.buildResponse();
         }
 
