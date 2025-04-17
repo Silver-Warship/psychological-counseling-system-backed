@@ -1,5 +1,6 @@
-package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
+package org.example.psychologicalcounseling.module.OrderManage.supervisorOrderManage;
 
+import org.example.psychologicalcounseling.model.SupervisorArrangement;
 import org.example.psychologicalcounseling.repository.SupervisorArrangementRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,29 @@ public class SupervisorOrderManageService {
         }
 
         return new GetSupervisorOrderResponse(timePeriods);
+    }
+
+    public boolean addSupervisorOrder(Long supervisorID, Long startTimestamp, Long endTimestamp) {
+        try {
+            // construct new order
+            SupervisorArrangement newArrangement = new SupervisorArrangement();
+            newArrangement.setSupervisorID(supervisorID);
+            newArrangement.setStartTimestamp(startTimestamp);
+            newArrangement.setEndTimestamp(endTimestamp);
+            // save the new order
+            supervisorArrangementRepository.save(newArrangement);
+        } catch (Exception ignored) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeSupervisorOrder(Long supervisorID) {
+        try {
+            supervisorArrangementRepository.deleteById(supervisorID);
+        } catch (Exception ignored) {
+            return false;
+        }
+        return true;
     }
 }

@@ -29,11 +29,11 @@ public class CounsellorOrderManageService {
         return new GetCounsellorOrderResponse(orderList);
     }
 
-    public void addCounsellorOrder(List<UpdateConsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void addCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
         // add all orders of the counsellors
 
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();;
-        for (UpdateConsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
+        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
             counsellorArrangement.setCounsellorID(conunsellor.getCounsellorID());
             //System.out.println(conunsellor.getCounsellorID());
             counsellorArrangement.setStartTimestamp(conunsellor.getStartTimestamp());
@@ -43,10 +43,10 @@ public class CounsellorOrderManageService {
 
     }
 
-    public void cancelCounsellorOrder(List<UpdateConsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void cancelCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
         // delete all orders of counsellors
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();
-        for (UpdateConsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
+        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
             counsellorArrangement=counsellorArrangementRepository.findArrangementByParams(
                     conunsellor.getCounsellorID(),
                     conunsellor.getStartTimestamp(),

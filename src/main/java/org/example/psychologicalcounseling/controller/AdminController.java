@@ -3,7 +3,6 @@ package org.example.psychologicalcounseling.controller;
 import org.example.psychologicalcounseling.module.OrderManage.getAllOrder.GetAllOrderNumberResponse;
 import org.example.psychologicalcounseling.module.OrderManage.getAllOrder.GetOrderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +15,7 @@ public class AdminController {
     }
 
     @GetMapping("/api/getAllOrderNumber")
-    public ResponseEntity<?> getAllOrder(Long startTimestamp, Long endTimestamp, Long timeStep) {
+    public ResponseEntity<?> getAllOrderNumber(Long startTimestamp, Long endTimestamp, Long timeStep) {
         // check if startTimestamp and endTimestamp are present
         if (startTimestamp == null || startTimestamp < 0) {
             return ResponseEntity.badRequest().body("Invalid start timestamp");
