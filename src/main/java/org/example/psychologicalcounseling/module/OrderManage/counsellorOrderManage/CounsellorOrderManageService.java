@@ -1,9 +1,6 @@
 package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
-import com.alibaba.fastjson.serializer.JSONSerializer;
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.getCounsellorOrder.GetCounsellorOrderResponse;
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder.UpdateConsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +28,11 @@ public class CounsellorOrderManageService {
         return new GetCounsellorOrderResponse(orderList);
     }
 
-    public void addCounsellorOrder(List<UpdateConsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void addCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
         // add all orders of the counsellors
 
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();;
-        for (UpdateConsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
+        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
             counsellorArrangement.setCounsellorID(conunsellor.getCounsellorID());
             //System.out.println(conunsellor.getCounsellorID());
             counsellorArrangement.setStartTimestamp(conunsellor.getStartTimestamp());
@@ -45,10 +42,10 @@ public class CounsellorOrderManageService {
 
     }
 
-    public void cancelCounsellorOrder(List<UpdateConsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void cancelCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
         // delete all orders of counsellors
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();
-        for (UpdateConsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
+        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
             counsellorArrangement=counsellorArrangementRepository.findArrangementByParams(
                     conunsellor.getCounsellorID(),
                     conunsellor.getStartTimestamp(),
