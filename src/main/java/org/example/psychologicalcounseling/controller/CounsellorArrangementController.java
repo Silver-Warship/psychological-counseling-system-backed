@@ -2,6 +2,7 @@ package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.AdminManage.orderManage.OrderManageService;
 import org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder.UpdateConsellorOrderRequest;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CounsellorArrangementController {
     private final CounsellorRepository counsellorRepository;
-    private final OrderManageService orderManageService;
+    private final CounsellorOrderManageService counsellorOrderManageService;
 
-    public CounsellorArrangementController(CounsellorRepository counsellorRepository, OrderManageService orderManageService) {
+    public CounsellorArrangementController(CounsellorRepository counsellorRepository, CounsellorOrderManageService counsellorOrderManageService) {
         this.counsellorRepository = counsellorRepository;
-        this.orderManageService = orderManageService;
+        this.counsellorOrderManageService = counsellorOrderManageService;
     }
 
     @GetMapping("/api/getCounsellorOrder")
@@ -23,7 +24,7 @@ public class CounsellorArrangementController {
             return ResponseEntity.badRequest().body("Invalid counsellor ID");
         }
 
-        return orderManageService.getCounsellorOrder(counsellorID).buildResponse();
+        return counsellorOrderManageService.getCounsellorOrder(counsellorID).buildResponse();
     }
 
     @PostMapping("/api/addCounsellorOrder")

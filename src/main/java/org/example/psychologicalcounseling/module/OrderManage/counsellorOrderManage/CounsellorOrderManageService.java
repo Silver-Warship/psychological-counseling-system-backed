@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.AdminManage.orderManage;
+package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderManageService {
+public class CounsellorOrderManageService {
     private final CounsellorArrangementRepository counsellorArrangementRepository;
 
-    public OrderManageService(CounsellorArrangementRepository counsellorArrangementRepository) {
+    public CounsellorOrderManageService(CounsellorArrangementRepository counsellorArrangementRepository) {
         this.counsellorArrangementRepository = counsellorArrangementRepository;
     }
 
