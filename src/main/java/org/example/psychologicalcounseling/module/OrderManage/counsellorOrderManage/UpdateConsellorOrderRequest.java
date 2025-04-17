@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder;
+package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
 import lombok.Data;
 

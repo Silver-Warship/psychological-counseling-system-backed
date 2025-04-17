@@ -1,9 +1,7 @@
 package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
-import com.alibaba.fastjson.serializer.JSONSerializer;
+
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.getCounsellorOrder.GetCounsellorOrderResponse;
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder.UpdateConsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
 
