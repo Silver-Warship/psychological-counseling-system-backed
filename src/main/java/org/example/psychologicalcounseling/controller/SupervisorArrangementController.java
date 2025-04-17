@@ -5,6 +5,7 @@ import org.example.psychologicalcounseling.module.OrderManage.supervisorOrderMan
 import org.example.psychologicalcounseling.module.OrderManage.supervisorOrderManage.SupervisorOrderManageService;
 import org.example.psychologicalcounseling.repository.SupervisorArrangementRepository;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
+import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +34,10 @@ public class SupervisorArrangementController {
             endTimestamp = System.currentTimeMillis();
         }
 
-        // check whether the timestamp is valid
-        if (startTimestamp > endTimestamp) {
-            return ResponseEntity.badRequest().body("startTimestamp should be less than or equal endTimestamp");
+        // check if startTimestamp and endTimestamp are valid
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(startTimestamp, endTimestamp);
+        if (timeStampError.isPresent()) {
+            return ResponseEntity.badRequest().body(timeStampError);
         }
 
         // get the supervisor order
@@ -44,18 +46,14 @@ public class SupervisorArrangementController {
 
     @PostMapping("/api/addSupervisorOrder")
     public ResponseEntity<?> addSupervisorOrder(@RequestBody AddSupervisorOrderDto request) {
-        if (request.getSupervisorID() == null || request.getStartTimestamp() == null || request.getEndTimestamp() == null) {
-            return ResponseEntity.badRequest().body("Invalid parameters");
-        }
-
-        // check whether the timestamp is valid
-        if (request.getStartTimestamp() > request.getEndTimestamp()) {
-            return ResponseEntity.badRequest().body("startTimestamp should be less than or equal endTimestamp");
-        }
-
-        // check if the supervisorID is valid
-        if (!supervisorRepository.existsById(request.getSupervisorID())) {
+        if (request.getSupervisorID() == null || !supervisorRepository.existsById(request.getSupervisorID())) {
             return ResponseEntity.badRequest().body("Invalid supervisor ID");
+        }
+
+        // check if startTimestamp and endTimestamp are valid
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(request.getStartTimestamp(), request.getEndTimestamp());
+        if (timeStampError.isPresent()) {
+            return ResponseEntity.badRequest().body(timeStampError);
         }
 
         // check whether the order is valid
