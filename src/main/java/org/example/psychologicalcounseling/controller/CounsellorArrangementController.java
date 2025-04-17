@@ -1,8 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.OrderManageService;
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder.UpdateConsellorOrderRequest;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +27,14 @@ public class CounsellorArrangementController {
     }
 
     @PostMapping("/api/addCounsellorOrder")
-    public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateConsellorOrderRequest addRequest) {
-        this.orderManageService.addCounsellorOrder(addRequest.getConunsellors());
+    public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest addRequest) {
+        this.counsellorOrderManageService.addCounsellorOrder(addRequest.getCounsellors());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 
     @PostMapping("/api/cancelCounsellorOrder")
-    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody UpdateConsellorOrderRequest cancelRequest) {
-        this.orderManageService.cancelCounsellorOrder(cancelRequest.getConunsellors());
+    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest cancelRequest) {
+        this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getCounsellors());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 

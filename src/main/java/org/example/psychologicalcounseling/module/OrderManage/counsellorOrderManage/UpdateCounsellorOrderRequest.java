@@ -1,12 +1,12 @@
-package org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder;
+package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UpdateConsellorOrderRequest {
-    private List<CounsellorOrder> conunsellors;
+public class UpdateCounsellorOrderRequest {
+    private List<CounsellorOrder> counsellors;
 
     @Data
     public static class CounsellorOrder {

@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
+package org.example.psychologicalcounseling.module.OrderManage.supervisorOrderManage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
