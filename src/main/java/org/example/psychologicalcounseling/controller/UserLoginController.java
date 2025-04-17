@@ -1,7 +1,5 @@
 package org.example.psychologicalcounseling.controller;
 
-import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
-import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.OriginalPasswordBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginRequestDto;
 import org.example.psychologicalcounseling.dto.UserDto;
@@ -13,11 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @RestController
 //@RequestMapping("/api/users")
 public class UserLoginController {
@@ -28,7 +21,6 @@ public class UserLoginController {
 
     @PostMapping("/api/users/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
-
         LoginResponse response = new LoginResponse();
         //验证email和password是否正确
         String email = loginRequest.getEmail();
