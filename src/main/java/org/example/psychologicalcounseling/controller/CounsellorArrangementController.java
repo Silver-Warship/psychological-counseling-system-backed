@@ -1,12 +1,10 @@
 package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.AdminManage.orderManage.OrderManageService;
+import org.example.psychologicalcounseling.module.AdminManage.orderManage.updateConsellorOrder.UpdateConsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CounsellorArrangementController {
@@ -16,11 +14,6 @@ public class CounsellorArrangementController {
     public CounsellorArrangementController(CounsellorRepository counsellorRepository, OrderManageService orderManageService) {
         this.counsellorRepository = counsellorRepository;
         this.orderManageService = orderManageService;
-    }
-
-    @PostMapping("/api/addCounsellorOrder")
-    ResponseEntity<?> addCounsellorOrder() {
-        return ResponseEntity.ok("Counsellor order added successfully");
     }
 
     @GetMapping("/api/getCounsellorOrder")
@@ -33,8 +26,16 @@ public class CounsellorArrangementController {
         return orderManageService.getCounsellorOrder(counsellorID).buildResponse();
     }
 
-    @PostMapping("/api/cancelCounsellorOrder")
-    ResponseEntity<?> cancelCounsellorOrder() {
-        return ResponseEntity.ok("Counsellor order cancelled successfully");
+    @PostMapping("/api/addCounsellorOrder")
+    public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateConsellorOrderRequest addRequest) {
+        this.orderManageService.addCounsellorOrder(addRequest.getConunsellors());
+        return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
+
+    @PostMapping("/api/cancelCounsellorOrder")
+    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody UpdateConsellorOrderRequest cancelRequest) {
+        this.orderManageService.cancelCounsellorOrder(cancelRequest.getConunsellors());
+        return ResponseEntity.accepted().body("Counsellor order updated successfully");
+    }
+
 }
