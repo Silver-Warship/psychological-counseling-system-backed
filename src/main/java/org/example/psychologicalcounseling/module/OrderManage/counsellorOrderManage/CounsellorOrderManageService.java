@@ -1,14 +1,13 @@
-package org.example.psychologicalcounseling.module.OrderManage.orderManage;
+package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
-import org.example.psychologicalcounseling.module.OrderManage.orderManage.getCounsellorOrder.GetCounsellorOrderResponse;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderManageService {
+public class CounsellorOrderManageService {
     private final CounsellorArrangementRepository counsellorArrangementRepository;
 
-    public OrderManageService(CounsellorArrangementRepository counsellorArrangementRepository) {
+    public CounsellorOrderManageService(CounsellorArrangementRepository counsellorArrangementRepository) {
         this.counsellorArrangementRepository = counsellorArrangementRepository;
     }
 

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetOrderService {
-    private final CounsellorArrangementRepository counsellorArrangementRepository;
-    private final SupervisorArrangementRepository supervisorArrangementRepository;
+    final private CounsellorArrangementRepository counsellorArrangementRepository;
+    final private SupervisorArrangementRepository supervisorArrangementRepository;
 
     public GetOrderService(CounsellorArrangementRepository counsellorArrangementRepository, SupervisorArrangementRepository supervisorArrangementRepository) {
         this.counsellorArrangementRepository = counsellorArrangementRepository;
