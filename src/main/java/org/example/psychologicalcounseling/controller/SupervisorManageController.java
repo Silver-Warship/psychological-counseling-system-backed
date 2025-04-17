@@ -1,7 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.OrderManage.getBindingCounsellor.GetBindingCounsellorService;
-import org.example.psychologicalcounseling.module.OrderManage.orderManage.OrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ public class SupervisorManageController {
     private final SupervisorRepository supervisorRepository;
     private final GetBindingCounsellorService getBindingCounsellorService;
 
-    public SupervisorManageController(SupervisorRepository supervisorRepository, GetBindingCounsellorService getBindingCounsellorService, OrderManageService orderManageService) {
+    public SupervisorManageController(SupervisorRepository supervisorRepository, GetBindingCounsellorService getBindingCounsellorService, CounsellorOrderManageService counsellorOrderManageService) {
         this.supervisorRepository = supervisorRepository;
         this.getBindingCounsellorService = getBindingCounsellorService;
     }

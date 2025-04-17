@@ -7,6 +7,8 @@ import org.example.psychologicalcounseling.module.consultant.ConsultantRecordSer
 import org.example.psychologicalcounseling.module.consultant.getConsultationDuration.getConsultationDurationRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultationDuration.getConsultationDurationResponse;
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionNumberResponse;
+import org.example.psychologicalcounseling.repository.CounsellorRepository;
+import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ConsultantRecordController {
     private final ConsultantRecordService getConsultantRecordService;
+    private final UserRepository userRepository;
+    private final CounsellorRepository counsellorRepository;
 
-    public ConsultantRecordController(ConsultantRecordService getConsultantRecordService) {
+    public ConsultantRecordController(ConsultantRecordService getConsultantRecordService, UserRepository userRepository, CounsellorRepository counsellorRepository) {
         this.getConsultantRecordService = getConsultantRecordService;
+        this.userRepository = userRepository;
+        this.counsellorRepository = counsellorRepository;
     }
 
     @GetMapping("/api/getConsultantRecord")
@@ -29,12 +35,17 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
+        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+            response.setCode(601);
+            response.setCodeMsg("The start timestamp is invalid.");
+            return response.buildResponse();
+        }
 
         // check if userID or counsellorID present
         // if both are present, use userID
         // if both are not present, return error
         if (request.getUserID() != null) {
-            if (request.getUserID() < 0) {
+            if (!userRepository.existsById(request.getUserID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
@@ -42,7 +53,7 @@ public class ConsultantRecordController {
             response. setConsultantRecords(getConsultantRecordService.getConsultantRecordByUser(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
-            if (request.getCounsellorID() < 0) {
+            if (!counsellorRepository.existsById(request.getCounsellorID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
@@ -68,12 +79,17 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
+        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+            response.setCode(601);
+            response.setCodeMsg("startTimestamp should be less than endTimestamp");
+            return response.buildResponse();
+        }
 
         // check if userID or counsellorID present
         // if both are present, use userID
         // if both are not present, return error
         if (request.getUserID() != null) {
-            if (request.getUserID() < 0) {
+            if (!userRepository.existsById(request.getUserID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
@@ -81,7 +97,7 @@ public class ConsultantRecordController {
             response.setNumber(getConsultantRecordService.getCompletedSessionNumberByUserID(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
-            if (request.getCounsellorID() < 0) {
+            if (!counsellorRepository.existsById(request.getCounsellorID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
@@ -107,12 +123,17 @@ public class ConsultantRecordController {
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
+        if (request.getStartTimestamp() > request.getEndTimestamp()) {
+            response.setCode(601);
+            response.setCodeMsg("startTimestamp should be less than endTimestamp");
+            return response.buildResponse();
+        }
 
         // check if userID or counsellorID present
         // if both are present, use userID
         // if both are not present, return error
         if (request.getUserID() != null) {
-            if (request.getUserID() < 0) {
+            if (!userRepository.existsById(request.getUserID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
@@ -120,7 +141,7 @@ public class ConsultantRecordController {
             response.setDurations(getConsultantRecordService.getHistoricalConsultationDurationByUserID(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
-            if (request.getCounsellorID() < 0) {
+            if (!counsellorRepository.existsById(request.getCounsellorID())) {
                 response.setCode(601);
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
