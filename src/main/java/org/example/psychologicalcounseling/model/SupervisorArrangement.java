@@ -5,15 +5,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "CounsellorArrangement")
-public class CounsellorArrangement {
+@Table(name = "SupervisorArrangement")
+public class SupervisorArrangement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "arrangeID")
     private Long arrangeID;
 
-    @Column(name = "counsellorID")
-    private Long counsellorID;
+    @Column(name = "supervisorID")
+    private Long supervisorID;
 
     @Column(name = "startTimestamp")
     private Long startTimestamp;

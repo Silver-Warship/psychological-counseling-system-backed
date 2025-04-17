@@ -1,22 +1,22 @@
-package org.example.psychologicalcounseling.module.AdminManage.GetBindingCounsellor;
+package org.example.psychologicalcounseling.module.OrderManage.getBindingCounsellor;
 
-import org.example.psychologicalcounseling.repository.AdminManageRepository;
+import org.example.psychologicalcounseling.repository.SupervisorManageRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetBindingCounsellorService {
-    private final AdminManageRepository adminManageRepository;
+    private final SupervisorManageRepository supervisorManageRepository;
     private final CounsellorRepository counsellorRepository;
 
-    public GetBindingCounsellorService(AdminManageRepository adminManageRepository, CounsellorRepository counsellorRepository) {
-        this.adminManageRepository = adminManageRepository;
+    public GetBindingCounsellorService(SupervisorManageRepository supervisorManageRepository, CounsellorRepository counsellorRepository) {
+        this.supervisorManageRepository = supervisorManageRepository;
         this.counsellorRepository = counsellorRepository;
     }
 
-    public GetBindingCounsellorResponse getBindingCounsellor(Long adminId) {
+    public GetBindingCounsellorResponse getBindingCounsellor(Long supervisorID) {
         // get counsellor IDs bound to the admin
-        var counsellorIds = adminManageRepository.findCounsellorIDByAdminID(adminId);
+        var counsellorIds = supervisorManageRepository.findCounsellorIDBySupervisorID(supervisorID);
         // get counsellor names
         var counsellorNames = counsellorIds.stream().map(counsellorRepository::findCounsellorNameByCounsellorID).toList();
         // create the response

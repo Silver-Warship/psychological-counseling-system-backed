@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.AdminManage.GetBindingCounsellor;
+package org.example.psychologicalcounseling.module.OrderManage.getBindingCounsellor;
 
 import lombok.Data;
 import lombok.Setter;

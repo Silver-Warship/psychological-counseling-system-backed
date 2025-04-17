@@ -1,26 +1,19 @@
 package org.example.psychologicalcounseling.controller;
 
-import org.example.psychologicalcounseling.module.AdminManage.orderManage.OrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CounsellorArrangementController {
     private final CounsellorRepository counsellorRepository;
-    private final OrderManageService orderManageService;
+    private final CounsellorOrderManageService counsellorOrderManageService;
 
-    public CounsellorArrangementController(CounsellorRepository counsellorRepository, OrderManageService orderManageService) {
+    public CounsellorArrangementController(CounsellorRepository counsellorRepository, CounsellorOrderManageService counsellorOrderManageService) {
         this.counsellorRepository = counsellorRepository;
-        this.orderManageService = orderManageService;
-    }
-
-    @PostMapping("/api/addCounsellorOrder")
-    ResponseEntity<?> addCounsellorOrder() {
-        return ResponseEntity.ok("Counsellor order added successfully");
+        this.counsellorOrderManageService = counsellorOrderManageService;
     }
 
     @GetMapping("/api/getCounsellorOrder")
@@ -30,11 +23,19 @@ public class CounsellorArrangementController {
             return ResponseEntity.badRequest().body("Invalid counsellor ID");
         }
 
-        return orderManageService.getCounsellorOrder(counsellorID).buildResponse();
+        return counsellorOrderManageService.getCounsellorOrder(counsellorID).buildResponse();
+    }
+
+    @PostMapping("/api/addCounsellorOrder")
+    public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest addRequest) {
+        this.counsellorOrderManageService.addCounsellorOrder(addRequest.getCounsellors());
+        return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 
     @PostMapping("/api/cancelCounsellorOrder")
-    ResponseEntity<?> cancelCounsellorOrder() {
-        return ResponseEntity.ok("Counsellor order cancelled successfully");
+    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest cancelRequest) {
+        this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getCounsellors());
+        return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
+
 }

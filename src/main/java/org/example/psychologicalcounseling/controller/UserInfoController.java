@@ -2,6 +2,7 @@ package org.example.psychologicalcounseling.controller;
 
 
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
+import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.user.info.UserInfoService;
 import org.example.psychologicalcounseling.module.user.info.EditRequestDto;
@@ -30,12 +31,14 @@ public class UserInfoController {
             String email = jwtUtilTokenBuilder.getEmailFromToken(token);
             Long uid = userInfoService.getUidByEmail(email);
             String nickname = userInfoService.getNicknameByEmail(email);
+            User.Gender gender = userInfoService.getGenderByEmail(email);
             //return "Hello, " + email + "!";
 
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("uid", uid);
             userInfo.put("email", email);
             userInfo.put("nickname", nickname);
+            userInfo.put("gender", gender);
 
             return ResponseEntity.ok(userInfo);
         } else {
@@ -70,7 +73,6 @@ public class UserInfoController {
     @PostMapping("/user/editprofile")
     public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest) {
         userInfoService.editUserProfile(editRequest);
-
         return ResponseEntity.ok().build();
     }
 
