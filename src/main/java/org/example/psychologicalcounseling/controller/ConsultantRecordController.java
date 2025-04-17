@@ -76,6 +76,12 @@ public class ConsultantRecordController {
         if (request.getStartTimestamp() == null) {
             request.setStartTimestamp(0L);
         }
+
+        if(request.getStartTimestamp()<0){
+            response.setCode(601);
+            response.setCodeMsg("The start timestamp is invalid.");
+        }
+
         if (request.getEndTimestamp() == null) {
             request.setEndTimestamp(System.currentTimeMillis());
         }
