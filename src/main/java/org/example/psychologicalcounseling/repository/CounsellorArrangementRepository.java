@@ -13,13 +13,9 @@ public interface CounsellorArrangementRepository extends JpaRepository<Counsello
     List<CounsellorArrangement> findAllByCounsellorID(Long counsellorID);
 
     @Query("SELECT ca FROM CounsellorArrangement ca " +
-            "WHERE ca.counsellorID = :counsellorID AND " +
-                  "ca.startTimestamp = :startTimestamp " +
-                  "AND ca.endTimestamp = :endTimestamp")
-    CounsellorArrangement findArrangementByParams(
-            @Param("counsellorID") Long counsellorID,
-            @Param("startTimestamp") Long startTimestamp,
-            @Param("endTimestamp") Long endTimestamp
+            "WHERE ca.arrangeID = :arrangeID")
+    CounsellorArrangement findArrangementByID(
+            @Param("arrangeID") Long arrangeID
     );
 
     @Query(nativeQuery = true, value = "SELECT count(*) FROM CounsellorArrangement WHERE startTimestamp >= :startTimestamp AND startTimestamp <= :endTimestamp")

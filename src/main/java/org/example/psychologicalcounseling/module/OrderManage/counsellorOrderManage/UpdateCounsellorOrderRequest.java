@@ -8,6 +8,7 @@ import java.util.List;
 public class UpdateCounsellorOrderRequest {
     private List<CounsellorOrder> counsellors;
 
+
     @Data
     public static class CounsellorOrder {
         private Long counsellorID;

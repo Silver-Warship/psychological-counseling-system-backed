@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CancelCounsellorOrderRequest;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
@@ -34,8 +35,8 @@ public class CounsellorArrangementController {
     }
 
     @PostMapping("/api/cancelCounsellorOrder")
-    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest cancelRequest) {
-        this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getCounsellors());
+    public ResponseEntity<?> cancelCounsellorOrder(@RequestBody CancelCounsellorOrderRequest cancelRequest) {
+        this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getArrangeIDs());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 }
