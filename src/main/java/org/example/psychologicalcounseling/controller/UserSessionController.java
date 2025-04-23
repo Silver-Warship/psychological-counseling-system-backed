@@ -16,7 +16,8 @@ public class UserSessionController {
     private final GetSessionMessageServer getSessionMessageServer;
     private final AccountRepository accountRepository;
 
-    public UserSessionController(GetRunningSessionService getRunningSessionService, GetSessionMessageServer getSessionMessageServer, AccountRepository accountRepository) {
+    public UserSessionController(GetRunningSessionService getRunningSessionService, GetSessionMessageServer getSessionMessageServer,
+                                 AccountRepository accountRepository) {
         this.getRunningSessionService = getRunningSessionService;
         this.getSessionMessageServer = getSessionMessageServer;
         this.accountRepository = accountRepository;

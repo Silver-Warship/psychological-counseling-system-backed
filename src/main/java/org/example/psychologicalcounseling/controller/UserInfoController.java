@@ -2,6 +2,9 @@ package org.example.psychologicalcounseling.controller;
 
 
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
+import org.example.psychologicalcounseling.model.Admin;
+import org.example.psychologicalcounseling.model.Counsellor;
+import org.example.psychologicalcounseling.model.Supervisor;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.user.info.UserInfoService;
@@ -26,26 +29,51 @@ public class UserInfoController {
 
     //通过token获取当前登录的用户信息
     @GetMapping("/tokenVerify")
-    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
-        if (jwtUtilTokenBuilder.validateToken(token)) {
-            String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-            Long uid = userInfoService.getUidByEmail(email);
-            String nickname = userInfoService.getNicknameByEmail(email);
-            User.Gender gender = userInfoService.getGenderByEmail(email);
-            //return "Hello, " + email + "!";
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token, @RequestParam String role) {
+        String email = jwtUtilTokenBuilder.getEmailFromToken(token);
 
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("uid", uid);
-            userInfo.put("email", email);
-            userInfo.put("nickname", nickname);
-            userInfo.put("gender", gender);
 
-            return ResponseEntity.ok(userInfo);
-        } else {
-//            Map<String, String> userInfo = new HashMap<>();
-//            userInfo.put("uid", "invalid token");
-            return (ResponseEntity<?>) ResponseEntity.badRequest();
+        Long uid = null;
+        String nickname = "";
+        String gender = "";
+        //return "Hello, " + email + "!";
+
+        switch (role){
+            case "user":
+                User user = userInfoService.getUserByEmail(email);
+                uid = user.getUid();
+                nickname = user.getNickname();
+                gender = user.getGender().toString();
+                break;
+            case "counsellor":
+                Counsellor counsellor = userInfoService.getCounsellorByEmail(email);
+                uid = counsellor.getCounsellorID();
+                nickname = counsellor.getNickname();
+                gender = counsellor.getGender().toString();
+                break;
+            case "supervisor":
+                Supervisor supervisor = userInfoService.getSupervisorByEmail(email);
+                uid = supervisor.getSupervisorID();
+                nickname = supervisor.getNickname();
+                gender = supervisor.getGender().toString();
+            case "admin":
+                Admin admin = userInfoService.getAdminByEmail(email);
+                uid = admin.getAdminID();
+                nickname = admin.getNickname();
+                gender = admin.getGender().toString();
+
+
+            default:
+                return ResponseEntity.badRequest().body("Invalid role");
+
         }
+
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("uid", uid);
+        userInfo.put("email", email);
+        userInfo.put("nickname", nickname);
+        userInfo.put("gender", gender);
+        return ResponseEntity.ok(userInfo);
     }
 
     //获取所有用户的信息

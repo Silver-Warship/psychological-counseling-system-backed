@@ -43,14 +43,11 @@ public class CounsellorOrderManageService {
 
     }
 
-    public void cancelCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void cancelCounsellorOrder(List<Long> arrangeIDs) {
         // delete all orders of counsellors
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();
-        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
-            counsellorArrangement=counsellorArrangementRepository.findArrangementByParams(
-                    conunsellor.getCounsellorID(),
-                    conunsellor.getStartTimestamp(),
-                    conunsellor.getEndTimestamp());
+        for (Long arrangeID : arrangeIDs) {
+            counsellorArrangement=counsellorArrangementRepository.findArrangementByID(arrangeID);
             counsellorArrangementRepository.delete(counsellorArrangement);
         }
     }
