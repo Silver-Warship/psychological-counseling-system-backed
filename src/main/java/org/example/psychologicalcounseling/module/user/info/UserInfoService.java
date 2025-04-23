@@ -1,13 +1,8 @@
 package org.example.psychologicalcounseling.module.user.info;
 
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
-import org.example.psychologicalcounseling.model.Account;
-import org.example.psychologicalcounseling.model.Admin;
-import org.example.psychologicalcounseling.model.Session;
-import org.example.psychologicalcounseling.model.User;
-import org.example.psychologicalcounseling.repository.AccountRepository;
-import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
+import org.example.psychologicalcounseling.model.*;
+import org.example.psychologicalcounseling.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +18,13 @@ public class UserInfoService {
     SessionRepository sessionRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    CounsellorRepository counsellorRepository;
+    @Autowired
+    SupervisorRepository supervisorRepository;
+    @Autowired
+    AdminRepository adminRepository;
+
 
     public List<UserWithSessionsDto> getAllUsers() {
         // 从数据库中获取所有用户信息
@@ -40,35 +42,48 @@ public class UserInfoService {
         return userWithSessionsList;
     }
 
-    public Long getUidByEmail(String email) {
-        // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return -1L;
-        }
-        return user.getUid();
-    }
-
-    public String getNicknameByEmail(String email) {
+    public User getUserByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
         if (user == null) {
             // 用户不存在，返回-1或其他错误处理
             return null;
         }
-        return user.getNickname();
+        return user;
     }
 
-    public User.Gender getGenderByEmail(String email) {
+    public Counsellor getCounsellorByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
+        Counsellor counsellor = counsellorRepository.findByEmail(email);
+        if (counsellor == null) {
             // 用户不存在，返回-1或其他错误处理
             return null;
         }
-        return user.getGender();
-    }
+        return counsellor;
+     }
+
+
+    public Supervisor getSupervisorByEmail(String email) {
+        // 从数据库中获取用户信息，并检查用户是否存在
+        Supervisor supervisor = supervisorRepository.findByEmail(email);
+        if (supervisor == null) {
+            // 用户不存在，
+            return null;
+        }
+        return supervisor;
+     }
+
+     public Admin getAdminByEmail(String email) {
+        // 从数据库中获取用户信息，并检查用户是否存在
+        Admin admin = adminRepository.findByEmail(email);
+        if (admin == null) {
+            // 用户不存在，
+            return null;
+        }
+        return admin;
+     }
+
+
 
     public boolean editUserProfile (EditRequestDto editRequestDto){
         try{
