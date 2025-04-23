@@ -1,9 +1,6 @@
 package org.example.psychologicalcounseling.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -20,9 +17,10 @@ public class Supervisor {
     private String email;
 
     @Column(name = "gender")
-    private Counsellor.Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     public enum Gender {
-        MALE, FaMALE, UNKNOWN, GUNSHIP
+        male, female, unknown, gunship
     }
 }
