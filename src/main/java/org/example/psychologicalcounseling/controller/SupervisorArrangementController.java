@@ -7,10 +7,7 @@ import org.example.psychologicalcounseling.repository.SupervisorArrangementRepos
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
 import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SupervisorArrangementController {
@@ -26,7 +23,7 @@ public class SupervisorArrangementController {
 
 
     @GetMapping("/api/getSupervisorOrder")
-    public ResponseEntity<?> getSupervisorOrder(Long supervisorID, Long startTimestamp, Long endTimestamp) {
+    public ResponseEntity<?> getSupervisorOrder(@RequestParam Long supervisorID, @RequestParam Long startTimestamp, @RequestParam Long endTimestamp) {
         if (startTimestamp == null || startTimestamp < 0) {
             startTimestamp = 0L;
         }

@@ -28,4 +28,7 @@ public class ConsultantRecord {
 
     @Column(name = "appraisal")
     String appraisal;
+
+    @Column(name = "counsellorAppraisal")
+    String counsellorAppraisal;
 }
