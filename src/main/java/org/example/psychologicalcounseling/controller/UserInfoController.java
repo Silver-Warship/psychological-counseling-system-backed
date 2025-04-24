@@ -56,12 +56,13 @@ public class UserInfoController {
                 uid = supervisor.getSupervisorID();
                 nickname = supervisor.getNickname();
                 gender = supervisor.getGender().toString();
+                break;
             case "admin":
                 Admin admin = userInfoService.getAdminByEmail(email);
                 uid = admin.getAdminID();
                 nickname = admin.getNickname();
                 gender = admin.getGender().toString();
-
+                break;
 
             default:
                 return ResponseEntity.badRequest().body("Invalid role");

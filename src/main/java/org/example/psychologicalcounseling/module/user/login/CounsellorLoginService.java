@@ -1,26 +1,19 @@
 package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.UserDto;
-import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.Account;
 import org.example.psychologicalcounseling.model.Counsellor;
-import org.example.psychologicalcounseling.model.Session;
-import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
-import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class CounselorLoginService {
+public class CounsellorLoginService {
     @Autowired
     CounsellorRepository counsellorRepository;
     @Autowired
