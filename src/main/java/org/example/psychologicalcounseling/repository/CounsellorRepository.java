@@ -13,4 +13,6 @@ public interface CounsellorRepository extends CrudRepository<Counsellor, Long> {
     String findCounsellorNameByCounsellorID(Long consultantID);
 
     Counsellor findByEmail(String email);
+
+    Counsellor findByCounsellorID(Long counsellorID);
 }

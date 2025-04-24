@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SupervisorRepository extends JpaRepository<Supervisor, Long> {
     Supervisor findByEmail(String email);
+
+    Supervisor findBySupervisorID(Long supervisorID);
     // Custom query methods can be defined here if needed
     // For example, to find a supervisor by their ID:
     // Optional<Supervisor> findById(Long id);

@@ -31,12 +31,11 @@ public class UserInfoController {
     @GetMapping("/tokenVerify")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token, @RequestParam String role) {
         String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-
+        System.out.println(email);
 
         Long uid = null;
         String nickname = "";
         String gender = "";
-        //return "Hello, " + email + "!";
 
         switch (role){
             case "user":
@@ -56,13 +55,13 @@ public class UserInfoController {
                 uid = supervisor.getSupervisorID();
                 nickname = supervisor.getNickname();
                 gender = supervisor.getGender().toString();
+                break;
             case "admin":
                 Admin admin = userInfoService.getAdminByEmail(email);
                 uid = admin.getAdminID();
                 nickname = admin.getNickname();
                 gender = admin.getGender().toString();
-
-
+                break;
             default:
                 return ResponseEntity.badRequest().body("Invalid role");
 
@@ -101,6 +100,12 @@ public class UserInfoController {
     @PostMapping("/user/editprofile")
     public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest) {
         userInfoService.editUserProfile(editRequest);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/user/searchBy")
+    public ResponseEntity<?> searchUserInfo(@RequestParam String email) {
         return ResponseEntity.ok().build();
     }
 

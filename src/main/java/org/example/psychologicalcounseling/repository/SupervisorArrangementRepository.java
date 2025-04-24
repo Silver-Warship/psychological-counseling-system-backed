@@ -17,4 +17,8 @@ public interface SupervisorArrangementRepository extends JpaRepository<Superviso
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM SupervisorArrangement WHERE supervisorID = :supervisorID AND startTimestamp >= :startTimestamp AND startTimestamp <= :endTimestamp")
     Long countBySupervisorIDAndStartTimestampBetween(Long supervisorID, Long startTimestamp, Long endTimestamp);
+
+    @Query(nativeQuery = true, value = "SELECT  DISTINCT supervisorID, arrangeID FROM SupervisorArrangement WHERE startTimestamp >= :startTimestamp AND startTimestamp <= :endTimestamp")
+    List<Object[]> findSupervisorListByTime(Long startTimestamp, Long endTimestamp);
+
 }
