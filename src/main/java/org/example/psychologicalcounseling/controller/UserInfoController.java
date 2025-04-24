@@ -31,11 +31,12 @@ public class UserInfoController {
     @GetMapping("/tokenVerify")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token, @RequestParam String role) {
         String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-        System.out.println(email);
+
 
         Long uid = null;
         String nickname = "";
         String gender = "";
+        //return "Hello, " + email + "!";
 
         switch (role){
             case "user":

@@ -53,7 +53,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response. setConsultantRecords(getConsultantRecordService.getConsultantRecordByUser(request.getUserID(),
+            response.setConsultantRecords(getConsultantRecordService.getConsultantRecordByUser(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
             if (!counsellorRepository.existsById(request.getCounsellorID())) {
