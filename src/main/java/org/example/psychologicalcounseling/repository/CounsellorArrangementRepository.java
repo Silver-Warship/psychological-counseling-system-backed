@@ -24,7 +24,7 @@ public interface CounsellorArrangementRepository extends JpaRepository<Counsello
     @Query(nativeQuery = true, value = "SELECT count(*) FROM CounsellorArrangement WHERE startTimestamp >= :startTimestamp AND startTimestamp <= :endTimestamp")
     Long findCounsellorNumberByTime(Long startTimestamp, Long endTimestamp);
 
-    @Query(nativeQuery = true, value = "SELECT  DISTINCT counsellorID, arrangeID FROM CounsellorArrangement WHERE startTimestamp >= :startTimestamp AND endTimestamp <= :endTimestamp")
+    @Query(nativeQuery = true, value = "SELECT  DISTINCT counsellorID, arrangeID FROM CounsellorArrangement WHERE startTimestamp >= :startTimestamp AND startTimestamp <= :endTimestamp")
     List<Object[]> findIDListByTime(Long startTimestamp, Long endTimestamp);
 
 }

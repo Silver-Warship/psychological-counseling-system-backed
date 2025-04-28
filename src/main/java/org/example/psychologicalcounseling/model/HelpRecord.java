@@ -1,9 +1,7 @@
 package org.example.psychologicalcounseling.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "HelpRecord")
 public class HelpRecord {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recordID")
     private Long recordID;
 

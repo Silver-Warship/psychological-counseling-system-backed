@@ -13,6 +13,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
+    // TODO: 恢复token拦截
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");

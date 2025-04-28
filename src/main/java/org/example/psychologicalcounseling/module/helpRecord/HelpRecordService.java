@@ -12,7 +12,11 @@ public class HelpRecordService {
         this.helpRecordRepository = helpRecordRepository;
     }
 
-    public void addHelpRecord(Long counsellorID, Long supervisorID, Long userSessionID, Long helpSessionID) {
+    public boolean addHelpRecord(Long counsellorID, Long supervisorID, Long userSessionID, Long helpSessionID) {
+        if (helpRecordRepository.existsByAllAttributes(counsellorID, supervisorID, userSessionID, helpSessionID) > 0) {
+            return false;
+        }
+
         HelpRecord helpRecord = new HelpRecord();
         helpRecord.setCounsellorID(counsellorID);
         helpRecord.setSupervisorID(supervisorID);
@@ -21,6 +25,8 @@ public class HelpRecordService {
 
         // Save the help record to the database
         helpRecordRepository.save(helpRecord);
+
+        return true;
     }
 
 }

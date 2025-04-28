@@ -29,15 +29,15 @@ public class CounsellorOrderManageService {
         return new GetCounsellorOrderResponse(orderList);
     }
 
-    public void addCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> conunsellors) {
+    public void addCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> counsellors) {
         // add all orders of the counsellors
 
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();;
-        for (UpdateCounsellorOrderRequest.CounsellorOrder conunsellor : conunsellors) {
-            counsellorArrangement.setCounsellorID(conunsellor.getCounsellorID());
-            //System.out.println(conunsellor.getCounsellorID());
-            counsellorArrangement.setStartTimestamp(conunsellor.getStartTimestamp());
-            counsellorArrangement.setEndTimestamp(conunsellor.getEndTimestamp());
+        for (UpdateCounsellorOrderRequest.CounsellorOrder counsellor : counsellors) {
+            counsellorArrangement.setCounsellorID(counsellor.getCounsellorID());
+            //System.out.println(counsellor.getCounsellorID());
+            counsellorArrangement.setStartTimestamp(counsellor.getStartTimestamp());
+            counsellorArrangement.setEndTimestamp(counsellor.getEndTimestamp());
             counsellorArrangementRepository.save(counsellorArrangement);
         }
 
@@ -45,10 +45,8 @@ public class CounsellorOrderManageService {
 
     public void cancelCounsellorOrder(List<Long> arrangeIDs) {
         // delete all orders of counsellors
-        CounsellorArrangement counsellorArrangement= new CounsellorArrangement();
         for (Long arrangeID : arrangeIDs) {
-            counsellorArrangement=counsellorArrangementRepository.findArrangementByID(arrangeID);
-            counsellorArrangementRepository.delete(counsellorArrangement);
+            counsellorArrangementRepository.deleteById(arrangeID);
         }
     }
 }
