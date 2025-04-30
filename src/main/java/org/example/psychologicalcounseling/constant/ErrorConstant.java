@@ -57,6 +57,14 @@ public class ErrorConstant {
             200, "session have been closed"
     );
 
+    public static final Description successSendFile = new Description(
+            200, "success send file"
+    );
+
+    public static final Description newFile = new Description(
+            200, "there are new file from other user"
+    );
+
     public static final Description illegalTimestamp = new Description(
             601, "illegal timestamp, please check your timestamp"
     );
@@ -135,5 +143,13 @@ public class ErrorConstant {
 
     public static final Description sessionAlreadyClosed = new Description(
             620, "session already closed, please check your sessionID"
+    );
+
+    public static final Description illegalFileData = new Description(
+            621, "illegal file data, please check your file data"
+    );
+
+    public static final Description failSendFile = new Description(
+            622, "fail to send file, please check whether the receiver is online"
     );
 }
