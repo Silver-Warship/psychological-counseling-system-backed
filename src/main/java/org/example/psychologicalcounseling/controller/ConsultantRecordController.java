@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.consultant.addConsultantRecord.addConsultantRecordDto;
+import org.example.psychologicalcounseling.module.consultant.exportConsultantRecord.ExportConsultantRecordResponse;
 import org.example.psychologicalcounseling.module.consultant.getCompletedConsultationNumber.GetCompletedConsultationNumberRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordResponse;
@@ -8,6 +9,7 @@ import org.example.psychologicalcounseling.module.consultant.ConsultantRecordSer
 import org.example.psychologicalcounseling.module.consultant.getConsultationDuration.getConsultationDurationRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultationDuration.getConsultationDurationResponse;
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionNumberResponse;
+import org.example.psychologicalcounseling.repository.ConsultantRecordRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
@@ -24,12 +26,16 @@ public class ConsultantRecordController {
     private final UserRepository userRepository;
     private final CounsellorRepository counsellorRepository;
     private final SessionRepository sessionRepository;
+    private final ConsultantRecordRepository consultantRecordRepository;
 
-    public ConsultantRecordController(ConsultantRecordService consultantRecordService, UserRepository userRepository, CounsellorRepository counsellorRepository, SessionRepository sessionRepository) {
+    public ConsultantRecordController(ConsultantRecordService consultantRecordService, UserRepository userRepository,
+                                      CounsellorRepository counsellorRepository, SessionRepository sessionRepository,
+                                      ConsultantRecordRepository consultantRecordRepository) {
         this.consultantRecordService = consultantRecordService;
         this.userRepository = userRepository;
         this.counsellorRepository = counsellorRepository;
         this.sessionRepository = sessionRepository;
+        this.consultantRecordRepository = consultantRecordRepository;
     }
 
     @GetMapping("/api/getConsultantRecord")
@@ -195,5 +201,16 @@ public class ConsultantRecordController {
         }
 
         return ResponseEntity.badRequest().body("Failed to add consultant record");
+    }
+
+    @GetMapping("/api/exportConsultantRecord")
+    ResponseEntity<?> exportConsultantRecord(Long recordID) {
+        if (recordID == null || !consultantRecordRepository.existsById(recordID)) {
+            return ResponseEntity.badRequest().body("Record ID is invalid");
+        }
+
+        ExportConsultantRecordResponse response = new ExportConsultantRecordResponse();
+        response.content = consultantRecordService.exportConsultantRecord(recordID);
+        return response.buildResponse();
     }
 }

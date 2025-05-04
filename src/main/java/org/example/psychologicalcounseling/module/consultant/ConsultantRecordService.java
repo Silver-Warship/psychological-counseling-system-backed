@@ -1,14 +1,15 @@
 package org.example.psychologicalcounseling.module.consultant;
 
 import org.example.psychologicalcounseling.model.ConsultantRecord;
+import org.example.psychologicalcounseling.model.Message;
+import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordResponse;
-import org.example.psychologicalcounseling.repository.ConsultantRecordRepository;
-import org.example.psychologicalcounseling.repository.CounsellorRepository;
-import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.repository.UserRepository;
+import org.example.psychologicalcounseling.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.FrameworkServlet;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ConsultantRecordService {
@@ -16,13 +17,19 @@ public class ConsultantRecordService {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     private final CounsellorRepository counsellorRepository;
+    private final MessageRepository messageRepository;
+    private final FrameworkServlet frameworkServlet;
 
 
-    public ConsultantRecordService(ConsultantRecordRepository consultantRecordRepository, UserRepository userRepository, SessionRepository sessionRepository, CounsellorRepository counsellorRepository) {
+    public ConsultantRecordService(ConsultantRecordRepository consultantRecordRepository, UserRepository userRepository,
+                                   SessionRepository sessionRepository, CounsellorRepository counsellorRepository,
+                                   MessageRepository messageRepository, FrameworkServlet frameworkServlet) {
         this.consultantRecordRepository = consultantRecordRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
         this.counsellorRepository = counsellorRepository;
+        this.messageRepository = messageRepository;
+        this.frameworkServlet = frameworkServlet;
     }
 
 
@@ -165,8 +172,62 @@ public class ConsultantRecordService {
         record.setAppraisal(appraisal);
         record.setCounsellorAppraisal(counsellorAppraisal);
 
-
         consultantRecordRepository.save(record);
         return true;
+    }
+
+    /**
+     * Export the consultant record to a txt file
+     * @param recordID      The ID of the consultant record
+     * @return the content of the txt file
+     */
+    public String exportConsultantRecord(Long recordID) {
+        StringBuilder content = new StringBuilder();
+
+        // get record info first
+        ConsultantRecord record = consultantRecordRepository.findById(recordID).orElse(null);
+        if (record == null) {
+            return "Error: record not found";
+        }
+        content.append("recordIO: ").append(record.getRecordID()).append("\t").
+                append("counsellorID: ").append(record.getCounsellorID()).append("\t").
+                append("userID: ").append(record.getUserID()).append("\t").
+                append("sessionID: ").append(record.getSessionID()).append("\t").
+                append("userRating: ").append(record.getUserRating()).append("\t").
+                append("appraisal: ").append(record.getAppraisal()).append("\t").
+                append("counsellorAppraisal: ").append(record.getCounsellorAppraisal()).append("\n");
+
+        // get session info
+        Session session = sessionRepository.findSessionBySessionID(record.getSessionID());
+        if (session == null) {
+            return "Error: session not found";
+        }
+        content.append("sessionID: ").append(session.getSessionID()).append("\t").
+                append("startTimestamp: ").append(session.getStartTimestamp()).append("\t").
+                append("endTimestamp: ").append(session.getEndTimestamp()).append("\n");
+
+        // get user info
+        String userName = userRepository.findUserNameByUid(record.getUserID());
+        String counsellorName = counsellorRepository.findCounsellorNameByCounsellorID(record.getCounsellorID());
+        if (userName == null || counsellorName == null) {
+            return "Error: user or counsellor not found";
+        }
+
+        // get all messages in this session
+        List<Message> messages = messageRepository.findMessagesBySessionID(record.getSessionID());
+        if (messages == null) {
+            return "Error: messages not found";
+        }
+        for (var message : messages) {
+            if (Objects.equals(message.getSenderID(), record.getUserID())) {
+                content.append(message.getSendTimestamp()).append("\t").
+                        append(userName).append("： ").append(message.getContent()).append("\n");
+            } else if (Objects.equals(message.getSenderID(), record.getCounsellorID())) {
+                content.append(message.getSendTimestamp()).append("\t").
+                        append(counsellorName).append("： ").append(message.getContent()).append("\n");
+            }
+        }
+
+        return content.toString();
     }
 }
