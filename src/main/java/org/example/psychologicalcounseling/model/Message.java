@@ -44,7 +44,7 @@ public class Message {
     private int status;
 
     public enum FileType {
-        TEXT, IMAGE, FILE, LARGE_FILE, RECORD
+        TEXT, IMAGE, FILE, LARGE_FILE, RECORD, VOICE
     }
 
     public Message(TransmitMessageRequest request) {

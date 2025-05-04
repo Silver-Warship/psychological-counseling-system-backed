@@ -22,13 +22,4 @@ public class TimeStampUtil {
 
         return Optional.empty();
     }
-
-    static public void initialTimestamp(Long startTimestamp, Long endTimestamp) {
-        if (startTimestamp == null) {
-            startTimestamp = 0L;
-        }
-        if (endTimestamp == null) {
-            endTimestamp = System.currentTimeMillis();
-        }
-    }
 }
