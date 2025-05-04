@@ -30,12 +30,20 @@ public class CounsellorArrangementController {
 
     @PostMapping("/api/addCounsellorOrder")
     public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest addRequest) {
+        if (addRequest.getCounsellors() == null || addRequest.getCounsellors().isEmpty()) {
+            return ResponseEntity.badRequest().body("Counsellor order is empty");
+        }
+
         this.counsellorOrderManageService.addCounsellorOrder(addRequest.getCounsellors());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 
     @PostMapping("/api/cancelCounsellorOrder")
     public ResponseEntity<?> cancelCounsellorOrder(@RequestBody CancelCounsellorOrderRequest cancelRequest) {
+        if (cancelRequest.getArrangeIDs() == null || cancelRequest.getArrangeIDs().isEmpty()) {
+            return ResponseEntity.badRequest().body("Counsellor order is empty");
+        }
+
         this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getArrangeIDs());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }

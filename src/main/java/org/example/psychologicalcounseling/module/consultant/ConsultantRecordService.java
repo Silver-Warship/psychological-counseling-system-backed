@@ -52,6 +52,7 @@ public class ConsultantRecordService {
             response.setDuration(allSessionDuration.get(i));
             response.setUserRating(record.getUserRating());
             response.setAppraisal(record.getAppraisal());
+            response.setCounsellorAppraisal(record.getAppraisal());
             records[i] = response;
         }
 
@@ -138,5 +139,34 @@ public class ConsultantRecordService {
             return 0L;
         }
         return duration;
+    }
+
+    /**
+     * add a new consultant record
+     * @param counsellorID           The ID of the counsellor
+     * @param userID                 The ID of the user
+     * @param sessionID              The ID of the session
+     * @param userRating             The rating given by the user
+     * @param appraisal              The appraisal given by the user
+     * @param counsellorAppraisal    The appraisal given by the counsellor
+     * @return true if the record is added successfully, false otherwise
+     */
+    public boolean addConsultantRecord(Long counsellorID, Long userID, Long sessionID, Float userRating, String appraisal, String counsellorAppraisal) {
+        // check whether the consultant record exists
+        if (consultantRecordRepository.existsByAttributes(counsellorID, userID, sessionID) > 0) {
+            return false;
+        }
+
+        ConsultantRecord record = new ConsultantRecord();
+        record.setCounsellorID(counsellorID);
+        record.setUserID(userID);
+        record.setSessionID(sessionID);
+        record.setUserRating(userRating);
+        record.setAppraisal(appraisal);
+        record.setCounsellorAppraisal(counsellorAppraisal);
+
+
+        consultantRecordRepository.save(record);
+        return true;
     }
 }
