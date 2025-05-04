@@ -65,6 +65,13 @@ public class CounsellorArrangementController {
         if (addRequest.getCounsellors() == null || addRequest.getCounsellors().isEmpty()) {
             return ResponseEntity.badRequest().body("Counsellor order is empty");
         }
+        // check if startTimestamp and endTimestamp are valid
+        for (UpdateCounsellorOrderRequest.CounsellorOrder counsellor : addRequest.getCounsellors()) {
+            var timeStampError = TimeStampUtil.timestampBetweenCheck(counsellor.getStartTimestamp(), counsellor.getEndTimestamp());
+            if (timeStampError.isPresent()) {
+                return ResponseEntity.badRequest().body(timeStampError);
+            }
+        }
 
         this.counsellorOrderManageService.addCounsellorOrder(addRequest.getCounsellors());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
