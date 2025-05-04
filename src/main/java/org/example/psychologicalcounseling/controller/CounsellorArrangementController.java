@@ -4,6 +4,7 @@ package org.example.psychologicalcounseling.controller;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CancelCounsellorOrderRequest;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
+import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public class CounsellorArrangementController {
     private final CounsellorRepository counsellorRepository;
     private final CounsellorOrderManageService counsellorOrderManageService;
+    private final CounsellorArrangementRepository counsellorArrangementRepository;
 
-    public CounsellorArrangementController(CounsellorRepository counsellorRepository, CounsellorOrderManageService counsellorOrderManageService) {
+    public CounsellorArrangementController(CounsellorRepository counsellorRepository,
+                                           CounsellorOrderManageService counsellorOrderManageService,
+                                           CounsellorArrangementRepository counsellorArrangementRepository) {
         this.counsellorRepository = counsellorRepository;
         this.counsellorOrderManageService = counsellorOrderManageService;
+        this.counsellorArrangementRepository = counsellorArrangementRepository;
     }
 
     @GetMapping("/api/getCounsellorOrder")
@@ -81,6 +86,13 @@ public class CounsellorArrangementController {
     public ResponseEntity<?> cancelCounsellorOrder(@RequestBody CancelCounsellorOrderRequest cancelRequest) {
         if (cancelRequest.getArrangeIDs() == null || cancelRequest.getArrangeIDs().isEmpty()) {
             return ResponseEntity.badRequest().body("Counsellor order is empty");
+        }
+
+        // check if arrangeIDs are valid
+        for (Long arrangeID : cancelRequest.getArrangeIDs()) {
+            if (arrangeID == null || arrangeID < 0 || !counsellorArrangementRepository.existsById(arrangeID)) {
+                return ResponseEntity.badRequest().body("Invalid arrange ID");
+            }
         }
 
         this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getArrangeIDs());

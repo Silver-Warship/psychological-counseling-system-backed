@@ -36,7 +36,6 @@ public class CounsellorOrderManageService {
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();;
         for (UpdateCounsellorOrderRequest.CounsellorOrder counsellor : counsellors) {
             counsellorArrangement.setCounsellorID(counsellor.getCounsellorID());
-            //System.out.println(counsellor.getCounsellorID());
             counsellorArrangement.setStartTimestamp(counsellor.getStartTimestamp());
             counsellorArrangement.setEndTimestamp(counsellor.getEndTimestamp());
             counsellorArrangementRepository.save(counsellorArrangement);
