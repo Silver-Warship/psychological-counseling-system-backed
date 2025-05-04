@@ -1,7 +1,7 @@
 package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.safety.OriginalPasswordBuilder;
-import org.example.psychologicalcounseling.module.user.login.CounselorLoginService;
+import org.example.psychologicalcounseling.module.user.login.CounsellorLoginService;
 import org.example.psychologicalcounseling.module.user.login.LoginRequestDto;
 import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
@@ -12,13 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class CounselorLoginController {
+public class CounsellorLoginController {
     @Autowired//自动插入
-    private CounselorLoginService counselorLoginService;
+    private CounsellorLoginService counsellorLoginService;
     @Autowired
     private JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
-    @PostMapping("/api/counselor/login")
+    @PostMapping("/api/counsellor/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponse response = new LoginResponse();
         //验证email和password是否正确
@@ -30,9 +30,9 @@ public class CounselorLoginController {
         //注册：有email和password，email不在数据库内，有verification
         //验证注册：有email和password，email不在数据库内，没有verification
         if(password!=null && !password.isEmpty()){
-            if(counselorLoginService.checkEmail(email)){
+            if(counsellorLoginService.checkEmail(email)){
                 //登录验证
-                if (counselorLoginService.checkPassword(email, password)) {
+                if (counsellorLoginService.checkPassword(email, password)) {
                     //给正确的用户生成token
                     //登录成功
                     String token = jwtUtilTokenBuilder.generateToken(email);
@@ -51,7 +51,7 @@ public class CounselorLoginController {
             //注册或者验证注册码
             if(verificationCode==null || verificationCode.isEmpty()){
                 //发送验证码
-                if(counselorLoginService.SendVerificationCode(email, VerificationCodeBuilder.generateVerificationCode())){
+                if(counsellorLoginService.SendVerificationCode(email, VerificationCodeBuilder.generateVerificationCode())){
                     response.setCode(600);
                     response.setCodeMsg("Verification code is sent to your email.");
                 }else{
@@ -61,13 +61,13 @@ public class CounselorLoginController {
                 }
             }else{
                 //核对验证码
-                if(counselorLoginService.checkVerificationCode(email, verificationCode)){
-                    if(!counselorLoginService.checkEmail(email)){
+                if(counsellorLoginService.checkVerificationCode(email, verificationCode)){
+                    if(!counsellorLoginService.checkEmail(email)){
                         UserDto userDto = new UserDto();
                         userDto.setEmail(email);
                         userDto.setPassword(OriginalPasswordBuilder.generatePassword());
                         userDto.setNickname("User"+email);
-                        counselorLoginService.addUser(userDto);
+                        counsellorLoginService.addUser(userDto);
                         //response.setCode(200);
                         //response.setCodeMsg("Code is verified successfully.");
                     }

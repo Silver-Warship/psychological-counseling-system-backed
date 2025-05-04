@@ -1,5 +1,6 @@
 package org.example.psychologicalcounseling.controller;
 
+import org.example.psychologicalcounseling.module.consultant.addConsultantRecord.addConsultantRecordDto;
 import org.example.psychologicalcounseling.module.consultant.getCompletedConsultationNumber.GetCompletedConsultationNumberRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordRequest;
 import org.example.psychologicalcounseling.module.consultant.getConsultantRecord.GetConsultantRecordResponse;
@@ -8,22 +9,27 @@ import org.example.psychologicalcounseling.module.consultant.getConsultationDura
 import org.example.psychologicalcounseling.module.consultant.getConsultationDuration.getConsultationDurationResponse;
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionNumberResponse;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
+import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
 import org.example.psychologicalcounseling.utils.TimeStampUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ConsultantRecordController {
-    private final ConsultantRecordService getConsultantRecordService;
+    private final ConsultantRecordService consultantRecordService;
     private final UserRepository userRepository;
     private final CounsellorRepository counsellorRepository;
+    private final SessionRepository sessionRepository;
 
-    public ConsultantRecordController(ConsultantRecordService getConsultantRecordService, UserRepository userRepository, CounsellorRepository counsellorRepository) {
-        this.getConsultantRecordService = getConsultantRecordService;
+    public ConsultantRecordController(ConsultantRecordService consultantRecordService, UserRepository userRepository, CounsellorRepository counsellorRepository, SessionRepository sessionRepository) {
+        this.consultantRecordService = consultantRecordService;
         this.userRepository = userRepository;
         this.counsellorRepository = counsellorRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @GetMapping("/api/getConsultantRecord")
@@ -53,7 +59,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response. setConsultantRecords(getConsultantRecordService.getConsultantRecordByUser(request.getUserID(),
+            response.setConsultantRecords(consultantRecordService.getConsultantRecordByUser(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
             if (!counsellorRepository.existsById(request.getCounsellorID())) {
@@ -61,7 +67,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response.setConsultantRecords(getConsultantRecordService.getConsultantRecordByCounsellor(request.getCounsellorID(),
+            response.setConsultantRecords(consultantRecordService.getConsultantRecordByCounsellor(request.getCounsellorID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         } else {
                 response.setCode(601);
@@ -104,7 +110,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response.setNumber(getConsultantRecordService.getCompletedSessionNumberByUserID(request.getUserID(),
+            response.setNumber(consultantRecordService.getCompletedSessionNumberByUserID(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
             if (!counsellorRepository.existsById(request.getCounsellorID())) {
@@ -112,7 +118,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response.setNumber(getConsultantRecordService.getCompletedSessionNumberByCounsellorID(request.getCounsellorID(),
+            response.setNumber(consultantRecordService.getCompletedSessionNumberByCounsellorID(request.getCounsellorID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         } else {
                 response.setCode(601);
@@ -149,7 +155,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response.setDurations(getConsultantRecordService.getHistoricalConsultationDurationByUserID(request.getUserID(),
+            response.setDurations(consultantRecordService.getHistoricalConsultationDurationByUserID(request.getUserID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         }  else if (request.getCounsellorID() != null) {
             if (!counsellorRepository.existsById(request.getCounsellorID())) {
@@ -157,7 +163,7 @@ public class ConsultantRecordController {
                 response.setCodeMsg("The userID is invalid.");
                 return response.buildResponse();
             }
-            response.setDurations(getConsultantRecordService.getHistoricalConsultationDurationByCounsellorID(request.getCounsellorID(),
+            response.setDurations(consultantRecordService.getHistoricalConsultationDurationByCounsellorID(request.getCounsellorID(),
                     request.getStartTimestamp(), request.getEndTimestamp()));
         } else {
                 response.setCode(601);
@@ -166,5 +172,34 @@ public class ConsultantRecordController {
         }
 
         return response.buildResponse();
+    }
+
+
+    @PostMapping("/api/addConsultantRecord")
+    ResponseEntity<?> addConsultantRecord(@RequestBody addConsultantRecordDto request) {
+        // check if userID and counsellorID are valid
+        if (request.getUserID() == null || !userRepository.existsById(request.getUserID())) {
+            return ResponseEntity.badRequest().body("User ID is invalid");
+        }
+        if (request.getCounsellorID() == null || !counsellorRepository.existsById(request.getCounsellorID())) {
+            return ResponseEntity.badRequest().body("Counsellor ID is invalid");
+        }
+
+        // check if sessionID is valid
+        if (request.getSessionID() == null || !sessionRepository.existsById(request.getSessionID())) {
+            return ResponseEntity.badRequest().body("Session ID is invalid");
+        }
+
+        // check if userRating is valid
+        if (request.getUserRating() == null || request.getUserRating() < 0 || request.getUserRating() > 5) {
+            return ResponseEntity.badRequest().body("User rating is invalid");
+        }
+
+        if (consultantRecordService.addConsultantRecord(request.getCounsellorID(), request.getUserID(), request.getSessionID(),
+                request.getUserRating(), request.getAppraisal(), request.getCounsellorAppraisal())) {
+            return ResponseEntity.ok("Consultant record added successfully");
+        }
+
+        return ResponseEntity.badRequest().body("Failed to add consultant record");
     }
 }

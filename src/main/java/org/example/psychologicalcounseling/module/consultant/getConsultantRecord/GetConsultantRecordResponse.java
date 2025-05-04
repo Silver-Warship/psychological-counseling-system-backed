@@ -14,9 +14,11 @@ public class GetConsultantRecordResponse extends ResponseBuilder {
         private Long counsellorID;
         private String counsellorName;
         private Long timestamp;
+        private Long sessionID;
         private Long duration;
         private Float userRating;
         private String appraisal;
+        private String counsellorAppraisal;
     }
 
     public ConsultantRecord[] consultantRecords;
