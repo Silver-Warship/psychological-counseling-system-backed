@@ -23,7 +23,7 @@ public class SupervisorArrangementController {
 
 
     @GetMapping("/api/getSupervisorOrder")
-    public ResponseEntity<?> getSupervisorOrder(@RequestParam Long supervisorID, @RequestParam Long startTimestamp, @RequestParam Long endTimestamp) {
+    public ResponseEntity<?> getSupervisorOrder(@RequestParam Long supervisorID, Long startTimestamp, Long endTimestamp) {
         if (startTimestamp == null || startTimestamp < 0) {
             startTimestamp = 0L;
         }
@@ -39,6 +39,25 @@ public class SupervisorArrangementController {
 
         // get the supervisor order
         return supervisorOrderManageService.getSupervisorOrder(supervisorID, startTimestamp, endTimestamp).buildResponse();
+    }
+
+    @GetMapping("/api/getAllSupervisorOrder")
+    public ResponseEntity<?> getAllSupervisorOrder(Long startTimestamp, Long endTimestamp) {
+        if (startTimestamp == null || startTimestamp < 0) {
+            startTimestamp = 0L;
+        }
+        if (endTimestamp == null || endTimestamp < 0) {
+            endTimestamp = System.currentTimeMillis();
+        }
+
+        // check if startTimestamp and endTimestamp are valid
+        var timeStampError = TimeStampUtil.timestampBetweenCheck(startTimestamp, endTimestamp);
+        if (timeStampError.isPresent()) {
+            return ResponseEntity.badRequest().body(timeStampError);
+        }
+
+        // get the supervisor order
+        return supervisorOrderManageService.getAllSupervisorOrder(startTimestamp, endTimestamp).buildResponse();
     }
 
     @PostMapping("/api/addSupervisorOrder")

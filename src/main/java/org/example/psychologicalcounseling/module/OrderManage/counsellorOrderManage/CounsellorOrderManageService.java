@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
 
+import org.example.psychologicalcounseling.dto.ResponseBuilder;
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,29 @@ public class CounsellorOrderManageService {
         for (Long arrangeID : arrangeIDs) {
             counsellorArrangementRepository.deleteById(arrangeID);
         }
+    }
+
+    public ResponseBuilder getCounsellorOrder(Long counsellorID, Long startTimestamp, Long endTimestamp) {
+        // get all orders of the counsellor
+        var orders = counsellorArrangementRepository.findAllByCounsellorID(counsellorID, startTimestamp, endTimestamp);
+        // create the response
+        GetCounsellorOrderResponse.Order[] orderList = new GetCounsellorOrderResponse.Order[orders.size()];
+        for (int i = 0; i < orders.size(); i++) {
+            orderList[i] = new GetCounsellorOrderResponse.Order(orders.get(i).getStartTimestamp(), orders.get(i).getEndTimestamp());
+        }
+
+        return new GetCounsellorOrderResponse(orderList);
+    }
+
+    public ResponseBuilder getCounsellorOrder(Long startTimestamp, Long endTimestamp) {
+        // get all orders of the counsellor
+        var orders = counsellorArrangementRepository.findAllByCounsellorID(startTimestamp, endTimestamp);
+        // create the response
+        GetCounsellorOrderResponse.Order[] orderList = new GetCounsellorOrderResponse.Order[orders.size()];
+        for (int i = 0; i < orders.size(); i++) {
+            orderList[i] = new GetCounsellorOrderResponse.Order(orders.get(i).getStartTimestamp(), orders.get(i).getEndTimestamp());
+        }
+
+        return new GetCounsellorOrderResponse(orderList);
     }
 }

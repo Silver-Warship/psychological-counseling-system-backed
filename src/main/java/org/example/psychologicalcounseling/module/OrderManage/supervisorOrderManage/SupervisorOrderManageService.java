@@ -4,6 +4,8 @@ import org.example.psychologicalcounseling.model.SupervisorArrangement;
 import org.example.psychologicalcounseling.repository.SupervisorArrangementRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SupervisorOrderManageService {
     final private SupervisorArrangementRepository supervisorArrangementRepository;
@@ -12,11 +14,7 @@ public class SupervisorOrderManageService {
         this.supervisorArrangementRepository = supervisorArrangementRepository;
     }
 
-    public GetSupervisorOrderResponse getSupervisorOrder(Long supervisorID, Long startTimestamp, Long endTimestamp) {
-        // get all orders of the supervisor
-        var arrangements = supervisorArrangementRepository.findBySupervisorIDAndStartTimestampBetween(supervisorID, startTimestamp, endTimestamp);
-
-        // create the response
+    private GetSupervisorOrderResponse _supervisorOrderAdapt(List<SupervisorArrangement> arrangements) {
         GetSupervisorOrderResponse.TimePeriod[] timePeriods = new GetSupervisorOrderResponse.TimePeriod[arrangements.size()];
         for (int i = 0; i < arrangements.size(); i++) {
             Long start = arrangements.get(i).getStartTimestamp();
@@ -27,6 +25,22 @@ public class SupervisorOrderManageService {
         }
 
         return new GetSupervisorOrderResponse(timePeriods);
+    }
+
+    public GetSupervisorOrderResponse getSupervisorOrder(Long supervisorID, Long startTimestamp, Long endTimestamp) {
+        // get all orders of the supervisor
+        var arrangements = supervisorArrangementRepository.findBySupervisorIDAndStartTimestampBetween(supervisorID, startTimestamp, endTimestamp);
+
+        // create the response
+        return _supervisorOrderAdapt(arrangements);
+    }
+
+    public GetSupervisorOrderResponse getAllSupervisorOrder(Long startTimestamp, Long endTimestamp) {
+        // get all orders of the supervisor
+        var arrangements = supervisorArrangementRepository.findByStartTimestampBetween(startTimestamp, endTimestamp);
+
+        // create the response
+        return _supervisorOrderAdapt(arrangements);
     }
 
     public boolean addSupervisorOrder(Long supervisorID, Long startTimestamp, Long endTimestamp) {
