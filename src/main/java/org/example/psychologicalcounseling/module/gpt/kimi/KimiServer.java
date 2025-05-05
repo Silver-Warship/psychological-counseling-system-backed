@@ -7,7 +7,6 @@ import org.example.psychologicalcounseling.module.gpt.ChatWithGPTResponse;
 import org.example.psychologicalcounseling.module.gpt.GPTServer;
 import org.example.psychologicalcounseling.module.gpt.kimi.apiResponse.KimiMessage;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,11 @@ public class KimiServer implements GPTServer {
     // record the history of messages in each session
     private final Map<Long, List<KimiMessage>> messagePool = new HashMap<>();
 
+    /**
+     * Sends a message to the Kimi server and retrieves the response.
+     * @param request The request containing the sender ID and message content.
+     * @return A response containing the Kimi server's reply or an error message.
+     */
     public Response<ChatWithGPTResponse> sendMessage(ChatWithGPTRequest request) {
         List<KimiMessage> historyMessages = this.messagePool.get(request.getSenderID());
         if (historyMessages == null) {

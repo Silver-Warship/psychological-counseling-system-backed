@@ -7,17 +7,24 @@ import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.safety.VerificationCodeBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CounsellorLoginController {
-    @Autowired//自动插入
-    private CounsellorLoginService counsellorLoginService;
-    @Autowired
-    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
+    private final CounsellorLoginService counsellorLoginService;
+    private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
+    public CounsellorLoginController(CounsellorLoginService counsellorLoginService, JwtUtilTokenBuilder jwtUtilTokenBuilder) {
+        this.counsellorLoginService = counsellorLoginService;
+        this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
+    }
+
+    /**
+     * 咨询师登录接口
+     * @param loginRequest 登录请求体
+     * @return             如果登录成功，返回token和状态码600；如果登录失败，返回状态码601和错误信息；
+     */
     @PostMapping("/api/counsellor/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponse response = new LoginResponse();
@@ -68,8 +75,6 @@ public class CounsellorLoginController {
                         userDto.setPassword(OriginalPasswordBuilder.generatePassword());
                         userDto.setNickname("User"+email);
                         counsellorLoginService.addUser(userDto);
-                        //response.setCode(200);
-                        //response.setCodeMsg("Code is verified successfully.");
                     }
                     String token = jwtUtilTokenBuilder.generateToken(email);
                     response.setToken(token);
@@ -83,5 +88,4 @@ public class CounsellorLoginController {
         }
         return response.buildResponse();
     }
-
 }

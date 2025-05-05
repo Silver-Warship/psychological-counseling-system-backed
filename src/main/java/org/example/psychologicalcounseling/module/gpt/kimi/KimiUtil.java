@@ -18,6 +18,11 @@ public class KimiUtil {
     // record the history of messages in each session
     private static final Map<String, List<KimiMessage>> messagePool = new HashMap<>();
 
+    /**
+     * send a post request to the server
+     * @param messages the messages to be sent
+     * @return the response from the server
+     */
     private static String post_request(List<KimiMessage> messages) {
         Map<String, String> header = Map.of("Content-Type", "application/json",
                 "Authorization", "Bearer " + API_KEY);
@@ -27,12 +32,20 @@ public class KimiUtil {
         return HttpUtil.sendPost("https://api.moonshot.cn/v1/chat/completions", header, body);
     }
 
+    /**
+     * get initial messages for the first request
+     * @return a list of messages
+     */
     public static List<KimiMessage> getInitialMessages(){
         List<KimiMessage> messages = new Vector<>(10);
         messages.add(new KimiMessage("system", CALL_WORD));
         return messages;
     }
 
+    /**
+     * register a new session and get the session ID
+     * @return the session ID
+     */
     public static String registerSession() {
         List<KimiMessage> messages = getInitialMessages();
 
@@ -55,6 +68,12 @@ public class KimiUtil {
         return sessionID;
     }
 
+    /**
+     * send a message to the server and get the response
+     * @param sessionID the session ID
+     * @param message the message to be sent
+     * @return the response from the server
+     */
     public static String chat(String sessionID, String message) {
         List<KimiMessage> messages = messagePool.get(sessionID);
         messages.add(new KimiMessage("user", message));
@@ -68,6 +87,11 @@ public class KimiUtil {
         return response;
     }
 
+    /**
+     * send a message to the server and get the response
+     * @param messages the messages to be sent
+     * @return the response from the server
+     */
     public static String chat(List<KimiMessage> messages) {
         String strResponse = post_request(messages);
         KimiResponse mapResponse = JSON.parseObject(strResponse, KimiResponse.class);
@@ -83,6 +107,9 @@ public class KimiUtil {
         return lastMessage.getContent();
     }
 
+    /**
+     * test the KimiUtil class
+     */
     public static void test() {
         String session_id = registerSession();
         while (true) {

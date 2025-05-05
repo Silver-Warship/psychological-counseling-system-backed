@@ -1,11 +1,9 @@
 package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
-
 import org.example.psychologicalcounseling.dto.ResponseBuilder;
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -16,6 +14,11 @@ public class CounsellorOrderManageService {
         this.counsellorArrangementRepository = counsellorArrangementRepository;
     }
 
+    /**
+     * 获取 counsellor 的所有排班
+     * @param counsellorID counsellor 的 ID
+     * @return GetCounsellorOrderResponse 对象，包含 counsellor 的所有排班信息
+     */
     public GetCounsellorOrderResponse getCounsellorOrder(Long counsellorID) {
         // get all orders of the counsellor
         var orders = counsellorArrangementRepository.findAllByCounsellorID(counsellorID);
@@ -30,9 +33,12 @@ public class CounsellorOrderManageService {
         return new GetCounsellorOrderResponse(orderList);
     }
 
+    /**
+     * 添加 counsellor 的排班
+     * @param counsellors counsellor 的排班列表
+     */
     public void addCounsellorOrder(List<UpdateCounsellorOrderRequest.CounsellorOrder> counsellors) {
         // add all orders of the counsellors
-
         CounsellorArrangement counsellorArrangement= new CounsellorArrangement();;
         for (UpdateCounsellorOrderRequest.CounsellorOrder counsellor : counsellors) {
             counsellorArrangement.setCounsellorID(counsellor.getCounsellorID());
@@ -43,6 +49,10 @@ public class CounsellorOrderManageService {
 
     }
 
+    /**
+     * 取消 counsellor 的排班
+     * @param arrangeIDs counsellor 的排班 ID 列表
+     */
     public void cancelCounsellorOrder(List<Long> arrangeIDs) {
         // delete all orders of counsellors
         for (Long arrangeID : arrangeIDs) {
@@ -50,6 +60,13 @@ public class CounsellorOrderManageService {
         }
     }
 
+    /**
+     * 获取 counsellor 的所有排班
+     * @param counsellorID counsellor 的 ID
+     * @param startTimestamp 排班开始时间
+     * @param endTimestamp 排班结束时间
+     * @return GetCounsellorOrderResponse 对象，包含 counsellor 的所有排班信息
+     */
     public ResponseBuilder getCounsellorOrder(Long counsellorID, Long startTimestamp, Long endTimestamp) {
         // get all orders of the counsellor
         var orders = counsellorArrangementRepository.findAllByCounsellorID(counsellorID, startTimestamp, endTimestamp);
@@ -62,6 +79,12 @@ public class CounsellorOrderManageService {
         return new GetCounsellorOrderResponse(orderList);
     }
 
+    /**
+     * 获取 counsellor 的所有排班
+     * @param startTimestamp 排班开始时间
+     * @param endTimestamp 排班结束时间
+     * @return GetCounsellorOrderResponse 对象，包含 counsellor 的所有排班信息
+     */
     public ResponseBuilder getCounsellorOrder(Long startTimestamp, Long endTimestamp) {
         // get all orders of the counsellor
         var orders = counsellorArrangementRepository.findAllByCounsellorID(startTimestamp, endTimestamp);

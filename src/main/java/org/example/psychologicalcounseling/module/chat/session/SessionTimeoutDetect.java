@@ -34,9 +34,9 @@ public class SessionTimeoutDetect {
         checkSession();
     }
 
-    /*
-     * This method is called when the server starts
-     * It will check all the sessions in the database and if any session timeout when the server is closing will be set closed
+    /**
+     * Check all sessions in the database and set them as inactive if they are timed out.
+     * This method is called when the server starts.
      */
     private void checkSession() {
         // get all timeout sessions in the database
@@ -55,6 +55,11 @@ public class SessionTimeoutDetect {
         }
     }
 
+    /**
+     * Notify the user that the session has timed out.
+     * @param userID The user ID of the user to be notified.
+     * @param sessionID The session ID of the session that has timed out.
+     */
     public void notifyUser(Long userID, Long sessionID) {
         // notify the user that the session has timed out
         ConnectionService connectionService = GetBeanUtil.getBean(ConnectionService.class);
@@ -73,6 +78,12 @@ public class SessionTimeoutDetect {
         }
     }
 
+    /**
+     * Check if the session is timed out and set it as inactive.
+     * @param sessionID The session ID of the session to be checked.
+     * @param timeout The timeout period.
+     * @param timeoutPeriod The timeout period in milliseconds.
+     */
     private void onTimeOutTrigger(long sessionID, long timeout, long timeoutPeriod) {
         long lastActivityTime = getSessionLastActivityTime(sessionID);
         if (lastActivityTime + timeout <= timeoutPeriod) {
@@ -90,6 +101,11 @@ public class SessionTimeoutDetect {
         }
     }
 
+    /**
+     * Get the last activity time of the session.
+     * @param sessionID The session ID of the session to be checked.
+     * @return The last activity time of the session.
+     */
     private Long getSessionLastActivityTime(long sessionID) {
         // get the last activity time of the session
         return sessionRepository.findById(sessionID).orElseThrow().getLastMessageTimestamp();

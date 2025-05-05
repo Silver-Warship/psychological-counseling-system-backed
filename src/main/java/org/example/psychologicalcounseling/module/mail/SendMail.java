@@ -1,8 +1,6 @@
 package org.example.psychologicalcounseling.module.mail;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -21,15 +19,19 @@ public class SendMail {
     private static final String PASSWORD = "10225101Ecnu";
     *
     */
-    private  static String SMTP_HOST ;
-    private  static int SMTP_PORT ; // SMTP端口号
-    private  static String USERNAME ;
-    private  static String PASSWORD ;
-    private  static boolean AUTH;
-    private  static boolean SSL;
-
+    private static String SMTP_HOST ;
+    private static int SMTP_PORT ; // SMTP端口号
+    private static String USERNAME ;
+    private static String PASSWORD ;
+    private static boolean AUTH;
+    private static boolean SSL;
     private static SendMail sendmail = null;
 
+    /**
+     * 获取 SendMail 实例
+     *
+     * @return SendMail 实例
+     */
     public static SendMail getInstance() {
         if (sendmail == null) {
             sendmail = new SendMail();
@@ -37,6 +39,9 @@ public class SendMail {
         return sendmail;
     }
 
+    /**
+     * 私有构造函数，加载配置文件
+     */
     private SendMail() {
         Properties configProps = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
@@ -96,5 +101,4 @@ public class SendMail {
         }
         return true;
     }
-
 }

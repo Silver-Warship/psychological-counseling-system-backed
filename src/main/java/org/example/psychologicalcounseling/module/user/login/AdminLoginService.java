@@ -3,28 +3,32 @@ package org.example.psychologicalcounseling.module.user.login;
 import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.model.Account;
 import org.example.psychologicalcounseling.model.Admin;
-import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.AdminRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class AdminLoginService {
-    @Autowired
-    AdminRepository adminRepository;
-    @Autowired
-    AccountRepository accountRepository;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private final AdminRepository adminRepository;
+    private final AccountRepository accountRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final SendMail sendMail = SendMail.getInstance();
 
+    public AdminLoginService(AdminRepository adminRepository, AccountRepository accountRepository, RedisTemplate<String, String> redisTemplate) {
+        this.adminRepository = adminRepository;
+        this.accountRepository = accountRepository;
+        this.redisTemplate = redisTemplate;
+    }
 
-    private  final SendMail sendMail = SendMail.getInstance();
-
+    /**
+     * 发送验证码到指定邮箱
+     * @param email           收件人邮箱地址
+     * @param verificationCode 验证码
+     * @return 发送结果
+     */
     public Boolean SendVerificationCode(String email, String verificationCode) {
         //check if the email is already in Redis
         //System.out.println("查询哈希表");
@@ -47,6 +51,12 @@ public class AdminLoginService {
         }
     }
 
+    /**
+     * 检查验证码是否匹配
+     * @param email           收件人邮箱地址
+     * @param verificationCode 验证码
+     * @return 是否匹配
+     */
     public boolean checkVerificationCode(String email, String verificationCode) {
         //从Redis中获取验证码
         String storedVerificationCode = redisTemplate.opsForValue().get(email);
@@ -59,7 +69,11 @@ public class AdminLoginService {
     }
 
 
-    //检查传入的email是否存在
+    /**
+     * 检查传入的email是否存在
+     * @param email 电子邮件地址
+     * @return 是否存在
+     */
     public boolean checkEmail(String email) {
         //从数据库中获取用户信息，并检查用户是否存在
         Admin admin = adminRepository.findByEmail(email);
@@ -67,7 +81,12 @@ public class AdminLoginService {
         return admin != null;
     }
 
-    //默认email存在的前提下检查传入的email和password是否匹配
+    /**
+     * 检查传入的email和password是否匹配
+     * @param email 电子邮件地址
+     * @param password 密码
+     * @return 是否匹配
+     */
     public boolean checkPassword(String email, String password) {
 
         //从数据库中获取用户信息，并检查用户是否存在
@@ -83,7 +102,10 @@ public class AdminLoginService {
         return true;
     }
 
-    //添加用户，用email来作为nickname，这是可以修改的
+    /**
+     * 添加用户，用email来作为nickname，这是可以修改的
+     * @param userDto 用户信息传输对象
+     */
     public void addUser(UserDto userDto) {
         try {
 

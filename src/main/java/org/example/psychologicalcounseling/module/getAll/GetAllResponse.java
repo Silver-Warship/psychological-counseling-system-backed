@@ -1,14 +1,13 @@
 package org.example.psychologicalcounseling.module.getAll;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.example.psychologicalcounseling.dto.ResponseBuilder;
-
 import java.util.List;
 
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class GetAllResponse extends ResponseBuilder {
-
     @Data
     static class Info{
         private Long id;

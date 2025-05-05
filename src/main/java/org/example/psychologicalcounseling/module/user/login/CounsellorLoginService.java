@@ -14,15 +14,17 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class CounsellorLoginService {
-    @Autowired
-    CounsellorRepository counsellorRepository;
-    @Autowired
-    AccountRepository accountRepository;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-
+    private final CounsellorRepository counsellorRepository;
+    private final AccountRepository accountRepository;
+    private final RedisTemplate<String, String> redisTemplate;
     private  final SendMail sendMail = SendMail.getInstance();
+
+    public CounsellorLoginService(CounsellorRepository counsellorRepository, AccountRepository accountRepository,
+                                  RedisTemplate<String, String> redisTemplate) {
+        this.counsellorRepository = counsellorRepository;
+        this.accountRepository = accountRepository;
+        this.redisTemplate = redisTemplate;
+    }
 
     public Boolean SendVerificationCode(String email, String verificationCode) {
         //check if the email is already in Redis

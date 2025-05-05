@@ -2,29 +2,34 @@ package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.model.Account;
-import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.Supervisor;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class SupervisorLoginService {
-    @Autowired
-    SupervisorRepository supervisorRepository;
-    @Autowired
-    AccountRepository accountRepository;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-
+    private final SupervisorRepository supervisorRepository;
+    private final AccountRepository accountRepository;
+    private final RedisTemplate<String, String> redisTemplate;
     private  final SendMail sendMail = SendMail.getInstance();
 
+    public SupervisorLoginService(SupervisorRepository supervisorRepository, AccountRepository accountRepository,
+                                  RedisTemplate<String, String> redisTemplate) {
+        this.supervisorRepository = supervisorRepository;
+        this.accountRepository = accountRepository;
+        this.redisTemplate = redisTemplate;
+    }
+
+    /**
+     * 发送验证码到指定邮箱
+     * @param email 邮箱地址
+     * @param verificationCode 验证码
+     * @return true表示发送成功，false表示发送失败或邮箱已存在
+     */
     public Boolean SendVerificationCode(String email, String verificationCode) {
         //check if the email is already in Redis
         //System.out.println("查询哈希表");
@@ -47,6 +52,12 @@ public class SupervisorLoginService {
         }
     }
 
+    /**
+     * 检查验证码是否匹配
+     * @param email 邮箱地址
+     * @param verificationCode 验证码
+     * @return true表示验证码匹配，false表示验证码不匹配或已过期
+     */
     public boolean checkVerificationCode(String email, String verificationCode) {
         //从Redis中获取验证码
         String storedVerificationCode = redisTemplate.opsForValue().get(email);
@@ -59,7 +70,11 @@ public class SupervisorLoginService {
     }
 
 
-    //检查传入的email是否存在
+    /**
+     * 检查传入的email是否存在
+     * @param email 邮箱地址
+     * @return true表示邮箱存在，false表示邮箱不存在
+     */
     public boolean checkEmail(String email) {
         //从数据库中获取用户信息，并检查用户是否存在
         Supervisor supervisor = supervisorRepository.findByEmail(email);
@@ -67,7 +82,12 @@ public class SupervisorLoginService {
         return supervisor != null;
     }
 
-    //默认email存在的前提下检查传入的email和password是否匹配
+    /**
+     * 检查传入的email和password是否匹配
+     * @param email 邮箱地址
+     * @param password 密码
+     * @return true表示密码匹配，false表示密码不匹配
+     */
     public boolean checkPassword(String email, String password) {
 
         //从数据库中获取用户信息，并检查用户是否存在
@@ -83,7 +103,10 @@ public class SupervisorLoginService {
         return true;
     }
 
-    //添加用户，用email来作为nickname，这是可以修改的
+    /**
+     * 添加用户
+     * @param userDto 用户信息
+     */
     public void addUser(UserDto userDto) {
         try {
 
@@ -109,5 +132,4 @@ public class SupervisorLoginService {
             System.out.println("保存用户失败");
         }
     }
-
 }

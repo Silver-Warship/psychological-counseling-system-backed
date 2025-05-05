@@ -23,6 +23,11 @@ public class UserSessionController {
         this.accountRepository = accountRepository;
     }
 
+    /**
+     * Get the running session of a specific user
+     * @param userID the ID of the user
+     * @return the running session of the user
+     */
     @PostMapping("/api/getRunningSession")
     public ResponseEntity<?> getRunningSession(@RequestParam Long userID) {
         // check if userID is valid
@@ -33,6 +38,11 @@ public class UserSessionController {
         return getRunningSessionService.getRunningSession(userID).buildResponse();
     }
 
+    /**
+     * Get the number of running sessions of a specific user
+     * @param userID the ID of the user
+     * @return the number of running sessions of the user
+     */
     @GetMapping("/api/getRunningSessionNumber")
     public ResponseEntity<?> getRunningSessionNumber(@RequestParam Long userID) {
         // check if userID is valid
@@ -43,6 +53,11 @@ public class UserSessionController {
         return getRunningSessionService.getRunningSessionNumber(userID).buildResponse();
     }
 
+    /**
+     * Get the messages of a specific session
+     * @param sessionID the ID of the session
+     * @return the messages of the session
+     */
     @GetMapping("/api/getSessionMessages")
     public ResponseEntity<?> getSessionMessages(@RequestParam Long sessionID) {
         // check if sessionID is valid

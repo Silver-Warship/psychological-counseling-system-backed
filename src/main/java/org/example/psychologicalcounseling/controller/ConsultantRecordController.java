@@ -38,6 +38,11 @@ public class ConsultantRecordController {
         this.consultantRecordRepository = consultantRecordRepository;
     }
 
+    /**
+     * 通过用户ID或咨询师ID获取一段时间内咨询记录，如果不声明时间段将获取所有咨询记录
+     * @param request   所需参数
+     * @return          获取到的咨询记录
+     */
     @GetMapping("/api/getConsultantRecord")
     public ResponseEntity<?> getConsultantRecord(GetConsultantRecordRequest request) {
         GetConsultantRecordResponse response = new GetConsultantRecordResponse();
@@ -84,6 +89,11 @@ public class ConsultantRecordController {
         return response.buildResponse();
     }
 
+    /**
+     * 通过用户ID或咨询师ID获取一段时间内咨询记录的数量，如果不声明时间段将获取所有咨询记录
+     * @param request   所需参数
+     * @return          获取到的咨询记录数量
+     */
     @GetMapping("/api/getCompletedConsultationNumber")
     public ResponseEntity<?> getCompletedConsultationNumber(GetCompletedConsultationNumberRequest request) {
         GetRunningSessionNumberResponse response = new GetRunningSessionNumberResponse();
@@ -129,6 +139,11 @@ public class ConsultantRecordController {
         return response.buildResponse();
     }
 
+    /**
+     * 获取一段时间内咨询时长
+     * @param request   所需参数
+     * @return          在该时间段内的咨询时长
+     */
     @GetMapping("/api/getHistoricalConsultationDuration")
     public ResponseEntity<?> getHistoricalConsultationDuration(getConsultationDurationRequest request) {
         getConsultationDurationResponse response = new getConsultationDurationResponse();
@@ -175,6 +190,11 @@ public class ConsultantRecordController {
     }
 
 
+    /**
+     * 添加咨询记录
+     * @param request   所需参数
+     * @return          添加结果
+     */
     @PostMapping("/api/addConsultantRecord")
     ResponseEntity<?> addConsultantRecord(@RequestBody addConsultantRecordDto request) {
         // check if userID and counsellorID are valid
@@ -203,8 +223,14 @@ public class ConsultantRecordController {
         return ResponseEntity.badRequest().body("Failed to add consultant record");
     }
 
+    /**
+     * 导出咨询记录
+     * @param recordID  咨询记录ID
+     * @return          导出结果
+     */
     @GetMapping("/api/exportConsultantRecord")
     ResponseEntity<?> exportConsultantRecord(Long recordID) {
+        // check if recordID is valid
         if (recordID == null || !consultantRecordRepository.existsById(recordID)) {
             return ResponseEntity.badRequest().body("Record ID is invalid");
         }

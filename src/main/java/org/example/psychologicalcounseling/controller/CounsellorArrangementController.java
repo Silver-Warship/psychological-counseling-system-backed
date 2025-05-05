@@ -1,6 +1,5 @@
 package org.example.psychologicalcounseling.controller;
 
-
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CancelCounsellorOrderRequest;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
@@ -24,6 +23,13 @@ public class CounsellorArrangementController {
         this.counsellorArrangementRepository = counsellorArrangementRepository;
     }
 
+    /**
+     * Get the order of a specific counsellor
+     * @param counsellorID the ID of the counsellor
+     * @param startTimestamp the start timestamp of the order
+     * @param endTimestamp the end timestamp of the order
+     * @return the order of the counsellor
+     */
     @GetMapping("/api/getCounsellorOrder")
     public ResponseEntity<?> getCounsellorOrder(@RequestParam Long counsellorID, Long startTimestamp, Long endTimestamp) {
         if (startTimestamp == null || startTimestamp < 0) {
@@ -47,6 +53,12 @@ public class CounsellorArrangementController {
         return counsellorOrderManageService.getCounsellorOrder(counsellorID, startTimestamp, endTimestamp).buildResponse();
     }
 
+    /**
+     * Get the order of all counsellors
+     * @param startTimestamp the start timestamp of the order
+     * @param endTimestamp the end timestamp of the order
+     * @return the order of all counsellors
+     */
     @GetMapping("/api/getAllCounsellorOrder")
     public ResponseEntity<?> getAllCounsellorOrder(Long startTimestamp, Long endTimestamp) {
         if (startTimestamp == null || startTimestamp < 0) {
@@ -65,6 +77,11 @@ public class CounsellorArrangementController {
         return counsellorOrderManageService.getCounsellorOrder(startTimestamp, endTimestamp).buildResponse();
     }
 
+    /**
+     * Add a new order for a specific counsellor
+     * @param addRequest the request containing the order details
+     * @return the response indicating the result of the operation
+     */
     @PostMapping("/api/addCounsellorOrder")
     public ResponseEntity<?> addCounsellorOrder(@RequestBody UpdateCounsellorOrderRequest addRequest) {
         if (addRequest.getCounsellors() == null || addRequest.getCounsellors().isEmpty()) {
@@ -82,6 +99,11 @@ public class CounsellorArrangementController {
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
     }
 
+    /**
+     * Cancel an existing order for a specific counsellor
+     * @param cancelRequest the request containing the order details to be cancelled
+     * @return the response indicating the result of the operation
+     */
     @PostMapping("/api/cancelCounsellorOrder")
     public ResponseEntity<?> cancelCounsellorOrder(@RequestBody CancelCounsellorOrderRequest cancelRequest) {
         if (cancelRequest.getArrangeIDs() == null || cancelRequest.getArrangeIDs().isEmpty()) {

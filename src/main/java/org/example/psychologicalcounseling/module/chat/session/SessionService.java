@@ -3,7 +3,6 @@ package org.example.psychologicalcounseling.module.chat.session;
 import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.constant.OtherConstant;
 import org.example.psychologicalcounseling.dto.Response;
-import org.example.psychologicalcounseling.module.chat.connection.ConnectionService;
 import org.example.psychologicalcounseling.module.chat.session.CloseSession.CloseSessionRequest;
 import org.example.psychologicalcounseling.module.chat.session.CloseSession.CloseSessionResponse;
 import org.example.psychologicalcounseling.module.chat.session.checkSessionAlive.CheckSessionAliveRequest;
@@ -12,11 +11,7 @@ import org.example.psychologicalcounseling.module.chat.session.createSession.Cre
 import org.example.psychologicalcounseling.module.chat.session.createSession.CreateSessionResponse;
 import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.repository.SessionRepository;
-import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.WebSocketSession;
-
-import java.util.function.Function;
 
 @Service
 public class SessionService {
@@ -28,6 +23,12 @@ public class SessionService {
         this.sessionTimeoutDetect = sessionManager;
     }
 
+    /**
+     * Create a new session in the database and register it in the session manager.
+     * The session will be removed after 10 minutes if no activity is detected.
+     * @param request The request containing the session details.
+     * @return A response indicating the success or failure of the operation.
+     */
     public Response<CreateSessionResponse> createSession(CreateSessionRequest request) {
         // create a new session in the database
         Session session = new Session();
@@ -45,6 +46,11 @@ public class SessionService {
         return new Response<>(ErrorConstant.successCreateSession.code, ErrorConstant.successCreateSession.codeMsg, new CreateSessionResponse(session.getSessionID()));
     }
 
+    /**
+     * Check if the session is still active.
+     * @param request The request containing the session ID.
+     * @return A response indicating whether the session is alive or not.
+     */
     public Response<CheckSessionAliveResponse> checkSessionAlive(CheckSessionAliveRequest request) {
         // check if the session is still active
         Session session = sessionRepository.findById(request.getSessionID()).orElse(null);
@@ -63,6 +69,11 @@ public class SessionService {
         return new Response<>(ErrorConstant.sessionAlive.code, ErrorConstant.sessionAlive.codeMsg, new CheckSessionAliveResponse(true));
     }
 
+    /**
+     * Close the session in the database and notify the session manager to remove it.
+     * @param request The request containing the session ID.
+     * @return A response indicating the success or failure of the operation.
+     */
     public Response<CloseSessionResponse> closeSession(CloseSessionRequest request) {
         // close the session in the database
         sessionRepository.updateSessionBySessionID(request.getSessionID(), true);
