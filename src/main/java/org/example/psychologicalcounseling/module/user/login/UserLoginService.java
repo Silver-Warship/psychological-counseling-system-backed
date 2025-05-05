@@ -1,36 +1,35 @@
 package org.example.psychologicalcounseling.module.user.login;
 
 import org.example.psychologicalcounseling.dto.UserDto;
-import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.Account;
-import org.example.psychologicalcounseling.model.Session;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
-import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserLoginService {
+    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final SendMail sendMail = SendMail.getInstance();
 
+    public UserLoginService(UserRepository userRepository, AccountRepository accountRepository,
+                            RedisTemplate<String, String> redisTemplate) {
+        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
+        this.redisTemplate = redisTemplate;
+    }
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AccountRepository accountRepository;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-
-    private  final SendMail sendMail = SendMail.getInstance();
-
+    /**
+     * 发送验证码到指定邮箱
+     * @param email           用户的邮箱地址
+     * @param verificationCode 生成的验证码
+     * @return               是否成功发送验证码
+     */
     public Boolean SendVerificationCode(String email, String verificationCode) {
         //check if the email is already in Redis
         //System.out.println("查询哈希表");
@@ -53,6 +52,12 @@ public class UserLoginService {
         }
     }
 
+    /**
+     * 检查验证码是否匹配
+     * @param email           用户的邮箱地址
+     * @param verificationCode 生成的验证码
+     * @return               是否匹配
+     */
     public boolean checkVerificationCode(String email, String verificationCode) {
         //从Redis中获取验证码
         String storedVerificationCode = redisTemplate.opsForValue().get(email);
@@ -64,8 +69,11 @@ public class UserLoginService {
         return true;
     }
 
-
-    //检查传入的email是否存在
+    /**
+     * 检查传入的email是否存在
+     * @param email           用户的邮箱地址
+     * @return               是否存在
+     */
     public boolean checkEmail(String email) {
         //从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
@@ -76,7 +84,12 @@ public class UserLoginService {
         return true;
     }
 
-    //默认email存在的前提下检查传入的email和password是否匹配
+    /**
+     * 检查传入的email和password是否匹配
+     * @param email           用户的邮箱地址
+     * @param password        用户的密码
+     * @return               是否匹配
+     */
     public boolean checkPassword(String email, String password) {
 
         //从数据库中获取用户信息，并检查用户是否存在
@@ -92,7 +105,10 @@ public class UserLoginService {
         return true;
     }
 
-    //添加用户，用email来作为nickname，这是可以修改的
+    /**
+     * 添加用户
+     * @param userDto 用户信息
+     */
     public void addUser(UserDto userDto) {
         try {
 
@@ -118,5 +134,4 @@ public class UserLoginService {
             System.out.println("保存用户失败");
         }
     }
-
 }

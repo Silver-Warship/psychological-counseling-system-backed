@@ -1,6 +1,5 @@
 package org.example.psychologicalcounseling.controller;
 
-
 import org.example.psychologicalcounseling.module.helpRecord.AddHelpRecordDto;
 import org.example.psychologicalcounseling.module.helpRecord.HelpRecordService;
 import org.example.psychologicalcounseling.module.helpRecord.getHelpRecord.GetHelpRecordRequest;
@@ -19,15 +18,22 @@ public class HelpRecordController {
     private final SessionRepository sessionRepository;
     private final HelpRecordService helpRecordService;
 
-    public HelpRecordController(CounsellorRepository counsellorRepository, SupervisorRepository supervisorRepository, SessionRepository sessionRepository, HelpRecordService helpRecordService) {
+    public HelpRecordController(CounsellorRepository counsellorRepository, SupervisorRepository supervisorRepository,
+                                SessionRepository sessionRepository, HelpRecordService helpRecordService) {
         this.counsellorRepository = counsellorRepository;
         this.supervisorRepository = supervisorRepository;
         this.sessionRepository = sessionRepository;
         this.helpRecordService = helpRecordService;
     }
 
+    /**
+     * Add a help record
+     * @param dto the help record to be added
+     * @return the response entity
+     */
     @PostMapping("/api/addHelpRecord")
     ResponseEntity<?> addHelpRecord(@RequestBody AddHelpRecordDto dto) {
+        // check if the counsellorID, supervisorID, userSessionID and helpSessionID are present
         if (dto.getCounsellorID() == null || !counsellorRepository.existsById(dto.getCounsellorID())) {
             return ResponseEntity.badRequest().body("Counsellor ID is invalid");
         }
@@ -44,12 +50,19 @@ public class HelpRecordController {
             return ResponseEntity.badRequest().body("Help session ID is invalid");
         }
 
-        if (helpRecordService.addHelpRecord(dto.getCounsellorID(), dto.getSupervisorID(), dto.getUserSessionID(), dto.getHelpSessionID())) {
+        // try to add the help record
+        if (helpRecordService.addHelpRecord(dto.getCounsellorID(), dto.getSupervisorID(), dto.getUserSessionID(),
+                dto.getHelpSessionID())) {
             return ResponseEntity.ok("Help record added successfully");
         }
         return ResponseEntity.badRequest().body("Failed to add help record");
     }
 
+    /**
+     * Get the help record of a specific counsellor or supervisor
+     * @param request the request containing the counsellorID, supervisorID, startTimestamp and endTimestamp
+     * @return the help record of the counsellor or supervisor
+     */
     @GetMapping("/api/getHelpRecord")
     ResponseEntity<?> getHelpRecord(GetHelpRecordRequest request) {
         GetHelpRecordResponse response = new GetHelpRecordResponse();
@@ -71,10 +84,12 @@ public class HelpRecordController {
             if (request.getSupervisorID() == null || !supervisorRepository.existsById(request.getSupervisorID())) {
                 return ResponseEntity.badRequest().body("Counsellor ID or Supervisor ID is required");
             } else {
-                response.helpRecords = helpRecordService.getHelpRecordBySupervisor(request.getSupervisorID(), request.getStartTimestamp(), request.getEndTimestamp());
+                response.helpRecords = helpRecordService.getHelpRecordBySupervisor(request.getSupervisorID(),
+                        request.getStartTimestamp(), request.getEndTimestamp());
             }
         } else {
-             response.helpRecords = helpRecordService.getHelpRecordByCounsellor(request.getCounsellorID(), request.getStartTimestamp(), request.getEndTimestamp());
+             response.helpRecords = helpRecordService.getHelpRecordByCounsellor(request.getCounsellorID(),
+                     request.getStartTimestamp(), request.getEndTimestamp());
         }
 
         return ResponseEntity.ok(response);

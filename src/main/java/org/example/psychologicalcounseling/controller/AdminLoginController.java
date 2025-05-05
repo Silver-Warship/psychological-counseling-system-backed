@@ -7,17 +7,24 @@ import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.safety.VerificationCodeBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AdminLoginController {
-    @Autowired//自动插入
-    private AdminLoginService adminLoginService;
-    @Autowired
-    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
+    private final AdminLoginService adminLoginService;
+    private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
+    AdminLoginController(AdminLoginService adminLoginService, JwtUtilTokenBuilder jwtUtilTokenBuilder) {
+        this.adminLoginService = adminLoginService;
+        this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
+    }
+
+    /**
+     * 管理员登录接口
+     * @param loginRequest 登录请求体
+     * @return 登录响应
+     */
     @PostMapping("/api/admin/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponse response = new LoginResponse();
@@ -68,8 +75,6 @@ public class AdminLoginController {
                         userDto.setPassword(OriginalPasswordBuilder.generatePassword());
                         userDto.setNickname("User"+email);
                         adminLoginService.addUser(userDto);
-                        //response.setCode(200);
-                        //response.setCodeMsg("Code is verified successfully.");
                     }
                     String token = jwtUtilTokenBuilder.generateToken(email);
                     response.setToken(token);
@@ -83,5 +88,4 @@ public class AdminLoginController {
         }
         return response.buildResponse();
     }
-
 }

@@ -1,11 +1,10 @@
 package org.example.psychologicalcounseling.module.safety;
 
-
-
-
 public class VerificationCodeBuilder {
-
-    //tool method, generate a six digits verification code
+    /**
+     * Generates a six-digit verification code.
+     * @return A string representing the six-digit verification code.
+     */
     public static String generateVerificationCode() {
         StringBuilder verificationCode = new StringBuilder();
         for (int i = 0; i < 6; i++) {
@@ -14,6 +13,4 @@ public class VerificationCodeBuilder {
         }
         return verificationCode.toString();
     }
-
-
 }

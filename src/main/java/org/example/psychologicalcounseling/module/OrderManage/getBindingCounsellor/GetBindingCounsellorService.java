@@ -14,6 +14,11 @@ public class GetBindingCounsellorService {
         this.counsellorRepository = counsellorRepository;
     }
 
+    /**
+     * Get the list of counsellors bound to the admin
+     * @param supervisorID The ID of the admin
+     * @return A response containing the list of counsellors bound to the admin
+     */
     public GetBindingCounsellorResponse getBindingCounsellor(Long supervisorID) {
         // get counsellor IDs bound to the admin
         var counsellorIds = supervisorManageRepository.findCounsellorIDBySupervisorID(supervisorID);

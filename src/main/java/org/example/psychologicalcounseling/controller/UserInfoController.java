@@ -9,10 +9,8 @@ import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.user.info.UserInfoService;
 import org.example.psychologicalcounseling.module.user.info.EditRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,17 +19,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class UserInfoController {
-    @Autowired
-    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
-    @Autowired//自动插入
-    private UserInfoService userInfoService;
+    private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
+    private final UserInfoService userInfoService;
 
+    public UserInfoController(JwtUtilTokenBuilder jwtUtilTokenBuilder, UserInfoService userInfoService) {
+        this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
+        this.userInfoService = userInfoService;
+    }
 
-    //通过token获取当前登录的用户信息
+    /**
+     * 通过token获取当前登录的用户信息
+     * @param token 用户的token
+     * @param role 用户的角色
+     * @return 用户信息
+     */
     @GetMapping("/tokenVerify")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token, @RequestParam String role) {
         String email = jwtUtilTokenBuilder.getEmailFromToken(token);
-
 
         Long uid = null;
         String nickname = "";
@@ -76,7 +80,10 @@ public class UserInfoController {
         return ResponseEntity.ok(userInfo);
     }
 
-    //获取所有用户的信息
+    /**
+     * 获取所有用户信息，包括sessions
+     * @return List<Map<String, Object>> 用户信息列表
+     */
     @GetMapping("/test/getAll")
     public ResponseEntity<?> getUserList() {
         // 查询所有用户
@@ -98,16 +105,24 @@ public class UserInfoController {
         return ResponseEntity.ok(userInfoList);
     }
 
+    /**
+     * 编辑用户信息
+     * @param editRequest  用户信息
+     * @return             编辑结果
+     */
     @PostMapping("/user/editprofile")
     public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest) {
         userInfoService.editUserProfile(editRequest);
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * 通过email搜索用户信息
+     * @param email 用户的email
+     * @return     用户信息
+     */
     @GetMapping("/user/searchBy")
     public ResponseEntity<?> searchUserInfo(@RequestParam String email) {
         return ResponseEntity.ok().build();
     }
-
 }

@@ -33,6 +33,10 @@ public class SelfImplementIMService implements MessageService {
         this.sessionRepository = sessionRepository;
     }
 
+    /**
+     * Sends a message to the receiver if they are online.
+     * @param message The message to be sent.
+     */
     private void sendMessage(Message message) {
         // send to the receiver if the receiver is online
         Long receiverID = message.getReceiverID();
@@ -60,6 +64,11 @@ public class SelfImplementIMService implements MessageService {
         }
     }
 
+    /**
+     * Transmits a message to the receiver and saves it to the database.
+     * @param request The request containing the message details.
+     * @return A response indicating the success or failure of the operation.
+     */
     @Override
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {
         // check session
@@ -78,6 +87,11 @@ public class SelfImplementIMService implements MessageService {
         return new Response<>(ErrorConstant.successSendMessage.code, ErrorConstant.successSendMessage.codeMsg, new TransmitMessageResponse(message.getMessageID()));
     }
 
+    /**
+     * Retrieves unreceived messages for a specific user.
+     * @param request The request containing the user ID and session ID.
+     * @return A response containing the unreceived messages.
+     */
     @Override
     public Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request) {
         // get the un-received message from the database in chronological order
@@ -101,6 +115,11 @@ public class SelfImplementIMService implements MessageService {
         return new Response<>(ErrorConstant.successPullMessage.code, ErrorConstant.successPullMessage.codeMsg, new PullUnReceivedMessageResponse(messageArray));
     }
 
+    /**
+     * Acknowledges the message by updating its status and receive timestamp.
+     * @param request The request containing the message IDs and acknowledgment timestamp.
+     * @return A response indicating the success or failure of the operation.
+     */
     @Override
     public Response<AcknowledgeMessageResponse> acknowledgeMessage(AcknowledgeMessageRequest request) {
         // update the message status to 1 and set receive timestamp
