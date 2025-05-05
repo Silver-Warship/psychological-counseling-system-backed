@@ -34,7 +34,6 @@ public class UserLoginService {
         //check if the email is already in Redis
         //System.out.println("查询哈希表");
         try {
-
             if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
                 System.out.println("查询哈希表发现重复");
                 return false;
