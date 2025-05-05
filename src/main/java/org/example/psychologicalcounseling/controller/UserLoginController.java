@@ -27,6 +27,16 @@ public class UserLoginController {
      */
     @PostMapping("/api/users/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
+        // check if the email is empty
+        if (loginRequest.getEmail() == null || loginRequest.getEmail().isEmpty()) {
+            return ResponseEntity.badRequest().body("The email is empty.");
+        }
+
+        // check if the password is empty
+        if (loginRequest.getPassword() == null && loginRequest.getVerificationCode() == null) {
+            return ResponseEntity.badRequest().body("The password and verification is empty.");
+        }
+
         LoginResponse response = new LoginResponse();
         //验证email和password是否正确
         String email = loginRequest.getEmail();
