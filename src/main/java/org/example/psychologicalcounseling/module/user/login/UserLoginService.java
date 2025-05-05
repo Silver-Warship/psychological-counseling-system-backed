@@ -90,7 +90,6 @@ public class UserLoginService {
      * @return               是否匹配
      */
     public boolean checkPassword(String email, String password) {
-
         //从数据库中获取用户信息，并检查用户是否存在
         User user = userRepository.findByEmail(email);
         Long aid = user.getUid();
