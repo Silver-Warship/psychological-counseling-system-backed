@@ -31,7 +31,16 @@ public class HelpRecordService {
         List<String> allCounsellorNames = helpRecords.stream().map((record) -> counsellorRepository.findCounsellorNameByCounsellorID(record.getCounsellorID())).toList();
         // get all supervisor name from supervisorID
         List<String> allSupervisorNames = helpRecords.stream().map((record) -> supervisorRepository.findSupervisorNameBySupervisorID(record.getSupervisorID())).toList();
-
+        // get all help session duration from helpSessionID
+        List<Long> allHelpSessionDurations = helpRecords.stream().map((record) -> {
+            // get the duration from the session table
+            return helpRecordRepository.findHelpSessionDurationByHelpSessionID(record.getHelpSessionID());
+        }).toList();
+        // get all help session start time from helpSessionID
+        List<Long> allHelpSessionStartTimes = helpRecords.stream().map((record) -> {
+            // get the start time from the session table
+            return helpRecordRepository.findHelpSessionStartTimestampByHelpSessionID(record.getHelpSessionID());
+        }).toList();
 
         GetHelpRecordResponse.HelpRecord[] helpRecordList = new GetHelpRecordResponse.HelpRecord[helpRecords.size()];
         for (int i = 0; i < helpRecords.size(); i++) {
@@ -43,6 +52,8 @@ public class HelpRecordService {
             helpRecordList[i].setHelpSessionID(helpRecords.get(i).getHelpSessionID());
             helpRecordList[i].setCounsellorName(allCounsellorNames.get(i));
             helpRecordList[i].setSupervisorName(allSupervisorNames.get(i));
+            helpRecordList[i].setDuration(allHelpSessionDurations.get(i));
+            helpRecordList[i].setStartTimestamp(allHelpSessionStartTimes.get(i));
         }
         return helpRecordList;
     }

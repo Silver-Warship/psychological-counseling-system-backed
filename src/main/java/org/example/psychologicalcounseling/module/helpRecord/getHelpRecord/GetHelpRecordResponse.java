@@ -15,6 +15,8 @@ public class GetHelpRecordResponse extends ResponseBuilder {
         private String supervisorName;
         private Long userSessionID;
         private Long helpSessionID;
+        private Long duration;
+        private Long startTimestamp;
     }
 
     public GetHelpRecordResponse.HelpRecord[] helpRecords;
