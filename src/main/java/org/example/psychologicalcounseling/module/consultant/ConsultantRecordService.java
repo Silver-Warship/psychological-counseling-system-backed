@@ -51,6 +51,7 @@ public class ConsultantRecordService {
             GetConsultantRecordResponse.ConsultantRecord response = new GetConsultantRecordResponse.ConsultantRecord();
             response.setUserID(record.getUserID());
             response.setUserName(allUserNames.get(i));
+            response.setSessionID(allSessionStartTimestamp.get(i));
             response.setCounsellorID(record.getCounsellorID());
             response.setCounsellorName(allCounsellorNames.get(i));
             response.setTimestamp(allSessionStartTimestamp.get(i));
