@@ -7,7 +7,6 @@ import org.example.psychologicalcounseling.module.safety.VerificationCodeBuilder
 import org.example.psychologicalcounseling.module.user.login.LoginRequestDto;
 import org.example.psychologicalcounseling.module.user.login.LoginResponse;
 import org.example.psychologicalcounseling.module.user.login.SupervisorLoginService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SupervisorLoginController {
-    @Autowired//自动插入
-    private SupervisorLoginService supervisorLoginService;
-    @Autowired
-    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
+    private final SupervisorLoginService supervisorLoginService;
+    private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
+    public SupervisorLoginController(SupervisorLoginService supervisorLoginService, JwtUtilTokenBuilder jwtUtilTokenBuilder) {
+        this.supervisorLoginService = supervisorLoginService;
+        this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
+    }
+
+    /**
+     * 管理员登录接口
+     * @param loginRequest 登录请求体
+     * @return 登录响应
+     */
     @PostMapping("/api/supervisor/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
         LoginResponse response = new LoginResponse();
@@ -85,5 +92,4 @@ public class SupervisorLoginController {
         }
         return response.buildResponse();
     }
-
 }

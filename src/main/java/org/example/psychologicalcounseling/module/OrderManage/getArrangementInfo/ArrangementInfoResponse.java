@@ -1,10 +1,11 @@
 package org.example.psychologicalcounseling.module.OrderManage.getArrangementInfo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.example.psychologicalcounseling.dto.ResponseBuilder;
-
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ArrangementInfoResponse extends ResponseBuilder{
     private List<Info> info;
@@ -29,6 +30,4 @@ public class ArrangementInfoResponse extends ResponseBuilder{
             this.role = role;
         }
     }
-
-
 }

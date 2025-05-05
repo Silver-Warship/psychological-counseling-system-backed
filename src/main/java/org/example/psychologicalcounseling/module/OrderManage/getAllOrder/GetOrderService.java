@@ -1,9 +1,7 @@
 package org.example.psychologicalcounseling.module.OrderManage.getAllOrder;
 
-import org.example.psychologicalcounseling.controller.SupervisorArrangementController;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.example.psychologicalcounseling.repository.SupervisorArrangementRepository;
-import org.example.psychologicalcounseling.repository.SupervisorRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +14,12 @@ public class GetOrderService {
         this.supervisorArrangementRepository = supervisorArrangementRepository;
     }
 
+    /**
+     * Get the number of counsellor and supervisor in the given time period
+     * @param startTimestamp start timestamp
+     * @param endTimestamp   end timestamp
+     * @return OrderNum
+     */
     public GetAllOrderNumberResponse.OrderNum getOrderNumber(Long startTimestamp, Long endTimestamp) {
         // get the number of counsellor in the given time period
         Long counsellorNum = counsellorArrangementRepository.findCounsellorNumberByTime(startTimestamp, endTimestamp);

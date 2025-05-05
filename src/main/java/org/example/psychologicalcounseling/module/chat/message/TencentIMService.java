@@ -12,7 +12,6 @@ import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessag
 import org.example.psychologicalcounseling.repository.MessageRepository;
 import org.example.psychologicalcounseling.utils.HttpUtil;
 import org.json.JSONObject;
-
 import java.util.Map;
 import java.util.Random;
 
@@ -23,12 +22,17 @@ public class TencentIMService implements MessageService {
     final String ADMIN_USERSIG = "eJwtjMsOwiAURP*FLabSFkSbuPERianGpBo3blDQXO0rgI9o-Hex7XLOzJwP2qZZ8NAGJSgKCOo1GZQuHZyhwVIVUIJ1RrrKdAOrbrKuQaEkHBBCeExZ1Db6VYPRnjPGIl*11EHxZ5ySOBxxyjsLXLx-M5-mb2xX*CSI0uvZ-ljcM3**pk*ai0MfT3ZiuLCx1MtqjL4-efM0Yw__";
     final String RANDOM = "99999999";
     final String CONTENT_TYPE = "json";
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
 
     public TencentIMService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 
+    /**
+     * This method is used to send a message to a user using Tencent IM.
+     * @param request The request containing the sender ID, receiver ID, and content.
+     * @return A response indicating the success or failure of the operation.
+     */
     @Override
     // sample url : https://xxxxxx/v4/openim/sendmsg?sdkappid=88888888&identifier=admin&usersig=xxx&random=99999999&contenttype=json
     public Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request) {

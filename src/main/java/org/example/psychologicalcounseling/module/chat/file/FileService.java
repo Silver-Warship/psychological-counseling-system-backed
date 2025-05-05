@@ -20,6 +20,11 @@ public class FileService {
         }
     }
 
+    /**
+     * Send the file to the receiver
+     * @param fileDescription the file description
+     * @return true if the file is sent successfully, false otherwise
+     */
     private boolean sendFile(FileDescription fileDescription) {
          // send to the receiver if the receiver is online
         ConnectionService connectionService = GetBeanUtil.getBean(ConnectionService.class);

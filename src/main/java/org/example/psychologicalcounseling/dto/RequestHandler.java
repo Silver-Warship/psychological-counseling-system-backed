@@ -1,7 +1,6 @@
 package org.example.psychologicalcounseling.dto;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
-
 import java.lang.reflect.Field;
 
 @Getter

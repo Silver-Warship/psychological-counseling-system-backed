@@ -4,28 +4,32 @@ import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.Supervisor;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 @Service
 public class GetAllService {
+    private final CounsellorRepository counsellorRepository;
+    private final SupervisorRepository supervisorRepository;
 
-    @Autowired
-    CounsellorRepository counsellorRepository;
-    @Autowired
-    SupervisorRepository supervisorRepository;
+    public GetAllService(CounsellorRepository counsellorRepository, SupervisorRepository supervisorRepository) {
+        this.counsellorRepository = counsellorRepository;
+        this.supervisorRepository = supervisorRepository;
+    }
 
+    /**
+     * 获取所有 counsellor 或 supervisor 的信息
+     *
+     * @param role 角色类型，"counsellor" 或 "supervisor"
+     * @return GetAllResponse 对象，包含所有 counsellor 或 supervisor 的信息
+     */
     public GetAllResponse getAll(String role) {
         GetAllResponse getAllResponse = new GetAllResponse();
-        List <GetAllResponse.Info> infoList = new ArrayList<>();
+        List<GetAllResponse.Info> infoList = new ArrayList<>();
 
-
-
-        if(role.equals("counsellor")){
+        if (role.equals("counsellor")) {
             // 使用线程池执行异步操作
             ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -53,8 +57,7 @@ public class GetAllService {
             } finally {
                 executor.shutdown();
             }
-
-        }else if (role.equals("supervisor")){
+        } else if (role.equals("supervisor")) {
             // 使用线程池执行异步操作
             ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -77,11 +80,11 @@ public class GetAllService {
                 CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 executor.shutdown();
             }
 
-        }else {
+        } else {
             getAllResponse.setCode(500);
             getAllResponse.setCodeMsg("Bad Request : Role Error");
         }
@@ -89,5 +92,4 @@ public class GetAllService {
         getAllResponse.setInfos(infoList);
         return getAllResponse;
     }
-
 }

@@ -18,18 +18,16 @@ public class ConsultantRecordService {
     private final SessionRepository sessionRepository;
     private final CounsellorRepository counsellorRepository;
     private final MessageRepository messageRepository;
-    private final FrameworkServlet frameworkServlet;
 
 
     public ConsultantRecordService(ConsultantRecordRepository consultantRecordRepository, UserRepository userRepository,
                                    SessionRepository sessionRepository, CounsellorRepository counsellorRepository,
-                                   MessageRepository messageRepository, FrameworkServlet frameworkServlet) {
+                                   MessageRepository messageRepository) {
         this.consultantRecordRepository = consultantRecordRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
         this.counsellorRepository = counsellorRepository;
         this.messageRepository = messageRepository;
-        this.frameworkServlet = frameworkServlet;
     }
 
 
@@ -53,6 +51,7 @@ public class ConsultantRecordService {
             GetConsultantRecordResponse.ConsultantRecord response = new GetConsultantRecordResponse.ConsultantRecord();
             response.setUserID(record.getUserID());
             response.setUserName(allUserNames.get(i));
+            response.setSessionID(allSessionStartTimestamp.get(i));
             response.setCounsellorID(record.getCounsellorID());
             response.setCounsellorName(allCounsellorNames.get(i));
             response.setTimestamp(allSessionStartTimestamp.get(i));

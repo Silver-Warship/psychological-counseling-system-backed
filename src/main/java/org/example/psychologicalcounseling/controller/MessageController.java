@@ -8,7 +8,6 @@ import org.example.psychologicalcounseling.dto.Response;
 import org.example.psychologicalcounseling.utils.GetBeanUtil;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -25,6 +24,13 @@ public class MessageController implements WebSocketHandler {
         }
     }
 
+    /**
+     * Handle the incoming message and return a response.
+     *
+     * @param message the incoming message
+     * @param session the WebSocket session
+     * @return the response as a JSON string
+     */
     public String handle(String message, WebSocketSession session) {
         // convert message to json
         JSONObject json, content;

@@ -7,20 +7,36 @@ import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
 import org.example.psychologicalcounseling.module.safety.VerificationCodeBuilder;
 import org.example.psychologicalcounseling.module.user.login.LoginResponse;
 import org.example.psychologicalcounseling.module.user.login.UserLoginService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("/api/users")
 public class UserLoginController {
-    @Autowired//自动插入
-    private UserLoginService userLoginService;
-    @Autowired
-    private JwtUtilTokenBuilder jwtUtilTokenBuilder;
+    private final UserLoginService userLoginService;
+    private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
 
+    public UserLoginController(UserLoginService userLoginService, JwtUtilTokenBuilder jwtUtilTokenBuilder) {
+        this.userLoginService = userLoginService;
+        this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
+    }
+
+    /**
+     * 用户登录接口
+     * @param loginRequest 登录请求体
+     * @return             如果登录成功，返回token和状态码600；如果登录失败，返回状态码601和错误信息；
+     */
     @PostMapping("/api/users/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
+        // check if the email is empty
+        if (loginRequest.getEmail() == null || loginRequest.getEmail().isEmpty()) {
+            return ResponseEntity.badRequest().body("The email is empty.");
+        }
+
+        // check if the password is empty
+        if (loginRequest.getPassword() == null && loginRequest.getVerificationCode() == null) {
+            return ResponseEntity.badRequest().body("The password and verification is empty.");
+        }
+
         LoginResponse response = new LoginResponse();
         //验证email和password是否正确
         String email = loginRequest.getEmail();

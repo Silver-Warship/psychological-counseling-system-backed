@@ -9,12 +9,24 @@ import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessag
 import org.example.psychologicalcounseling.module.chat.message.acknowledgeMessage.AcknowledgeMessageResponse;
 
 public interface MessageService {
-    // 接收客户端请求并发送消息
+    /**
+     * 发送消息
+     * @param request 发送消息请求
+     * @return        发送消息响应
+     */
     Response<TransmitMessageResponse> transmitMessage(TransmitMessageRequest request);
 
-    // 获取某个用户所有未接收的消息
+    /**
+     * 拉取未接收的消息
+     * @param request 拉取未接收消息请求
+     * @return        拉取未接收消息响应
+     */
     Response<PullUnReceivedMessageResponse> pullUnReceivedMessage(PullUnReceivedMessageRequest request);
 
-    // 确认消息已接收
+    /**
+     * 确认消息已接收
+     * @param request 消息确认请求
+     * @return        确认消息响应
+     */
     Response<AcknowledgeMessageResponse> acknowledgeMessage(AcknowledgeMessageRequest request);
 }
