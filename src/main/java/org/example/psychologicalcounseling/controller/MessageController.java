@@ -47,6 +47,7 @@ public class MessageController implements WebSocketHandler {
             if (bigMessage.length() >= chunkSize) {
                 message = bigMessage.toString();
                 bigMessage = new StringBuilder();
+                chunkSize = 0L;
             } else {
                 return null;
             }

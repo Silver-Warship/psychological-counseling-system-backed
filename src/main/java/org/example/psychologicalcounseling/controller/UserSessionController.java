@@ -4,6 +4,7 @@ import org.example.psychologicalcounseling.constant.ErrorConstant;
 import org.example.psychologicalcounseling.module.session.GetRunningSession.GetRunningSessionService;
 import org.example.psychologicalcounseling.module.session.GetSessionMessage.GetSessionMessageServer;
 import org.example.psychologicalcounseling.repository.AccountRepository;
+import org.example.psychologicalcounseling.repository.SessionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +16,14 @@ public class UserSessionController {
     private final GetRunningSessionService getRunningSessionService;
     private final GetSessionMessageServer getSessionMessageServer;
     private final AccountRepository accountRepository;
+    private final SessionRepository sessionRepository;
 
     public UserSessionController(GetRunningSessionService getRunningSessionService, GetSessionMessageServer getSessionMessageServer,
-                                 AccountRepository accountRepository) {
+                                 AccountRepository accountRepository, SessionRepository sessionRepository) {
         this.getRunningSessionService = getRunningSessionService;
         this.getSessionMessageServer = getSessionMessageServer;
         this.accountRepository = accountRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     /**
@@ -61,7 +64,7 @@ public class UserSessionController {
     @GetMapping("/api/getSessionMessages")
     public ResponseEntity<?> getSessionMessages(@RequestParam Long sessionID) {
         // check if sessionID is valid
-        if (sessionID == null || sessionID < 0 || !accountRepository.existsById(sessionID)) {
+        if (sessionID == null || sessionID < 0 || !sessionRepository.existsById(sessionID)) {
             return ResponseEntity.badRequest().body(ErrorConstant.noThisSession.codeMsg);
         }
 
