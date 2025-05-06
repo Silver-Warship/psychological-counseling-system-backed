@@ -35,6 +35,7 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
         registry.setMessageSizeLimit(1024 * 1024 * 100); // 设置消息大小限制为100MB
+        registry.setSendBufferSizeLimit(1024 * 1024 * 100);
     }
 
     @Bean
