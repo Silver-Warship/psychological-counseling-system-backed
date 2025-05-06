@@ -33,9 +33,9 @@ public class UserLoginController {
         }
 
         // check if the password is empty
-        if (loginRequest.getPassword() == null && loginRequest.getVerificationCode() == null) {
-            return ResponseEntity.badRequest().body("The password and verification is empty.");
-        }
+//        if (loginRequest.getPassword() == null && loginRequest.getVerificationCode() == null) {
+//            return ResponseEntity.badRequest().body("The password and verification is empty.");
+//        }
 
         LoginResponse response = new LoginResponse();
         //验证email和password是否正确
