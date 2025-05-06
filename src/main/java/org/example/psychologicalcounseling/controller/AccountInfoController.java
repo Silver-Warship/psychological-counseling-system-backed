@@ -1,6 +1,5 @@
 package org.example.psychologicalcounseling.controller;
 
-
 import org.example.psychologicalcounseling.dto.UserWithSessionsDto;
 import org.example.psychologicalcounseling.model.Admin;
 import org.example.psychologicalcounseling.model.Counsellor;
