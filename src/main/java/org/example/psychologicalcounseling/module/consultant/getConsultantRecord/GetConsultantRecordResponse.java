@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 public class GetConsultantRecordResponse extends ResponseBuilder {
     @Data
     public static class ConsultantRecord {
+        private Long recordID;
         private Long userID;
         private String userName;
         private Long counsellorID;

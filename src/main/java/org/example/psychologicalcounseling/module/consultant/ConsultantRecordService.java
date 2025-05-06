@@ -51,7 +51,7 @@ public class ConsultantRecordService {
             GetConsultantRecordResponse.ConsultantRecord response = new GetConsultantRecordResponse.ConsultantRecord();
             response.setUserID(record.getUserID());
             response.setUserName(allUserNames.get(i));
-            response.setSessionID(allSessionStartTimestamp.get(i));
+            response.setSessionID(record.getSessionID());
             response.setCounsellorID(record.getCounsellorID());
             response.setCounsellorName(allCounsellorNames.get(i));
             response.setTimestamp(allSessionStartTimestamp.get(i));
@@ -59,6 +59,7 @@ public class ConsultantRecordService {
             response.setUserRating(record.getUserRating());
             response.setAppraisal(record.getAppraisal());
             response.setCounsellorAppraisal(record.getAppraisal());
+            response.setRecordID(record.getRecordID());
             records[i] = response;
         }
 
