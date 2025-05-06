@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class MessageController implements WebSocketHandler {
     protected HashMap<String, Class<?>> requestMap;
     private Long chunkSize = 0L;
-    private StringBuilder content = new StringBuilder();
+    private StringBuilder bigMessage = new StringBuilder();
 
     public MessageController(MessageController... children) {
         requestMap = new HashMap<>(10);
@@ -43,9 +43,11 @@ public class MessageController implements WebSocketHandler {
         }
 
         if (chunkSize > 0) {
-            content.append(message);
-            if (content.length() >= chunkSize) {
-                message = content.toString();
+            bigMessage.append(message);
+            if (bigMessage.length() >= chunkSize) {
+                message = bigMessage.toString();
+                bigMessage = new StringBuilder();
+                chunkSize = 0L;
             } else {
                 return null;
             }
