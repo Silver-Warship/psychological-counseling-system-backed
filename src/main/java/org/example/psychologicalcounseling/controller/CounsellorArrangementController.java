@@ -2,6 +2,7 @@ package org.example.psychologicalcounseling.controller;
 
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CancelCounsellorOrderRequest;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.CounsellorOrderManageService;
+import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.GetOnDutyCounsellorResponse;
 import org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage.UpdateCounsellorOrderRequest;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
@@ -119,5 +120,22 @@ public class CounsellorArrangementController {
 
         this.counsellorOrderManageService.cancelCounsellorOrder(cancelRequest.getArrangeIDs());
         return ResponseEntity.accepted().body("Counsellor order updated successfully");
+    }
+
+    /**
+     * Get the list of on-duty counsellors
+     * @param timestamp current timestamp
+     * @return the list of on-duty counsellors
+     */
+    @GetMapping("/api/getOnDutyCounsellor")
+    public ResponseEntity<?> getOnDutyCounsellor(Long timestamp) {
+        if (timestamp == null || timestamp < 0) {
+            return ResponseEntity.badRequest().body("Invalid timestamp");
+        }
+
+        GetOnDutyCounsellorResponse response = new GetOnDutyCounsellorResponse();
+        response.setCounsellors(counsellorOrderManageService.getOnDutyCounsellor(timestamp));
+
+        return response.buildResponse();
     }
 }
