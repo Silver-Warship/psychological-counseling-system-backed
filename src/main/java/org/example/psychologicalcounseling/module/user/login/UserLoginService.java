@@ -123,6 +123,7 @@ public class UserLoginService {
             user.setEmail(userDto.getEmail());
             //user.setPassword(userDto.getPassword());
             user.setNickname(userDto.getNickname());
+            user.setGender(User.Gender.unknown);
             user.setUid(aid);
             // 保存到数据库
             userRepository.save(user);

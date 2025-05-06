@@ -3,6 +3,7 @@ package org.example.psychologicalcounseling.module.user.login;
 import org.example.psychologicalcounseling.dto.UserDto;
 import org.example.psychologicalcounseling.model.Account;
 import org.example.psychologicalcounseling.model.Admin;
+import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.mail.SendMail;
 import org.example.psychologicalcounseling.repository.AccountRepository;
 import org.example.psychologicalcounseling.repository.AdminRepository;
@@ -122,6 +123,7 @@ public class AdminLoginService {
             admin.setEmail(userDto.getEmail());
             //user.setPassword(userDto.getPassword());
             admin.setNickname(userDto.getNickname());
+            admin.setGender(Admin.Gender.unknown);
             admin.setAdminID(aid);
             // 保存到数据库
             adminRepository.save(admin);
