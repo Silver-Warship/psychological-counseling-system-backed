@@ -12,6 +12,7 @@ public interface CounsellorRepository extends JpaRepository<Counsellor, Long> {
     @Query(nativeQuery = true, value = "SELECT nickname FROM Counsellor WHERE counsellorID=:consultantID")
     String findCounsellorNameByCounsellorID(Long consultantID);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM Counsellor WHERE email=:email")
     Counsellor findByEmail(String email);
 
     Counsellor findByCounsellorID(Long counsellorID);
