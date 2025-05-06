@@ -7,8 +7,8 @@ import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.Supervisor;
 import org.example.psychologicalcounseling.model.User;
 import org.example.psychologicalcounseling.module.safety.JwtUtilTokenBuilder;
-import org.example.psychologicalcounseling.module.user.info.UserInfoService;
-import org.example.psychologicalcounseling.module.user.info.EditRequestDto;
+import org.example.psychologicalcounseling.module.info.AccountInfoService;
+import org.example.psychologicalcounseling.module.info.EditRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class UserInfoController {
+public class AccountInfoController {
     private final JwtUtilTokenBuilder jwtUtilTokenBuilder;
-    private final UserInfoService userInfoService;
+    private final AccountInfoService accountInfoService;
 
-    public UserInfoController(JwtUtilTokenBuilder jwtUtilTokenBuilder, UserInfoService userInfoService) {
+    public AccountInfoController(JwtUtilTokenBuilder jwtUtilTokenBuilder, AccountInfoService accountInfoService) {
         this.jwtUtilTokenBuilder = jwtUtilTokenBuilder;
-        this.userInfoService = userInfoService;
+        this.accountInfoService = accountInfoService;
     }
 
     /**
@@ -44,25 +44,25 @@ public class UserInfoController {
 
         switch (role){
             case "user":
-                User user = userInfoService.getUserByEmail(email);
+                User user = accountInfoService.getUserByEmail(email);
                 uid = user.getUid();
                 nickname = user.getNickname();
                 gender = user.getGender().toString();
                 break;
             case "counsellor":
-                Counsellor counsellor = userInfoService.getCounsellorByEmail(email);
+                Counsellor counsellor = accountInfoService.getCounsellorByEmail(email);
                 uid = counsellor.getCounsellorID();
                 nickname = counsellor.getNickname();
                 gender = counsellor.getGender().toString();
                 break;
             case "supervisor":
-                Supervisor supervisor = userInfoService.getSupervisorByEmail(email);
+                Supervisor supervisor = accountInfoService.getSupervisorByEmail(email);
                 uid = supervisor.getSupervisorID();
                 nickname = supervisor.getNickname();
                 gender = supervisor.getGender().toString();
                 break;
             case "admin":
-                Admin admin = userInfoService.getAdminByEmail(email);
+                Admin admin = accountInfoService.getAdminByEmail(email);
                 uid = admin.getAdminID();
                 nickname = admin.getNickname();
                 gender = admin.getGender().toString();
@@ -87,7 +87,7 @@ public class UserInfoController {
     @GetMapping("/test/getAll")
     public ResponseEntity<?> getUserList() {
         // 查询所有用户
-        List<UserWithSessionsDto> userList = userInfoService.getAllUsers();
+        List<UserWithSessionsDto> userList = accountInfoService.getAllUsers();
 
         // 创建一个List来存储用户信息，包括sessions
         List<Map<String, Object>> userInfoList = new ArrayList<>();
@@ -110,10 +110,22 @@ public class UserInfoController {
      * @param editRequest  用户信息
      * @return             编辑结果
      */
-    @PostMapping("/user/editprofile")
-    public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest) {
-        userInfoService.editUserProfile(editRequest);
-        return ResponseEntity.ok().build();
+    @PostMapping("/editprofile")
+    public ResponseEntity<?> editUserProfile(@RequestBody EditRequestDto editRequest, @RequestParam String role) {
+        boolean result = false;
+        if(role.equals("user")){
+            result = accountInfoService.editUserProfile(editRequest);
+        }else if(role.equals("counsellor")){
+            result = accountInfoService.editCounsellorProfile(editRequest);
+        }else if(role.equals("supervisor")){
+            result = accountInfoService.editSupervisorProfile(editRequest);
+        }
+
+        if(result){
+            return ResponseEntity.ok().build();
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**

@@ -14,6 +14,8 @@ import java.util.HashMap;
 
 public class MessageController implements WebSocketHandler {
     protected HashMap<String, Class<?>> requestMap;
+    private Long chunkSize = 0L;
+    private StringBuilder content = new StringBuilder();
 
     public MessageController(MessageController... children) {
         requestMap = new HashMap<>(10);
@@ -32,6 +34,23 @@ public class MessageController implements WebSocketHandler {
      * @return the response as a JSON string
      */
     public String handle(String message, WebSocketSession session) {
+        // check whether message is digit
+        try {
+            chunkSize = Long.parseLong(message);
+            return null;
+        } catch (Exception ignored) {
+
+        }
+
+        if (chunkSize > 0) {
+            content.append(message);
+            if (content.length() >= chunkSize) {
+                message = content.toString();
+            } else {
+                return null;
+            }
+        }
+
         // convert message to json
         JSONObject json, content;
         try {
@@ -98,7 +117,9 @@ public class MessageController implements WebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String response = handle(message.getPayload().toString(), session);
         try {
-            session.sendMessage(new TextMessage(response));
+            if (response != null) {
+                session.sendMessage(new TextMessage(response));
+            }
         } catch (IOException ignored) {
 
         }
