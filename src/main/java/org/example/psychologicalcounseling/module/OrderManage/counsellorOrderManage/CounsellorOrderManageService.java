@@ -1,6 +1,7 @@
 package org.example.psychologicalcounseling.module.OrderManage.counsellorOrderManage;
 
 import org.example.psychologicalcounseling.dto.ResponseBuilder;
+import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.CounsellorArrangement;
 import org.example.psychologicalcounseling.repository.CounsellorArrangementRepository;
 import org.springframework.stereotype.Service;
@@ -95,5 +96,19 @@ public class CounsellorOrderManageService {
         }
 
         return new GetCounsellorOrderResponse(orderList);
+    }
+
+    /**
+     * 获取在某个时间段内值班的咨询师
+     * @param timestamp 时间戳
+     * @return 在该时间段内值班的咨询师列表
+     */
+    public Counsellor[] getOnDutyCounsellor(Long timestamp) {
+        var counsellors = counsellorArrangementRepository.findOnDutyCounsellor(timestamp);
+        if (counsellors == null) {
+            return new Counsellor[0];
+        }
+
+        return counsellors;
     }
 }
