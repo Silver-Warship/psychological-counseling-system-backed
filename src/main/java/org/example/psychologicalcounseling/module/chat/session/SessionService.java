@@ -41,7 +41,7 @@ public class SessionService {
 
         // register the session in session manager
         // the session will be removed after 10 minutes if no activity is detected
-        sessionTimeoutDetect.registerSession(session.getSessionID(), OtherConstant.SessionTimeout);
+        // sessionTimeoutDetect.registerSession(session.getSessionID(), OtherConstant.SessionTimeout);
 
         return new Response<>(ErrorConstant.successCreateSession.code, ErrorConstant.successCreateSession.codeMsg, new CreateSessionResponse(session.getSessionID()));
     }
