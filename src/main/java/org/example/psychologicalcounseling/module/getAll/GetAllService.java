@@ -2,8 +2,11 @@ package org.example.psychologicalcounseling.module.getAll;
 
 import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.Supervisor;
+import org.example.psychologicalcounseling.model.User;
+import org.example.psychologicalcounseling.module.user.login.UserLoginService;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
+import org.example.psychologicalcounseling.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +16,12 @@ import java.util.concurrent.*;
 public class GetAllService {
     private final CounsellorRepository counsellorRepository;
     private final SupervisorRepository supervisorRepository;
+    private final UserRepository userRepository;
 
-    public GetAllService(CounsellorRepository counsellorRepository, SupervisorRepository supervisorRepository) {
+    public GetAllService(CounsellorRepository counsellorRepository, SupervisorRepository supervisorRepository, UserRepository userRepository) {
         this.counsellorRepository = counsellorRepository;
         this.supervisorRepository = supervisorRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -92,4 +97,66 @@ public class GetAllService {
         getAllResponse.setInfos(infoList);
         return getAllResponse;
     }
+
+    /**
+     * 模糊搜索 user、counsellor 或 supervisor 的信息
+     *
+     * @param id       user、counsellor 或 supervisor 的 ID
+     * @param role     角色类型，“user”"counsellor" 或 "supervisor"
+     * @param nickname user、counsellor 或 supervisor 的昵称
+     * @return GetAllResponse 模糊搜索结果
+     */
+    public GetAllResponse fuzzySearch(Long id, String role, String nickname) {
+        GetAllResponse getAllResponse = new GetAllResponse();
+        List<GetAllResponse.Info> infoList = new ArrayList<>();
+
+        if (nickname == null || nickname.isEmpty()){
+            nickname = "welcomeToHuaShiXinTu";
+        }
+
+        if(id==null || id.toString().isEmpty()){
+            id = (long) -1;
+        }
+
+
+        if ("user".equals(role)) {
+            // 模糊查询用户信息
+            List<User> users = userRepository.findByUidOrNicknameContainingIgnoreCase(id, nickname);
+            for (User user : users) {
+                infoList.add(new GetAllResponse.Info(
+                        user.getUid(),
+                        user.getNickname(),
+                        user.getEmail()
+                ));
+            }
+        } else if ("counsellor".equals(role)) {
+            // 模糊查询咨询师信息
+            List<Counsellor> counsellors = counsellorRepository.findByCounsellorIDOrNicknameContainingIgnoreCase(id, nickname);
+            for (Counsellor counsellor : counsellors) {
+                infoList.add(new GetAllResponse.Info(
+                        counsellor.getCounsellorID(),
+                        counsellor.getNickname(),
+                        counsellor.getEmail()
+                ));
+            }
+        } else if ("supervisor".equals(role)) {
+            // 模糊查询督导信息
+            List<Supervisor> supervisors = supervisorRepository.findBySupervisorIDOrNicknameContainingIgnoreCase(id, nickname);
+
+            for (Supervisor supervisor : supervisors) {
+                infoList.add(new GetAllResponse.Info(
+                        supervisor.getSupervisorID(),
+                        supervisor.getNickname(),
+                        supervisor.getEmail()
+                ));
+            }
+        } else {
+            getAllResponse.setCode(500);
+            getAllResponse.setCodeMsg("Bad Request: Invalid Role");
+        }
+
+        getAllResponse.setInfos(infoList);
+        return getAllResponse;
+    }
+
 }

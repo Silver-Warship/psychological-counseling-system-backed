@@ -1,4 +1,4 @@
-package org.example.psychologicalcounseling.module.user.info;
+package org.example.psychologicalcounseling.module.info;
 
 import lombok.Data;
 import org.example.psychologicalcounseling.model.User;
@@ -6,7 +6,7 @@ import org.example.psychologicalcounseling.model.User;
 @Data
 public class EditRequestDto {
     private Long uid;
-    private User.Gender gender;
+    private String gender;
     private String password;
     private String nickname;
 }
