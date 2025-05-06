@@ -52,6 +52,7 @@ public class SelfImplementIMService implements MessageService {
         msgToClient.setContent(message.getContent());
         msgToClient.setContentType(message.getContentType());
         msgToClient.setTimestamp(message.getSendTimestamp());
+        msgToClient.setSessionID(message.getSessionID());
         Response<PullUnReceivedMessageResponse.Message> serverResponse = new Response<>(
                 ServerMessageType.NEW_MESSAGE, ErrorConstant.newMessage.code, ErrorConstant.newMessage.codeMsg, msgToClient
         );
@@ -99,7 +100,6 @@ public class SelfImplementIMService implements MessageService {
                 message.getStatus() == 0 && Objects.equals(message.getReceiverID(), request.getUserID()) // && Objects.equals(message.getSessionID(), request.getSessionID())
         ).toList();
 
-
         // package the message to response
         PullUnReceivedMessageResponse.Message[] messageArray = new PullUnReceivedMessageResponse.Message[messages.size()];
         for (int i = 0; i < messages.size(); i++) {
@@ -109,6 +109,7 @@ public class SelfImplementIMService implements MessageService {
             m.setContent(message.getContent());
             m.setContentType(message.getContentType());
             m.setTimestamp(message.getSendTimestamp());
+            m.setSessionID(message.getSessionID());
             messageArray[i] = m;
         }
 
