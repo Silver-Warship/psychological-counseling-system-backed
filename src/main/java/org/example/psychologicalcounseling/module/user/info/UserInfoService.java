@@ -68,12 +68,7 @@ public class UserInfoService {
      */
     public Counsellor getCounsellorByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
-        Counsellor counsellor = counsellorRepository.findByEmail(email);
-        if (counsellor == null) {
-            // 用户不存在，返回-1或其他错误处理
-            return null;
-        }
-        return counsellor;
+        return counsellorRepository.findByEmail(email);
     }
 
     /**
@@ -83,12 +78,8 @@ public class UserInfoService {
      */
     public Supervisor getSupervisorByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
-        Supervisor supervisor = supervisorRepository.findByEmail(email);
-        if (supervisor == null) {
-            // 用户不存在，
-            return null;
-        }
-        return supervisor;
+        // 用户不存在，
+        return supervisorRepository.findByEmail(email);
     }
 
     /**
@@ -98,12 +89,8 @@ public class UserInfoService {
      */
     public Admin getAdminByEmail(String email) {
         // 从数据库中获取用户信息，并检查用户是否存在
-        Admin admin = adminRepository.findByEmail(email);
-        if (admin == null) {
-            // 用户不存在，
-            return null;
-        }
-        return admin;
+        // 用户不存在，
+        return adminRepository.findByEmail(email);
     }
 
     /**

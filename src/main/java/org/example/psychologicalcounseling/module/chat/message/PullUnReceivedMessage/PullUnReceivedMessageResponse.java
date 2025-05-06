@@ -15,6 +15,7 @@ public class PullUnReceivedMessageResponse {
         private org.example.psychologicalcounseling.model.Message.FileType contentType;
         private String content;
         private long timestamp;
+        private Long sessionID;
     }
 
     private Message[] messages;
