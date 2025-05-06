@@ -3,7 +3,6 @@ package org.example.psychologicalcounseling.module.getAll;
 import org.example.psychologicalcounseling.model.Counsellor;
 import org.example.psychologicalcounseling.model.Supervisor;
 import org.example.psychologicalcounseling.model.User;
-import org.example.psychologicalcounseling.module.user.login.UserLoginService;
 import org.example.psychologicalcounseling.repository.CounsellorRepository;
 import org.example.psychologicalcounseling.repository.SupervisorRepository;
 import org.example.psychologicalcounseling.repository.UserRepository;
@@ -126,7 +125,8 @@ public class GetAllService {
                 infoList.add(new GetAllResponse.Info(
                         user.getUid(),
                         user.getNickname(),
-                        user.getEmail()
+                        user.getEmail(),
+                        user.getGender().toString()
                 ));
             }
         } else if ("counsellor".equals(role)) {
@@ -136,7 +136,8 @@ public class GetAllService {
                 infoList.add(new GetAllResponse.Info(
                         counsellor.getCounsellorID(),
                         counsellor.getNickname(),
-                        counsellor.getEmail()
+                        counsellor.getEmail(),
+                        counsellor.getGender().toString()
                 ));
             }
         } else if ("supervisor".equals(role)) {
@@ -147,7 +148,8 @@ public class GetAllService {
                 infoList.add(new GetAllResponse.Info(
                         supervisor.getSupervisorID(),
                         supervisor.getNickname(),
-                        supervisor.getEmail()
+                        supervisor.getEmail(),
+                        supervisor.getGender().toString()
                 ));
             }
         } else {
