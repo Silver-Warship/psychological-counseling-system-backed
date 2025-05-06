@@ -7,6 +7,9 @@ import org.example.psychologicalcounseling.module.consultant.getConsultantRecord
 import org.example.psychologicalcounseling.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.FrameworkServlet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import java.util.List;
 import java.util.Objects;
@@ -202,9 +205,23 @@ public class ConsultantRecordService {
         if (session == null) {
             return "Error: session not found";
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
+
+        // 取出可能为 null 的 Long 时间戳
+        Long startTs = session.getStartTimestamp();
+        Long endTs   = session.getEndTimestamp();
+
+// 如果为 null，就用占位符，否则格式化
+        String startTime = (startTs != null)
+                ? sdf.format(new Date(startTs))
+                : "N/A";
+        String endTime = (endTs != null)
+                ? sdf.format(new Date(endTs))
+                : "N/A";
         content.append("sessionID: ").append(session.getSessionID()).append("\t").
-                append("startTimestamp: ").append(session.getStartTimestamp()).append("\t").
-                append("endTimestamp: ").append(session.getEndTimestamp()).append("\n");
+                append("startTime: ").append(startTime).append("\t")
+                .append("endTime: ").append(endTime).append("\n");
 
         // get user info
         String userName = userRepository.findUserNameByUid(record.getUserID());
