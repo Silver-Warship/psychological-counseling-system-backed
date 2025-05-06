@@ -45,4 +45,5 @@ public class GetRunningSessionService {
     public GetRunningSessionNumberResponse getRunningSessionNumber(Long userID) {
         return new GetRunningSessionNumberResponse(sessionRepository.findRunningSessionNumberByUserID(userID));
     }
+
 }
