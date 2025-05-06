@@ -12,9 +12,12 @@ import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer, WebMvcConfigurer {
-    @Autowired
-    private TokenInterceptor tokenInterceptor;
+public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBrokerConfigurer {
+    private final TokenInterceptor tokenInterceptor;
+
+    public WebSocketConfig(TokenInterceptor tokenInterceptor) {
+        this.tokenInterceptor = tokenInterceptor;
+    }
 
     /**
     @Override
@@ -27,6 +30,11 @@ public class WebSocketConfig implements WebSocketConfigurer, WebMvcConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatHandler(), "/chat").setAllowedOrigins("*");
+    }
+
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        registry.setMessageSizeLimit(1024 * 1024 * 100); // 设置消息大小限制为100MB
     }
 
     @Bean
