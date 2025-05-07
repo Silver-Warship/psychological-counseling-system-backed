@@ -108,7 +108,17 @@ public class CounsellorOrderManageService {
         if (counsellors == null) {
             return new Counsellor[0];
         }
+        // create the response
+        Counsellor[] counsellorList = new Counsellor[counsellors.size()];
+        for (int i = 0; i < counsellors.size(); i++) {
+            counsellorList[i] = new Counsellor();
+            counsellorList[i].setCounsellorID(counsellors.get(i).getCounsellorID());
+            counsellorList[i].setNickname(counsellors.get(i).getNickname());
+            counsellorList[i].setGender(counsellors.get(i).getGender());
+            counsellorList[i].setEmail(counsellors.get(i).getEmail());
+            counsellorList[i].setSelfAppraisal(counsellors.get(i).getSelfAppraisal());
+        }
 
-        return counsellors;
+        return counsellorList;
     }
 }
