@@ -48,7 +48,7 @@ public class AdminController {
         for (int i=1; i<=orderNumCnt; i++) {
             // Get the order number for the current timestamp
             Long currentTimestamp = startTimestamp + (i - 1) * timeStep;
-            var orderNum = getOrderService.getOrderNumber(currentTimestamp + 1, min(endTimestamp, timeStep + currentTimestamp));
+            var orderNum = getOrderService.getOrderNumber(currentTimestamp, min(endTimestamp, timeStep + currentTimestamp));
             // add the order number to the response
             response.getOrderList()[i - 1] = orderNum;
         }
